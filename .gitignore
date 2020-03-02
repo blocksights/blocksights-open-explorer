@@ -5,3 +5,6 @@ bower_components/
 tmp
 .DS_Store
 .ideaapp/charting_library/
+.idea
+app/charting_library/*
+dist/*
