@@ -1,10 +1,13 @@
 {
-  "name": "bitshares-explorer",
+  "name": "open-explorer",
   "private": false,
   "version": "1.0.0",
-  "description": "An opensource bitshares explorer.",
-  "repository": "https://github.com/oxarbitrage/bitshares-explorer",
+  "description": "An opensource explorer for Graphene blockchains.",
+  "repository": "-",
   "license": "MIT",
+  "browser": {
+    "ws": "./loadWebSocket.js"
+  },
   "devDependencies": {
     "angular": ">=1.7.9",
     "angular-animate": "1.7.8",

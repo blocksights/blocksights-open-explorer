@@ -67,7 +67,7 @@
                                                 <ul class="list-group">
                                                     <li class="list-group-item">
                                                         <span class="badge" style="background-color: #FFFFFF; color: #000000">{{account.bts_balance | number}}</span>
-                                                        BTS <span data-translate="Balance"></span>
+                                                        {{ coreSymbol }} <span data-translate="Balance"></span>
                                                     </li>
                                                     <li class="list-group-item">
                                                         <span class="badge" style="background-color: #FFFFFF; color: #000000">{{account.lifetime_fees_paid | number}}</span>
@@ -447,9 +447,6 @@
         </div>
         <div class="panel-body table-responsive">
             <div class="col-md-6">
-            </div>
-            <div class="col-md-6 text-right">
-                <a href="http://open-explorer.io/bitshares-account-exporter/" target="_blank"><span size="+1"><span data-translate="Click here for a CSV account exporter"></span></span></a>
             </div>
             <table class="table">
                 <thead>

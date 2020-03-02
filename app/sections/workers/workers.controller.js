@@ -2,10 +2,12 @@
     'use strict';
 
     angular.module('app.workers')
-        .controller('workersCtrl', ['$scope', 'utilities', 'governanceService', workersCtrl]);
+        .controller('workersCtrl', ['$scope', 'utilities', 'governanceService', 'appConfig', workersCtrl]);
 
-    function workersCtrl($scope, utilities, governanceService) {
-        
+    function workersCtrl($scope, utilities, governanceService, appConfig) {
+
+        $scope.branding = appConfig.branding;
+
         governanceService.getWorkers(function (returnData) {
             $scope.workers_current = returnData[0];
             $scope.workers_expired = returnData[1];

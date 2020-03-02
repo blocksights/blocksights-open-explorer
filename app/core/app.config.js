@@ -1,13 +1,17 @@
+import {getGATag, getConnections, getBlockchainName, getConfig} from "../branding";
+
 (function() {
     'use strict';
 
     angular.module('app')
         .factory('appConfig', [appConfig]);
 
-
     angular.module('app').config(['AnalyticsProvider', function (AnalyticsProvider) {
         // Add configuration code as desired
-        AnalyticsProvider.setAccount('UA-101388661-2');  //UU-XXXXXXX-X should be your tracking code
+        let gatag = getGATag();
+        if (gatag != null) {
+            AnalyticsProvider.setAccount(gatag);  //UU-XXXXXXX-X should be your tracking code
+        }
     }]).run(['Analytics', function(Analytics) { }]);
 
     angular.module('app').config(['$locationProvider', function($locationProvider) {
@@ -33,10 +37,10 @@
         var date = new Date();
         var year = date.getFullYear();
         var main = {
-            brand: 'Bitshares Explorer',
-            name: 'oxarbitrage',
-            api_link: 'https://github.com/oxarbitrage/bitshares-python-api-backend',
-            source_code_link: 'https://github.com/oxarbitrage/open-explorer',
+            brand: getBlockchainName() + " Explorer",
+            name: getBlockchainName(),
+            api_link: "https://github.com/bitshares/bitshares-explorer-api",
+            source_code_link: "https://github.com/bitshares/open-explorer",
             year: year,
             pageTransition: pageTransitionOpts[0]
         };
@@ -49,23 +53,19 @@
             danger:     '#E96562',
             gray:       '#DCDCDC'
         };
-
         var urls = {
-            websocket: "ws://bts-seoul.clockwork.gr/ws",
-            //python_backend: "http://185.208.208.184:5000",
-            python_backend: "https://explorer.bitshares-kibana.info/",
-            //elasticsearch_wrapper: "https://eswrapper.bitshares.eu", // infrastructure
-            elasticsearch_wrapper: "https://explorer.bitshares-kibana.info/", // clockwork
-            //elasticsearch_wrapper: "/elastic",
-            //udf_wrapper: "http://185.208.208.184:5001"
-            udf_wrapper: "https://explorer.bitshares-kibana.info/udf"
+            websocket: getConnections().blockchain,
+            python_backend: getConnections().api,
+            elasticsearch_wrapper: getConnections().api,
+            udf_wrapper: getConnections().api + "udf"
         };
-
+        var branding = getConfig();
         return {
             pageTransitionOpts: pageTransitionOpts,
             main: main,
             color: color,
-            urls: urls
+            urls: urls,
+            branding: branding
         };
     }
 

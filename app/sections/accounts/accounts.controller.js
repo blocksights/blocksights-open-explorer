@@ -12,9 +12,10 @@ import {sha256} from "js-sha256";
 
 		const path = $location.path();
 		let name = $routeParams.name;
-		if(name) {
+		if (name) {
             name = name.toLowerCase();
 			if(path.includes("accounts")) {
+                $scope.coreSymbol = appConfig.branding.coreSymbol;
 
                 accountService.getFullAccount(name, function (fullAccount) {
 

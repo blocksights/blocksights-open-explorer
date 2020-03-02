@@ -15,7 +15,7 @@
                 <div class="panel-heading"><span data-translate="Search block"></span></div>
                 <div class="panel-body">
                     <p><span data-translate="Search by block by inserting block number. No commas, no dots, just pure numbers."></span></p>
-                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2block('19446934')" style="cursor: pointer;">19446934</a></p>
+                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2block(branding.example.block)" style="cursor: pointer;">{{ branding.example.block }}</a></p>
                     <form role="form" data-ng-submit="submit()">
                         <input type="hidden" class="form-control" ng-model="type" value="block">
                         <div class="form-group ui-typeahead">
@@ -33,7 +33,7 @@
                 <div class="panel-heading"><span data-translate="Search account"></span></div>
                 <div class="panel-body">
                     <p><span data-translate="Looking for an account? Start typing the first letters of it's name and let the auto complete feature help you find the exact account name string."></span></p>
-                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2account('alfredo-worker')" style="cursor: pointer;">alfredo-worker</a></p>
+                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2account(branding.example.account)" style="cursor: pointer;">{{ branding.example.account }}</a></p>
                     <form role="form" data-ng-submit="submit()">
                         <input type="hidden" class="form-control" ng-model="type" value="account">
                         <div class="form-group ui-typeahead">
@@ -74,7 +74,7 @@
                 </div>
                 <div class="panel-body">
                     <p><span data-translate="Looking for a SmartCoin or UIA? Start typing the first letters of it's name and let the auto complete feature help you find the exact asset name string."></span></p>
-                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2asset('CNY')" style="cursor: pointer;">CNY</a></p>
+                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2asset(branding.coreSymbol)" style="cursor: pointer;">{{ branding.coreSymbol }}</a></p>
                     <form role="form" data-ng-submit="submit()">
                         <input type="hidden" class="form-control" ng-model="type" value="asset">
                         <div class="form-group ui-typeahead">
@@ -94,7 +94,7 @@
                 </div>
                 <div class="panel-body">
                     <p><span data-translate="If you have a transaction hash, please paste it here to get transaction information."></span></p>
-                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2tx('738be2bd22e2da31d587d281ea7ee9bd02b9dbf0')" style="cursor: pointer;">738be2bd22e2da31d587d281ea7ee9bd02b9dbf0</a></p>
+                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2tx(branding.example.tx)" style="cursor: pointer;">{{ branding.example.tx }}</a></p>
                     <form role="form" data-ng-submit="submit()">
                         <input type="hidden" class="form-control" ng-model="type" value="asset">
                         <div class="form-group ui-typeahead">

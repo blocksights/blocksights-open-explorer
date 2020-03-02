@@ -6,6 +6,8 @@
 
     function searchCtrl($scope, $filter, $routeParams, $location, $http, appConfig) {
 
+        $scope.branding = appConfig.branding;
+
         $scope.add2block = function(block) {
             $scope.block = block;
         };

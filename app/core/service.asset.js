@@ -91,7 +91,7 @@
                         description = description_p[3];
                         type = "User Issued";
                     }
-                    if (response.data.symbol === "BTS") {
+                    if (asset_id === "1.3.0") {
                         type = "Core Token";
                     }
 
