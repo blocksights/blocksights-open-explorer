@@ -1,4 +1,4 @@
-import {getGATag, getConnections, getBlockchainName, getConfig} from "../branding";
+import {getGATag, getConnections, getConfig} from "../branding";
 
 (function() {
     'use strict';
@@ -6,13 +6,13 @@ import {getGATag, getConnections, getBlockchainName, getConfig} from "../brandin
     angular.module('app')
         .factory('appConfig', [appConfig]);
 
-    angular.module('app').config(['AnalyticsProvider', function (AnalyticsProvider) {
-        // Add configuration code as desired
-        let gatag = getGATag();
-        if (gatag != null) {
+    let gatag = getGATag();
+    if (gatag != null) {
+        angular.module('app').config(['AnalyticsProvider', function (AnalyticsProvider) {
+            // Add configuration code as desired
             AnalyticsProvider.setAccount(gatag);  //UU-XXXXXXX-X should be your tracking code
-        }
-    }]).run(['Analytics', function(Analytics) { }]);
+        }]).run(['Analytics', function (Analytics) {}]);
+    }
 
     angular.module('app').config(['$locationProvider', function($locationProvider) {
         $locationProvider.hashPrefix('');
@@ -36,9 +36,10 @@ import {getGATag, getConnections, getBlockchainName, getConfig} from "../brandin
         ];
         var date = new Date();
         var year = date.getFullYear();
+        var branding = getConfig();
         var main = {
-            brand: getBlockchainName() + " Explorer",
-            name: getBlockchainName(),
+            brand: branding.name + " Explorer",
+            name: branding.name,
             api_link: "https://github.com/bitshares/bitshares-explorer-api",
             source_code_link: "https://github.com/bitshares/open-explorer",
             year: year,
@@ -57,9 +58,8 @@ import {getGATag, getConnections, getBlockchainName, getConfig} from "../brandin
             websocket: getConnections().blockchain,
             python_backend: getConnections().api,
             elasticsearch_wrapper: getConnections().api,
-            udf_wrapper: getConnections().api + "udf"
+            udf_wrapper: getConnections().api + "/udf"
         };
-        var branding = getConfig();
         return {
             pageTransitionOpts: pageTransitionOpts,
             main: main,

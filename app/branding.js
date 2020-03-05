@@ -1,7 +1,3 @@
-export function getBlockchainName() {
-    return "BitShares::";
-}
-
 export function getGATag() {
     return null;
 }
@@ -9,18 +5,14 @@ export function getGATag() {
 export function getConnections() {
     return {
         blockchain: "wss://eu.nodes.bitshares.ws/",
-        api: "https://explorer.bitshares-kibana.info/"
+        api: "http://127.0.0.1:5000/openexplorer"  // "http://127.0.0.1:5000/"
     }
-}
-
-export function getCoreTokenSymbol() {
-    return "BTS2"
 }
 
 export function getConfig() {
     return {
         name: "BitShares",
-        coreSymbol: "BTS2",
+        coreSymbol: "BTS",
         example: {
             block: 19446934,
             account: "alfredo-worker",

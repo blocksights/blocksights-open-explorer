@@ -848,7 +848,7 @@
 
 
                 // sort ordering (Ascending or Descending). Default to true (oder ID ascending)
-                $scope[reverse] = false;
+                $scope[reverse] = true;
 
                 // called on header click
                 $scope[sortColumn] = function(col){

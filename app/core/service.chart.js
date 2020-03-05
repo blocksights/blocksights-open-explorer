@@ -1,5 +1,3 @@
-import {getCoreTokenSymbol} from "../branding";
-
 (function() {
     'use strict';
 
@@ -18,7 +16,7 @@ import {getCoreTokenSymbol} from "../branding";
                         dex_volume_chart.options = {
                             animation: true,
                             title: {
-                                text: 'Daily DEX Volume in ' + getCoreTokenSymbol() + ' for the last 30 days'
+                                text: 'Daily DEX Volume in ' + appConfig.branding.coreSymbol + ' for the last 30 days'
                             },
                             tooltip: {
                                 trigger: 'axis'
