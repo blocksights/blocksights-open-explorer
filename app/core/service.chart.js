@@ -6,6 +6,50 @@
 
     function chartService($http, appConfig, utilities) {
 
+        function errorChart(message) {
+            const options = {
+                "animation":true,
+                "calculable":true,
+                "title": {"text": message, "left":"center"},
+                "series":[
+                    {
+                        "color":[
+                            "#DDDDDD"
+                        ],
+                        "name":"Top Smartcoins",
+                        "type":"pie",
+                        "roseType":"radius",
+                        "max":40,
+                        "itemStyle":{
+                            "normal":{
+                                "label":{
+                                    "show":false
+                                },
+                                "labelLine":{
+                                    "show":false
+                                }
+                            },
+                            "emphasis":{
+                                "label":{
+                                    "show":true
+                                },
+                                "labelLine":{
+                                    "show":true
+                                }
+                            }
+                        },
+                        "data":[
+                            {
+                                "value":23
+                            }
+                        ]
+                    }
+                ]
+            };
+            return {options: options}
+            return {options: {errorMsg: {text: "asdsd", left: "center"}}};
+        }
+
         return {
             dailyDEXChart: function(callback) {
 
@@ -156,7 +200,7 @@
                         }]
                     };
                     callback(operations_chart);
-                });
+                }).catch((err) => callback(errorChart("Error loading")));
             },
             topProxiesChart: function(callback) {
                 $http.get(appConfig.urls.python_backend + "/top_proxies").then(function(response) {
@@ -225,7 +269,7 @@
                         }]
                     };
                     callback(proxies_chart);
-                });
+                }).catch((err) => callback(errorChart("Error loading")));
             },
             topMarketsChart: function(callback) {
                 $http.get(appConfig.urls.python_backend + "/top_markets").then(function(response) {
@@ -294,7 +338,7 @@
                         }]
                     };
                     callback(markets_chart);
-                });
+                }).catch((err) => callback(errorChart("Error loading")));
             },
             topSmartCoinsChart: function(callback) {
                 $http.get(appConfig.urls.python_backend + "/top_smartcoins").then(function(response) {
@@ -361,7 +405,7 @@
                         }]
                     };
                     callback(smartcoins_chart);
-                });
+                }).catch((err) => callback(errorChart("Error loading")));
             },
             topUIAsChart: function(callback) {
                 $http.get(appConfig.urls.python_backend + "/top_uias").then(function(response) {
@@ -428,7 +472,7 @@
                         }]
                     };
                     callback(uias_chart);
-                });
+                }).catch((err) => callback(errorChart("Error loading")));
             },
             topHoldersChart: function(callback) {
                 $http.get(appConfig.urls.python_backend + "/top_holders").then(function(response) {
@@ -497,7 +541,7 @@
                         }]
                     };
                     callback(holders_chart);
-                });
+                }).catch((err) => callback(errorChart("Error loading")));
             }
         };
     }

@@ -19,7 +19,7 @@
                         followers: value.followers,
                         perc: value.bts_weight_percentage
                     };
-                    if(counter <= 10)
+                    if(counter <= 100)
                         proxies.push(parsed);
                     counter++;
                 });
@@ -51,5 +51,5 @@
             }
         }
     }
-    
+
 })();

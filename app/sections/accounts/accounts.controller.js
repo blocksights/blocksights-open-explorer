@@ -58,27 +58,21 @@ import {sha256} from "js-sha256";
                         };
                         $scope.select(1);
 
-                        accountService.getAccountName(fullAccount.account.options.voting_account,
-                            function (returnData) {
-
-                            $scope.account = {
-                                name: fullAccount.account.name,
-                                id: fullAccount.account.id,
-                                referer: fullAccount.referrer_name,
-                                registrar: fullAccount.registrar_name,
-                                statistics: fullAccount.account.statistics,
-                                cashback: cashback_balance_id,
-                                cashback_balance: utilities.formatBalance(cashback_balance_balance, 5),
-                                lifetime: lifetime,
-                                total_ops: total_ops,
-                                lifetime_fees_paid: parseInt(utilities.formatBalance(lifetime_fees_paid, 5)),
-                                bts_balance: parseInt(utilities.formatBalance(bts_balance, 5)),
-                                vesting: vesting_balances,
-                                memo_key: fullAccount.account.options.memo_key,
-                                voting_account_id: fullAccount.account.options.voting_account,
-                                voting_account_name: returnData
-                            };
-                        });
+                        $scope.account = {
+                            name: fullAccount.account.name,
+                            id: fullAccount.account.id,
+                            referer: fullAccount.referrer_name,
+                            registrar: fullAccount.registrar_name,
+                            statistics: fullAccount.account.statistics,
+                            cashback: cashback_balance_id,
+                            cashback_balance: utilities.formatBalance(cashback_balance_balance, 5),
+                            lifetime: lifetime,
+                            total_ops: total_ops,
+                            lifetime_fees_paid: parseInt(utilities.formatBalance(lifetime_fees_paid, 5)),
+                            bts_balance: parseInt(utilities.formatBalance(bts_balance, 5)),
+                            vesting: vesting_balances,
+                            memo_key: fullAccount.account.options.memo_key
+                        };
                     });
 
                     $scope.select_balances = function(page_balances) {
@@ -167,6 +161,21 @@ import {sha256} from "js-sha256";
                     accountService.parseVotes(fullAccount.votes, function (returnData) {
                         $scope.votes = returnData;
                     });
+
+                    // fill in voting
+                    accountService.getVotingStats(fullAccount.account.id, function (returnData) {
+                        $scope.votingStats = returnData;
+                    });
+
+                    accountService.getAccountName(fullAccount.account.options.voting_account,
+                        function (returnData) {
+                            if ($scope.account == undefined) {
+                                $scope.account = {}
+                            }
+                            $scope.account.voting_account_id = fullAccount.account.options.voting_account;
+                            $scope.account.voting_account_name = returnData;
+                        });
+
 
                     accountService.getReferrerCount(name, function (returnData) {
                         $scope.referral_count = returnData;

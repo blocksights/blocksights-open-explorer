@@ -34,26 +34,32 @@
         // lazy load on tab change
         $scope.loadTabsCharts = function(tabName) {
             if (tabName == "operations") {
+                $scope.operations_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
                 chartService.topOperationsChart(function (returnData) {
                     $scope.operations_chart = returnData;
                 });
             } else if (tabName == "proxies") {
+                $scope.proxies_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
                 chartService.topProxiesChart(function (returnData) {
                     $scope.proxies_chart = returnData;
                 });
             } else if (tabName == "markets") {
+                $scope.markets_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
                 chartService.topMarketsChart(function (returnData) {
                     $scope.markets_chart = returnData;
                 });
             } else if (tabName == "smartcoin") {
+                $scope.smartcoins_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
                 chartService.topSmartCoinsChart(function (returnData) {
                     $scope.smartcoins_chart = returnData;
                 });
             } else if (tabName == "uia") {
+                $scope.uias_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
                 chartService.topUIAsChart(function (returnData) {
                     $scope.uias_chart = returnData;
                 });
             } else if (tabName == "holders") {
+                $scope.holders_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
                 chartService.topHoldersChart(function (returnData) {
                     $scope.holders_chart = returnData;
                 });

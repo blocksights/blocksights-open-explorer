@@ -320,7 +320,16 @@
                     });
                     callback(results);
                 });
-            }
+            },
+            getVotingStats: function(account_id, callback) {
+                $http.get(
+                    appConfig.urls.python_backend + "/account_voting_power?account_id=" + account_id
+                ).then(
+                    function (response) {
+                        callback(response.data);
+                    }
+                );
+            },
         };
     }
 })();

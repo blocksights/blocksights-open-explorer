@@ -76,7 +76,7 @@
 
             getBigTransactions: function(callback) {
                 $http.get(appConfig.urls.elasticsearch_wrapper +
-                    "/es/account_history?from_date=now-1h&to_date=now&type=aggs&agg_field=block_data.trx_id.keyword&size=20")
+                    "/es/account_history?from_date=now-6h&to_date=now&type=aggs&agg_field=block_data.trx_id.keyword&size=20")
                     .then(function (response) {
 
                     let transactions = [];

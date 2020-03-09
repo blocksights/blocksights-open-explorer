@@ -52,9 +52,20 @@
                                                         <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href='#/accounts/{{account.registrar}}/'>{{account.registrar}}</a></span>
                                                         <span data-translate="Registrar"></span>
                                                     </li>
-                                                    <li class="list-group-item">
+                                                    <li ng-if="account && account.voting_account_id && account.voting_account_id != '1.2.5'" class="list-group-item">
                                                         <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href='#/objects/{{account.voting_account_id}}/'>{{account.voting_account_name}}</a></span>
                                                         <span data-translate="Voting as"></span>
+                                                    </li>
+                                                    <li ng-if="account.voting_account_id == '1.2.5' && votingStats.has_voted" class="list-group-item">
+                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{votingStats.total_power | number}}</span>
+                                                        <span data-translate="Voting Power"></span>
+                                                    </li>
+                                                    <li ng-if="account.voting_account_id == '1.2.5' && votingStats.has_voted" class="list-group-item">
+                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{votingStats.total_proxied | number}}</span>
+                                                        <span data-translate="Voting Proxy Followers"></span>
+                                                    </li>
+                                                    <li ng-if="account.voting_account_id == '1.2.5' && !votingStats.has_voted" class="list-group-item">
+                                                        <span data-translate="No voting activity"></span>
                                                     </li>
                                                 </ul>
                                             </div>
