@@ -205,5 +205,10 @@
   "Most active markets": "Most active markets",
   "Pair": "Pair",
 
-  "COPYRIGHT": "COPYRIGHT"
+  "COPYRIGHT": "COPYRIGHT",
+
+  "general": {
+    "SUPPLY": "SUPPLY",
+    "VOLUME": "VOLUME"
+  }
 }
