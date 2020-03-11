@@ -136,6 +136,7 @@
                 });
             },
             getTotalAccountOps: function(account_id, callback) {
+                // @deprecated creates massive load, remove
                 $http.get(appConfig.urls.elasticsearch_wrapper + "/es/account_history?account_id="+account_id+
                     "&from_date=2015-10-10&to_date=now&type=count").then(function(response) {
                         var count = 0;
@@ -288,7 +289,7 @@
             },
             getAccountHistory: function(account_id, start, limit, callback) {
                 $http.get(appConfig.urls.elasticsearch_wrapper + "/es/account_history?account_id=" +
-                    account_id + "&search_after=" + start + "&size=" + limit + "&sort_by=-account_history.sequence")
+                    account_id + (start != null ? "&search_after=" + start : "") + "&size=" + limit + "&sort_by=-account_history.sequence")
                     .then(function (response) {
 
                     var results = [];
@@ -303,16 +304,20 @@
                         timestamp = time.toLocaleString();
                         witness = value.witness;
                         var parsed_op = value.operation_history.op_object;
+                        if (parsed_op == undefined)
+                            parsed_op = JSON.parse(value.operation_history.op)[1];
+                        if (parsed_op.amount)
+                            parsed_op.amount_ = parsed_op.amount;
                         var operation = {
                             operation_id: value.account_history.operation_id,
                             block_num: value.block_data.block_num,
                             time: timestamp,
                             witness: witness,
                             op_type: op_type,
-                            op_color: op_color
+                            op_color: op_color,
+                            sequence: value.account_history.sequence
                         };
-                        var operation_text = "";
-                        operation_text = utilities.opText(appConfig, $http, value.operation_type, parsed_op,
+                        utilities.opText(appConfig, $http, value.operation_type, parsed_op,
                             function(returnData) {
                             operation.operation_text = returnData;
                         });

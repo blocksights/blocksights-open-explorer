@@ -18,6 +18,18 @@ import {sha256} from "js-sha256";
                 $scope.coreSymbol = appConfig.branding.coreSymbol;
 
                 accountService.getFullAccount(name, function (fullAccount) {
+                    // give user fast feedback on first load
+                    let new_account = {
+                        name: fullAccount.account.name,
+                        id: fullAccount.account.id,
+                        referer: fullAccount.referrer_name,
+                        registrar: fullAccount.registrar_name
+                    };
+                    if ($scope.account) {
+                        $scope.account = Object.assign(new_account, $scope.account);
+                    } else {
+                        $scope.account = new_account;
+                    }
 
                     let cashback_balance_id = "";
                     let cashback_balance_balance = 0;
@@ -42,39 +54,66 @@ import {sha256} from "js-sha256";
 
                     jdenticon.update("#identicon", sha256(fullAccount.account.name));
 
-                    accountService.getTotalAccountOps(fullAccount.account.id, function (returnDataTotalOps) {
-                        const total_ops = returnDataTotalOps;
+                    new_account = {
+                        name: fullAccount.account.name,
+                        id: fullAccount.account.id,
+                        referer: fullAccount.referrer_name,
+                        registrar: fullAccount.registrar_name,
+                        statistics: fullAccount.account.statistics,
+                        cashback: cashback_balance_id,
+                        cashback_balance: utilities.formatBalance(cashback_balance_balance, 5),
+                        lifetime: lifetime,
+                        lifetime_fees_paid: parseInt(utilities.formatBalance(lifetime_fees_paid, 5)),
+                        bts_balance: parseInt(utilities.formatBalance(bts_balance, 5)),
+                        vesting: vesting_balances,
+                        memo_key: fullAccount.account.options.memo_key
+                    };
+                    if ($scope.account) {
+                        $scope.account = Object.assign(new_account, $scope.account);
+                    } else {
+                        $scope.account = new_account;
+                    }
 
-                        $scope.select = function(page_operations) {
-                            const page = page_operations -1;
-                            const start = returnDataTotalOps - (page * 20) + 1;
-                            const limit = 20;
+                    let pageLimitHistory = 20;
 
-                            accountService.getAccountHistory(fullAccount.account.id, start, limit,
+                    accountService.getAccountHistory(fullAccount.account.id, null, pageLimitHistory,
+                    function (returnData) {
+                        $scope.operations = returnData;
+                        $scope.currentPage = 0;
+
+                        let totalNumberOfTransactions = 0;
+                        if (returnData.length > 0) {
+                            totalNumberOfTransactions = returnData[0].sequence;
+                            // use the sequence number to get the total number of ops
+                            $scope.select = function(page_operations) {
+                                const page = page_operations - 1;
+                                const start = totalNumberOfTransactions - (page * pageLimitHistory) + 1;
+                                const limit = pageLimitHistory;
+                                accountService.getAccountHistory(fullAccount.account.id, start, limit,
                                 function (returnData) {
-                                $scope.operations = returnData;
-                                $scope.currentPage = page_operations;
-                            });
+                                    $scope.operations = returnData;
+                                    $scope.currentPage = page_operations;
+                                });
+                            };
+                        }
+                        let new_account = {
+                            total_ops: totalNumberOfTransactions,
                         };
-                        $scope.select(1);
-
-                        $scope.account = {
-                            name: fullAccount.account.name,
-                            id: fullAccount.account.id,
-                            referer: fullAccount.referrer_name,
-                            registrar: fullAccount.registrar_name,
-                            statistics: fullAccount.account.statistics,
-                            cashback: cashback_balance_id,
-                            cashback_balance: utilities.formatBalance(cashback_balance_balance, 5),
-                            lifetime: lifetime,
-                            total_ops: total_ops,
-                            lifetime_fees_paid: parseInt(utilities.formatBalance(lifetime_fees_paid, 5)),
-                            bts_balance: parseInt(utilities.formatBalance(bts_balance, 5)),
-                            vesting: vesting_balances,
-                            memo_key: fullAccount.account.options.memo_key
+                        if ($scope.account) {
+                            $scope.account = Object.assign(new_account, $scope.account);
+                        } else {
+                            $scope.account = new_account;
+                        }
+                    }).catch(err => {
+                        let new_account = {
+                            total_ops: -1,
                         };
+                        if ($scope.account) {
+                            $scope.account = Object.assign(new_account, $scope.account);
+                        } else {
+                            $scope.account = new_account;
+                        }
                     });
-
                     $scope.select_balances = function(page_balances) {
                         const page = page_balances -1;
                         let balances = [];
@@ -149,10 +188,12 @@ import {sha256} from "js-sha256";
                         $scope.committee_id = returnData[4];
                         $scope.committee_url = returnData[5];
                     });
-                    accountService.checkIfProxy(account_id, function (returnData) {
-                        $scope.is_proxy = returnData[0];
-                        $scope.proxy_votes = returnData[1];
-                    });
+                    //accountService.checkIfProxy(account_id, function (returnData) {
+                    //    $scope.is_proxy = returnData[0];
+                    //    $scope.proxy_votes = returnData[1];
+                    //});
+                    $scope.is_proxy = false;
+                    $scope.proxy_votes = undefined;
 
                     accountService.parseProposals(fullAccount.proposals, function (returnData) {
                         $scope.proposals = returnData;
@@ -164,16 +205,21 @@ import {sha256} from "js-sha256";
 
                     // fill in voting
                     accountService.getVotingStats(fullAccount.account.id, function (returnData) {
+                        console.log("asdasdsa")
                         $scope.votingStats = returnData;
                     });
 
                     accountService.getAccountName(fullAccount.account.options.voting_account,
                         function (returnData) {
-                            if ($scope.account == undefined) {
-                                $scope.account = {}
+                            let new_account = {
+                                voting_account_id: fullAccount.account.options.voting_account,
+                                voting_account_name: returnData
+                            };
+                            if ($scope.account) {
+                                $scope.account = Object.assign(new_account, $scope.account);
+                            } else {
+                                $scope.account = new_account;
                             }
-                            $scope.account.voting_account_id = fullAccount.account.options.voting_account;
-                            $scope.account.voting_account_name = returnData;
                         });
 
 

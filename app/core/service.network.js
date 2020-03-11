@@ -57,7 +57,11 @@
                         operation.operation_id = value.account_history.operation_id;
                         operation.time = value.block_data.block_time;
 
-                        const parsed_op = value.operation_history.op_object;
+                        let parsed_op = value.operation_history.op_object;
+                        if (parsed_op == undefined)
+                            parsed_op = JSON.parse(value.operation_history.op)[1];
+                            if (parsed_op.amount)
+                                parsed_op.amount_ = parsed_op.amount;
 
                         utilities.opText(appConfig, $http, value.operation_type, parsed_op, function(returnData) {
                             operation.operation_text = returnData;
@@ -126,7 +130,12 @@
                             op_type: op_type
                         };
 
-                        const opArray = value.operation_history.op_object;
+                        let opArray = value.operation_history.op_object;
+                        if (opArray == undefined)
+                            opArray = JSON.parse(value.operation_history.op)[1];
+                        if (parsed_op.amount)
+                            parsed_op.amount_ = parsed_op.amount;
+
                         utilities.opText(appConfig, $http, value.operation_type, opArray, function (returnData) {
                             parsed.operation_text = returnData;
                         });
@@ -166,6 +175,8 @@
                 $http.get(appConfig.urls.python_backend + "/operation?operation_id=" + operation).then(function(response) {
                     const raw_obj = response.data.op;
                     const op_type =  utilities.operationType(response.data.op_type);
+
+                    console.log(response)
 
                     utilities.opText(appConfig, $http, response.data.op_type, raw_obj, function(returnData) {
                         op = {
