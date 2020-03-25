@@ -50,7 +50,7 @@ import {sha256} from "js-sha256";
                     });
 
                     const lifetime_fees_paid = fullAccount.statistics.lifetime_fees_paid;
-                    const bts_balance = fullAccount.balances[0].balance;
+                    const bts_balance = fullAccount.balances.length > 0 ? fullAccount.balances[0].balance : 0;
 
                     jdenticon.update("#identicon", sha256(fullAccount.account.name));
 
@@ -205,7 +205,6 @@ import {sha256} from "js-sha256";
 
                     // fill in voting
                     accountService.getVotingStats(fullAccount.account.id, function (returnData) {
-                        console.log("asdasdsa")
                         $scope.votingStats = returnData;
                     });
 

@@ -288,7 +288,7 @@
                 }
             },
             getAccountHistory: function(account_id, start, limit, callback) {
-                $http.get(appConfig.urls.elasticsearch_wrapper + "/es/account_history?account_id=" +
+                return $http.get(appConfig.urls.elasticsearch_wrapper + "/es/account_history?account_id=" +
                     account_id + (start != null ? "&search_after=" + start : "") + "&size=" + limit + "&sort_by=-account_history.sequence")
                     .then(function (response) {
 
