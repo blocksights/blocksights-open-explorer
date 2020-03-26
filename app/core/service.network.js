@@ -46,15 +46,18 @@
             },
             getLastOperations: function(limit, from, callback) {
                 $http.get(appConfig.urls.elasticsearch_wrapper +
-                    "/es/account_history?size=" + limit + "&from_=" + from + "&from_date=now-180d")
-                    .then(function (response) {
-
+                    "/es/account_history?size=" + limit + "&from_=" + from + "&from_date=now-180d"
+                ).then(function (response) {
                     let last_ops = [];
-                    angular.forEach(response.data, function (value) {
 
+                    // only add if the op id is not already added (transfer appears in both accounts!)
+                    const unique_data = response.data.filter((v,i,a)=>a.findIndex(t=>(t.operation_id_num === v.operation_id_num))===i);
+
+                    angular.forEach(unique_data, function (value) {
                         let operation = {};
                         operation.block_num = value.block_data.block_num;
                         operation.operation_id = value.account_history.operation_id;
+                        operation.operation_id_num = value.operation_id_num;
                         operation.time = value.block_data.block_time;
 
                         let parsed_op = value.operation_history.op_object;
@@ -72,7 +75,6 @@
                         operation.color = type_res[1];
 
                         last_ops.push(operation);
-
                     });
                     callback(last_ops);
                 });

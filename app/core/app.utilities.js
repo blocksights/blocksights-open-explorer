@@ -257,6 +257,17 @@
                         });
                     });
                 }
+                else if (operation_type === 8) {
+                    operation_account = operation.account_to_upgrade;
+
+                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                        .then(function (response_name) {
+
+                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
+                                "</a> upgraded to LTM (lifetime membership)";
+                            callback(operation_text);
+                        });
+                }
                 else if (operation_type === 14) {
                     var issuer = operation.issuer;
                     var issue_to_account =  operation.issue_to_account;
@@ -540,7 +551,7 @@
                         });
                 }
                 else {
-                    operation_text = "";
+                    operation_text = "Type" + operation_type + " (beautifier missing): " + JSON.stringify(operation).substr(0, 25) + " ...";
                     callback(operation_text);
                 }
 

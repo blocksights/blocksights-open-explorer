@@ -26,7 +26,13 @@
             networkService.getLastOperations(limit, from, function (returnData) {
                 $scope.operations = returnData;
                 $scope.currentPage = page_operations;
-                $scope.total_ops = 10000;
+                if (page_operations == 1) {
+                    if (returnData.length > 0) {
+                        $scope.total_ops = returnData[0].operation_id_num;
+                    } else {
+                        $scope.total_ops = 0;
+                    }
+                }
             });
         };
         $scope.select(1);
