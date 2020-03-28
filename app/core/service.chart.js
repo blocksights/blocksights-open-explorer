@@ -80,7 +80,7 @@
                                 scale: true,
                                 axisLabel: {
                                     formatter: function (value) {
-                                        return value / 1000000 + "M";
+                                        return value;
                                     }
                                 }
                             }],

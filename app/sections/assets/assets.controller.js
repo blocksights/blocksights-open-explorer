@@ -37,6 +37,7 @@
                     $scope.dynamic = returnData;
                 });
 
+                $scope.dex_volume_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
                 chartService.dailyDEXChart(function (returnData) {
                     $scope.dex_volume_chart = returnData;
                 });

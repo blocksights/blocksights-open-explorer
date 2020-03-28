@@ -80,10 +80,15 @@
                 });
             },
 
-            getBigTransactions: function(callback) {
-                $http.get(appConfig.urls.elasticsearch_wrapper +
-                    "/es/account_history?from_date=now-6h&to_date=now&type=aggs&agg_field=block_data.trx_id.keyword&size=20")
-                    .then(function (response) {
+            getBigTransactions: function(callback, ofLastHours) {
+                $http.get(
+                    appConfig.urls.elasticsearch_wrapper + "/es/account_history" +
+                    "?from_date=now-" + ofLastHours + "h" +
+                    "&to_date=now" +
+                    "&type=aggs" +
+                    "&agg_field=block_data.trx_id.keyword" +
+                    "&size=20"
+                ).then(function (response) {
 
                     let transactions = [];
                     angular.forEach(response.data, function (value) {
@@ -99,27 +104,13 @@
                 });
             },
 
-            getTransactionMetaData: function(trx, callback) {
-                let data;
-                $http.get(appConfig.urls.elasticsearch_wrapper + "/es/trx?trx=" + trx +
-                    "&size=1&sort=-operation_history.sequence")
-                    .then(function(response) {
-
-                    data = {
-                        hash: response.data[0].block_data.trx_id,
-                        counter: response.data[0].operation_history.op_in_trx,
-                        block_num: response.data[0].block_data.block_num,
-                        date: response.data[0].block_data.block_time
-                    };
-                    callback(data);
-                });
-            },
-
-            getTransactionOperations: function(trx, callback) {
-                $http.get(appConfig.urls.elasticsearch_wrapper + "/es/trx?trx=" + trx +
-                    "&size=100&sort=-operation_history.sequence")
-                    .then(function(response) {
-
+            getTransaction: function(trx, callback) {
+                return $http.get(appConfig.urls.elasticsearch_wrapper + "/es/trx?trx=" + trx +
+                    "&sort=-operation_history.sequence"
+                ).then(function(response) {
+                    if (response.data && response.data.length == 0) {
+                        return null;
+                    }
                     let operations = [];
                     angular.forEach(response.data, function (value) {
                         const op = utilities.operationType(value.operation_type);
@@ -135,15 +126,29 @@
                         let opArray = value.operation_history.op_object;
                         if (opArray == undefined)
                             opArray = JSON.parse(value.operation_history.op)[1];
-                        if (parsed_op.amount)
-                            parsed_op.amount_ = parsed_op.amount;
+                        if (opArray.amount)
+                            opArray.amount_ = opArray.amount;
 
                         utilities.opText(appConfig, $http, value.operation_type, opArray, function (returnData) {
                             parsed.operation_text = returnData;
                         });
                         operations.push(parsed);
                     });
-                    callback(operations);
+                    // only add if the op id is not already added (transfer appears in both accounts!)
+                    const unique_data = operations.filter((v,i,a)=>a.findIndex(t=>(t.operation_id === v.operation_id))===i);
+
+                    // meta data
+                    const metadata = {
+                        hash: response.data[0].block_data.trx_id,
+                        counter: response.data[0].operation_history.op_in_trx,
+                        block_num: response.data[0].block_data.block_num,
+                        date: response.data[0].block_data.block_time
+                    };
+
+                    callback({
+                        operations: unique_data,
+                        meta: metadata
+                    });
                 });
             },
             getFees: function(callback) {

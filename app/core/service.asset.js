@@ -65,12 +65,8 @@
                 var dex;
                 $http.get(appConfig.urls.python_backend + "/dex_total_volume").then(function (response) {
                     dex = {
-                        volume_bts: response.data.volume_bts,
-                        volume_cny: response.data.volume_cny,
-                        volume_usd: response.data.volume_usd,
-                        market_cap_bts: response.data.market_cap_bts.toString().slice(0, -12),
-                        market_cap_cny: response.data.market_cap_cny.toString().slice(0, -12),
-                        market_cap_usd: response.data.market_cap_usd.toString().slice(0, -12)
+                        volume_core_asset: response.data.volume_core_asset,
+                        market_cap_core_asset: response.data.market_cap_core_asset
                     };
                     callback(dex);
                 });

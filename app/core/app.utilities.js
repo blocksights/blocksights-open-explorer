@@ -268,6 +268,17 @@
                             callback(operation_text);
                         });
                 }
+                else if (operation_type === 10) {
+                    operation_account = operation.issuer;
+
+                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                        .then(function (response_name) {
+                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
+                                "</a> created the asset " + "<a href='/#/assets/" + operation.symbol + "'>" + operation.symbol +
+                            "</a>";
+                            callback(operation_text);
+                        });
+                }
                 else if (operation_type === 14) {
                     var issuer = operation.issuer;
                     var issue_to_account =  operation.issue_to_account;
