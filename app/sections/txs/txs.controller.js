@@ -20,7 +20,7 @@
         }
         else {
             if (path === "/txs") {
-                const ofLastHours = 48;
+                const ofLastHours = 128;
                 $scope.ofLastHours = ofLastHours;
                 networkService.getBigTransactions(function (returnData) {
                     $scope.transactions = returnData;

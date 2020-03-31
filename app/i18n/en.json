@@ -168,10 +168,13 @@
   "If you have a transaction hash, please paste it here to get transaction information.": "If you have a transaction hash, please paste it here to get transaction information.",
   "Transaction ID": "Transaction ID",
 
-  "Biggest transactions in the last 1 hour": "Biggest transactions in the last 1 hour",
+  "Biggest transactions": "Biggest transactions",
 
   "Hash": "Hash",
   "Date": "Date",
+
+  "hours": "hours",
+  "hour": "hour",
 
   "Voting report": "Voting report",
 

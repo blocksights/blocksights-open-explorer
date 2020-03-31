@@ -63,8 +63,9 @@
         }
         else {
             if(path === "/markets") {
-
-                marketService.getActiveMarkets(function (returnData) {
+                const ofLastHours = 128;
+                $scope.ofLastHours = ofLastHours;
+                marketService.getActiveMarkets(ofLastHours, function (returnData) {
                     $scope.markets = returnData;
                 });
                 utilities.columnsort($scope, "volume", "sortColumn", "sortClass", "reverse", "reverseclass", "column");

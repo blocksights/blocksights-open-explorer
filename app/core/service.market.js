@@ -7,9 +7,9 @@
     function marketService($http, appConfig) {
 
         return {
-            getActiveMarkets: function(callback) {
+            getActiveMarkets: function(lastXHours, callback) {
                 let markets = [];
-                $http.get(appConfig.urls.python_backend + "/most_active_markets").then(function(response) {
+                $http.get(appConfig.urls.python_backend + "/most_active_markets?of_last_hours=" + lastXHours).then(function(response) {
 
                     angular.forEach(response.data, function(value) {
                         const market = {
