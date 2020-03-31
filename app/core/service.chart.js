@@ -205,6 +205,16 @@
             topProxiesChart: function(callback) {
                 $http.get(appConfig.urls.python_backend + "/top_proxies").then(function(response) {
 
+                    const data = [];
+                    const amountToDisplay = 10;
+                    let i;
+                    for (i in response.data) {
+                        data.push({
+                            value: response.data[i].bts_weight,
+                            name: response.data[i].name
+                        });
+                        if (data.length >= amountToDisplay) break;
+                    }
                     var proxies_chart = {};
                     proxies_chart.options = {
                         animation: true,
@@ -215,20 +225,12 @@
                         legend: {
                             orient: 'vertical',
                             x: 'left',
-                            data: [
-                                response.data[0].name,
-                                response.data[1].name,
-                                response.data[2].name,
-                                response.data[3].name,
-                                response.data[4].name,
-                                response.data[5].name,
-                                response.data[6].name
-                            ]
+                            data: data.map(x => x.name)
                         },
                         toolbox: {
                             show: true,
                             feature: {
-                                saveAsImage: {show: true, title: "save as image"}
+                                saveAsImage: {show: true, title: "Save as image"}
                             }
                         },
                         calculable: true,
@@ -257,15 +259,7 @@
                                     }
                                 }
                             },
-                            data: [
-                                {value: response.data[0].bts_weight, name: response.data[0].name},
-                                {value: response.data[1].bts_weight, name: response.data[1].name},
-                                {value: response.data[2].bts_weight, name: response.data[2].name},
-                                {value: response.data[3].bts_weight, name: response.data[3].name},
-                                {value: response.data[4].bts_weight, name: response.data[4].name},
-                                {value: response.data[5].bts_weight, name: response.data[5].name},
-                                {value: response.data[6].bts_weight, name: response.data[6].name}
-                            ]
+                            data: data
                         }]
                     };
                     callback(proxies_chart);
@@ -273,6 +267,17 @@
             },
             topMarketsChart: function(callback) {
                 $http.get(appConfig.urls.python_backend + "/top_markets").then(function(response) {
+
+                    const data = [];
+                    const amountToDisplay = 10;
+                    let i;
+                    for (i in response.data) {
+                        data.push({
+                            value: response.data[i]["24h_volume"],
+                            name: response.data[i].pair
+                        });
+                        if (data.length >= amountToDisplay) break;
+                    }
 
                     var markets_chart = {};
                     markets_chart.options = {
@@ -284,15 +289,7 @@
                         legend: {
                             orient: 'vertical',
                             x: 'left',
-                            data: [
-                                response.data[0].pair,
-                                response.data[1].pair,
-                                response.data[2].pair,
-                                response.data[3].pair,
-                                response.data[4].pair,
-                                response.data[5].pair,
-                                response.data[6].pair
-                            ]
+                            data: data.map(x => x.name)
                         },
                         toolbox: {
                             show: true,
@@ -326,15 +323,7 @@
                                     }
                                 }
                             },
-                            data: [
-                                {value: response.data[0]["24h_volume"], name: response.data[0].pair},
-                                {value: response.data[1]["24h_volume"], name: response.data[1].pair},
-                                {value: response.data[2]["24h_volume"], name: response.data[2].pair},
-                                {value: response.data[3]["24h_volume"], name: response.data[3].pair},
-                                {value: response.data[4]["24h_volume"], name: response.data[4].pair},
-                                {value: response.data[5]["24h_volume"], name: response.data[5].pair},
-                                {value: response.data[6]["24h_volume"], name: response.data[6].pair}
-                            ]
+                            data: data
                         }]
                     };
                     callback(markets_chart);
@@ -342,6 +331,18 @@
             },
             topSmartCoinsChart: function(callback) {
                 $http.get(appConfig.urls.python_backend + "/top_smartcoins").then(function(response) {
+
+                    const data = [];
+                    const amountToDisplay = 10;
+                    let i;
+                    for (i in response.data) {
+                        data.push({
+                            value: response.data[i]["24h_volume"],
+                            name: response.data[i].asset_name
+                        });
+                        if (data.length >= amountToDisplay) break;
+                    }
+
                     var smartcoins_chart = {};
                     smartcoins_chart.options = {
                         animation: true,
@@ -352,15 +353,7 @@
                         legend: {
                             orient: 'vertical',
                             x: 'left',
-                            data: [
-                                response.data[0].asset_name,
-                                response.data[1].asset_name,
-                                response.data[2].asset_name,
-                                response.data[3].asset_name,
-                                response.data[4].asset_name,
-                                response.data[5].asset_name,
-                                response.data[6].asset_name
-                            ]
+                            data: data.map(x => x.name)
                         },
                         toolbox: {
                             show: true,
@@ -393,15 +386,7 @@
                                     }
                                 }
                             },
-                            data: [
-                                {value: response.data[0]["24h_volume"], name: response.data[0].asset_name},
-                                {value: response.data[1]["24h_volume"], name: response.data[1].asset_name},
-                                {value: response.data[2]["24h_volume"], name: response.data[2].asset_name},
-                                {value: response.data[3]["24h_volume"], name: response.data[3].asset_name},
-                                {value: response.data[4]["24h_volume"], name: response.data[4].asset_name},
-                                {value: response.data[5]["24h_volume"], name: response.data[5].asset_name},
-                                {value: response.data[6]["24h_volume"], name: response.data[6].asset_name}
-                            ]
+                            data: data
                         }]
                     };
                     callback(smartcoins_chart);
@@ -409,6 +394,18 @@
             },
             topUIAsChart: function(callback) {
                 $http.get(appConfig.urls.python_backend + "/top_uias").then(function(response) {
+
+                    const data = [];
+                    const amountToDisplay = 10;
+                    let i;
+                    for (i in response.data) {
+                        data.push({
+                            value: response.data[i]["24h_volume"],
+                            name: response.data[i].asset_name
+                        });
+                        if (data.length >= amountToDisplay) break;
+                    }
+
                     var uias_chart = {};
                     uias_chart.options = {
                         animation: true,
@@ -419,15 +416,7 @@
                         legend: {
                             orient: 'vertical',
                             x: 'left',
-                            data: [
-                                response.data[0].asset_name,
-                                response.data[1].asset_name,
-                                response.data[2].asset_name,
-                                response.data[3].asset_name,
-                                response.data[4].asset_name,
-                                response.data[5].asset_name,
-                                response.data[6].asset_name
-                            ]
+                            data: data.map(x => x.name)
                         },
                         toolbox: {
                             show: true,
@@ -460,15 +449,7 @@
                                     }
                                 }
                             },
-                            data: [
-                                {value: response.data[0]["24h_volume"], name: response.data[0].asset_name},
-                                {value: response.data[1]["24h_volume"], name: response.data[1].asset_name},
-                                {value: response.data[2]["24h_volume"], name: response.data[2].asset_name},
-                                {value: response.data[3]["24h_volume"], name: response.data[3].asset_name},
-                                {value: response.data[4]["24h_volume"], name: response.data[4].asset_name},
-                                {value: response.data[5]["24h_volume"], name: response.data[5].asset_name},
-                                {value: response.data[6]["24h_volume"], name: response.data[6].asset_name}
-                            ]
+                            data: data
                         }]
                     };
                     callback(uias_chart);
@@ -476,6 +457,17 @@
             },
             topHoldersChart: function(callback) {
                 $http.get(appConfig.urls.python_backend + "/top_holders").then(function(response) {
+
+                    const data = [];
+                    const amountToDisplay = 10;
+                    let i;
+                    for (i in response.data) {
+                        data.push({
+                            value: response.data[i].amount,
+                            name: response.data[i].account_name
+                        });
+                        if (data.length >= amountToDisplay) break;
+                    }
 
                     var holders_chart = {};
                     holders_chart.options = {
@@ -487,15 +479,7 @@
                         legend: {
                             orient: 'vertical',
                             x: 'left',
-                            data: [
-                                response.data[0].account_name,
-                                response.data[1].account_name,
-                                response.data[2].account_name,
-                                response.data[3].account_name,
-                                response.data[4].account_name,
-                                response.data[5].account_name,
-                                response.data[6].account_name
-                            ]
+                            data: data.map(x => x.name)
                         },
                         toolbox: {
                             show: true,
@@ -529,15 +513,7 @@
                                     }
                                 }
                             },
-                            data: [
-                                {value: response.data[0].amount, name: response.data[0].account_name},
-                                {value: response.data[1].amount, name: response.data[1].account_name},
-                                {value: response.data[2].amount, name: response.data[2].account_name},
-                                {value: response.data[3].amount, name: response.data[3].account_name},
-                                {value: response.data[4].amount, name: response.data[4].account_name},
-                                {value: response.data[5].amount, name: response.data[5].account_name},
-                                {value: response.data[6].amount, name: response.data[6].account_name}
-                            ]
+                            data: data
                         }]
                     };
                     callback(holders_chart);
