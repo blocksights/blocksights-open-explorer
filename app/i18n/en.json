@@ -215,5 +215,11 @@
   "general": {
     "SUPPLY": "SUPPLY",
     "VOLUME": "VOLUME"
-  }
+  },
+
+  "Loading": "Loading ...",
+  "No witness candidates found": "No witness candidates found",
+  "No committee candidates found": "No committee candidates found",
+  "No worker proposals found": "No worker proposals found",
+  "No proxies found": "No proxies found"
 }

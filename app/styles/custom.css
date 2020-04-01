@@ -70,3 +70,20 @@
 .tab-content>.tab-pane.active {
     height: auto;
 }
+
+.voting th.rotated-text {
+    height: 80px;
+    white-space: nowrap;
+    padding: 0 !important;
+}
+
+.voting th.rotated-text > div {
+    transform:
+            translate(13px, 0px)
+            rotate(310deg);
+    width: 30px;
+}
+
+.voting th.rotated-text > div > span {
+    padding: 5px 10px;
+}

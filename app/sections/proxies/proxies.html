@@ -23,12 +23,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="p in proxies | orderBy:column:reverse">
+                <tr ng-if="proxies === undefined"><td colspan="3"><span data-translate="Loading"></span></td></tr>
+                <tr ng-if="proxies.length == 0"><td colspan="3"><span data-translate="No proxies found"></span></td></tr>
+                <tr ng-if="proxies.length > 0" data-ng-repeat="p in proxies | orderBy:column:reverse">
                     <td>{{p.position}}</td>
                     <td><a href="#/accounts/{{p.account}}/">{{p.account_name}}</a></td>
                     <td class="align-right">{{p.power | number: 0}}</td>
 					<td class="align-right">{{p.followers | number}}</td>
                     <td>{{p.perc | number: 3}}</td>
+                </tr>
                 </tbody>
             </table>
         </div>

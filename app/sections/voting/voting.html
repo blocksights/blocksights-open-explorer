@@ -1,4 +1,4 @@
-<div class="page page-table" data-ng-controller="votingCtrl">
+<div class="page page-table voting" data-ng-controller="votingCtrl">
     <div class="row">
         <div class="col-md-6">
             <ol class="breadcrumb">
@@ -12,11 +12,17 @@
     <div class="panel panel-default">
         <div class="panel-heading"><span data-translate="Witnesses"></span> </div>
         <div class="panel-body table-responsive">
-            <table class="table">
+            <div ng-if="witnesses === undefined">
+                <span data-translate="Loading"></span>
+            </div>
+            <div ng-if="witnesses.length == 0">
+                <span data-translate="No witness candidates found"></span>
+            </div>
+            <table class="table" ng-if="witnesses.length > 0">
                 <thead>
                 <tr>
                     <th></th>
-                    <th data-ng-repeat="p in proxies"> {{p.account_name | limitTo: 8}} </th>
+                    <th class="rotated-text" data-ng-repeat="p in proxies"><div><span>{{p.account_name}}</span></div></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -32,6 +38,7 @@
                     <td class="{{w.tclass8}}">{{w.proxy8}}</td>
                     <td class="{{w.tclass9}}">{{w.proxy9}}</td>
                     <td class="{{w.tclass10}}">{{w.proxy10}}</td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -39,11 +46,17 @@
     <div class="panel panel-default">
         <div class="panel-heading"><span data-translate="Workers"></span> </div>
         <div class="panel-body table-responsive">
-            <table class="table">
+            <div ng-if="workers === undefined">
+                <span data-translate="Loading"></span>
+            </div>
+            <div ng-if="workers.length == 0">
+                <span data-translate="No worker proposals found"></span>
+            </div>
+            <table class="table" ng-if="workers.length > 0">
                 <thead>
                 <tr>
                     <th></th>
-                    <th data-ng-repeat="p in proxies"> {{p.account_name | limitTo: 8}} </th>
+                    <th class="rotated-text" data-ng-repeat="p in proxies"><div><span>{{p.account_name}}</span></div></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -59,6 +72,7 @@
                     <td class="{{w.tclass8}}">{{w.proxy8}}</td>
                     <td class="{{w.tclass9}}">{{w.proxy9}}</td>
                     <td class="{{w.tclass10}}">{{w.proxy10}}</td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -66,11 +80,17 @@
     <div class="panel panel-default">
         <div class="panel-heading"><span data-translate="Committee members"></span> </div>
         <div class="panel-body table-responsive">
-            <table class="table">
+            <div ng-if="committee === undefined">
+                <span data-translate="Loading"></span>
+            </div>
+            <div ng-if="committee.length == 0">
+                <span data-translate="No committee candidates found"></span>
+            </div>
+            <table class="table" ng-if="committee.length > 0">
                 <thead>
                 <tr>
                     <th></th>
-                    <th data-ng-repeat="p in proxies"> {{p.account_name | limitTo: 8}} </th>
+                    <th class="rotated-text" data-ng-repeat="p in proxies"><div><span>{{p.account_name}}</span></div></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -86,6 +106,7 @@
                     <td class="{{c.tclass8}}">{{c.proxy8}}</td>
                     <td class="{{c.tclass9}}">{{c.proxy9}}</td>
                     <td class="{{c.tclass10}}">{{c.proxy10}}</td>
+                </tr>
                 </tbody>
             </table>
         </div>
