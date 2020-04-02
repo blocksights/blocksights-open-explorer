@@ -66,6 +66,11 @@ module.exports = {
                 to: path.resolve(__dirname, './dist/i18n')
             }]
         ),
+        new CopyWebpackPlugin([{
+                from: path.resolve(__dirname, `./app/favicon.ico`),
+                to: path.resolve(__dirname, './dist/favicon.ico')
+            }]
+        ),
         new CopyWebpackPlugin(
             Html.map(html => {
                 return {

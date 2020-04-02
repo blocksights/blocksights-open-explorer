@@ -33,6 +33,8 @@
                         $scope.total_ops = 0;
                     }
                 }
+            }).catch(err => {
+                $scope.operations = "error";
             });
         };
         $scope.select(1);

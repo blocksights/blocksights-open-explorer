@@ -221,5 +221,7 @@
   "No witness candidates found": "No witness candidates found",
   "No committee candidates found": "No committee candidates found",
   "No worker proposals found": "No worker proposals found",
-  "No proxies found": "No proxies found"
+  "No proxies found": "No proxies found",
+  "No operations found": "No operations found",
+  "An error occurred during loading": "An error occurred during loading"
 }

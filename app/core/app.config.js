@@ -55,7 +55,6 @@ import {getGATag, getConnections, getConfig} from "../branding";
             gray:       '#DCDCDC'
         };
         var urls = {
-            websocket: getConnections().blockchain,
             python_backend: getConnections().api,
             elasticsearch_wrapper: getConnections().api,
             udf_wrapper: getConnections().api + "/udf"

@@ -45,11 +45,11 @@
                 });
             },
             getLastOperations: function(limit, from, callback) {
-                $http.get(appConfig.urls.elasticsearch_wrapper + "/es/account_history"
+                return $http.get(appConfig.urls.elasticsearch_wrapper + "/es/account_history"
                     + "?size=" + limit
                     + "&from_=" + from
                     + "&from_date=now-180d"
-                ).then(function (response) {
+                ).then(response => {
                     let last_ops = [];
 
                     // only add if the op id is not already added (transfer appears in both accounts!)
