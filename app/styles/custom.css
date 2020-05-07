@@ -1,33 +1,8 @@
-.flags-american,.flags-china,.flags-japan,.flags-portugal,.flags-russia,.flags-spain {
-    height:21px;
-    width:32px
-}
-.flags-american,.flags-china,.flags-japan,.flags-portugal,.flags-russia,.flags-spain,.flags-sprite {
-    background-repeat:no-repeat
-}
-.flags-american {
-    background-image:url(../images/flags/american.png);
-    background-position:0 0
-}
-.flags-china {
-    background-image:url(../images/flags/china.png);
-    background-position:0 0
-}
-.flags-japan {
-    background-image:url(../images/flags/japan.png);
-    background-position:0 0
-}
-.flags-portugal {
-    background-image:url(../images/flags/portugal.png);
-    background-position:0 0
-}
-.flags-russia {
-    background-image:url(../images/flags/russia.png);
-    background-position:0 0
-}
-.flags-spain {
-    background-image:url(../images/flags/spain.png);
-    background-position:0 0
+/* Icon for language selector */
+.globe {
+    width: 17px;
+    height: 17px;
+    margin-top: -1px; /* align globe image in a header */
 }
 
 /* arrows */
