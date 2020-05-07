@@ -87,3 +87,22 @@
 .voting th.rotated-text > div > span {
     padding: 5px 10px;
 }
+
+.popover {
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    border: 0;
+    box-shadow: none;
+}
+
+.popover.top>.arrow {
+    border-top: none;
+}
+
+.popover.top>.arrow:after {
+    border-top-color: rgba(0,0,0,0.85);
+}
+
+.popover-content {
+    word-break: break-all;
+}
