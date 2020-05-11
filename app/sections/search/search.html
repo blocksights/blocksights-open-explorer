@@ -20,7 +20,7 @@
                         <input type="hidden" class="form-control" ng-model="type" value="block">
                         <div class="form-group ui-typeahead">
                             <label for="block"><span data-translate="Block number"></span></label>
-                            <input type="text" class="form-control" ng-model="block" ng-change="updateData('block')" id="block" placeholder="enter block number"
+                            <input type="text" class="form-control" ng-model="block" ng-change="updateData('block')" id="block" placeholder="{{ 'Enter block number' | translate }}"
                                    uib-typeahead="b for b in blocks | filter:$viewValue | limitTo:8" ng-required="required">
                         </div>
                         <button type="submit" class="btn btn-success btn-w-md"><span data-translate="Go"></span></button>
@@ -38,7 +38,7 @@
                         <input type="hidden" class="form-control" ng-model="type" value="account">
                         <div class="form-group ui-typeahead">
                             <label for="account"><span data-translate="Account name or ID"></span></label>
-                            <input type="text" class="form-control" ng-model="account" ng-change="updateData('account')" id="account" placeholder="enter account name or id number"
+                            <input type="text" class="form-control" ng-model="account" ng-change="updateData('account')" id="account" placeholder="{{ 'Enter account name or id number' | translate }}"
                                    uib-typeahead="a for a in accounts | filter:$viewValue | limitTo:8" ng-required="required">
                         </div>
                         <button type="submit" class="btn btn-success btn-w-md"><span data-translate="Go"></span></button>
@@ -58,7 +58,7 @@
                         <input type="hidden" class="form-control" ng-model="type" value="object">
                         <div class="form-group">
                             <label for="object"><span data-translate="Object ID"></span></label>
-                            <input type="text" class="form-control" ng-model="object" id="object" placeholder="enter object id" ng-required="required">
+                            <input type="text" class="form-control" ng-model="object" id="object" placeholder="{{ 'Enter object id' | translate }}" ng-required="required">
                         </div>
                         <button type="submit" class="btn btn-success btn-w-md"><span data-translate="Go"></span></button>
                     </form>
@@ -79,7 +79,7 @@
                         <input type="hidden" class="form-control" ng-model="type" value="asset">
                         <div class="form-group ui-typeahead">
                             <label for="asset"><span data-translate="Asset name or ID"></span></label>
-                            <input type="text" class="form-control" ng-model="asset" ng-change="updateData('asset')" id="asset" placeholder="enter asset name or id"
+                            <input type="text" class="form-control" ng-model="asset" ng-change="updateData('asset')" id="asset" placeholder="{{ 'Enter asset name or id' | translate }}"
                                    uib-typeahead="a for a in assets | filter:$viewValue | limitTo:8" ng-required="required">
                         </div>
                         <button type="submit" class="btn btn-success btn-w-md"><span data-translate="Go"></span></button>
@@ -99,7 +99,7 @@
                         <input type="hidden" class="form-control" ng-model="type" value="asset">
                         <div class="form-group ui-typeahead">
                             <label for="asset"><span data-translate="Transaction ID"></span></label>
-                            <input type="text" class="form-control" ng-model="tx" ng-change="updateData('tx')" id="tx" placeholder="enter tx hash"
+                            <input type="text" class="form-control" ng-model="tx" ng-change="updateData('tx')" id="tx" placeholder="{{ 'Enter tx hash' | translate }}"
                                    uib-typeahead="a for a in txs | filter:$viewValue | limitTo:8" ng-required="required">
                         </div>
                         <button type="submit" class="btn btn-success btn-w-md"><span data-translate="Go"></span></button>
