@@ -60,31 +60,6 @@
                 return $scope.lang = lang;
             };
 
-            $scope.getFlag = function() {
-                var lang;
-                lang = $scope.lang;
-                switch (lang) {
-                    case 'English':
-                        return 'flags-american';
-                        break;
-                    case 'Español':
-                        return 'flags-spain';
-                        break;
-                    case '中文':
-                        return 'flags-china';
-                        break;
-                    case 'Portugues':
-                        return 'flags-portugal';
-                        break;
-                    case '日本語':
-                        return 'flags-japan';
-                        break;
-                    case 'Русский язык':
-                        return 'flags-russia';
-                        break;
-                }
-            };
-
         }
 
-})(); 
+})();

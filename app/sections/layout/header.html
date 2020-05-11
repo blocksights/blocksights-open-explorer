@@ -34,15 +34,13 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown langs text-normal" uib-dropdown is-open="status.isopenLang" data-ng-controller="LangCtrl">
                     <a href="javascript:;" class="active-flag" uib-dropdown-toggle ng-disabled="disabled">
-                        <div class="flag {{ getFlag() }}"></div>
+                        <img src="images/globe.svg" alt="globe" class="globe">
+                        {{ lang }}
                     </a>
                     <ul class="dropdown-menu list-langs pull-right">
                         <li data-ng-show="lang !== 'English' ">
                             <a href="javascript:;" data-ng-click="setLang('English')">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="flag flags-american"></div>
-                                    </div>
                                     <div class="col-md-8">
                                         English
                                     </div>
@@ -52,9 +50,6 @@
                         <li data-ng-show="lang !== 'Español' ">
                             <a href="javascript:;" data-ng-click="setLang('Español')">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="flag flags-spain"></div>
-                                    </div>
                                     <div class="col-md-8">
                                         Español
                                     </div>
@@ -64,9 +59,6 @@
                         <li data-ng-show="lang !== '中文' ">
                             <a href="javascript:;" data-ng-click="setLang('中文')">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="flag flags-china"></div>
-                                    </div>
                                     <div class="col-md-4">
                                         中文
                                     </div>
