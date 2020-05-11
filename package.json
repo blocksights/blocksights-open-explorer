@@ -2,9 +2,9 @@
   "name": "open-explorer",
   "private": false,
   "version": "1.0.0",
-  "description": "An opensource explorer for Graphene blockchains.",
+  "description": "An Open Source explorer for Graphene blockchains.",
   "repository": "-",
-  "license": "MIT",
+  "license": "MIT + Proprietary",
   "browser": {
     "ws": "./loadWebSocket.js"
   },
@@ -29,13 +29,13 @@
     "jdenticon": "2.2.0",
     "jquery": "3.4.1",
     "js-sha256": "0.9.0",
-    "webpack": "4.39.2",
-    "webpack-cli": "3.3.7",
-    "webpack-dev-server": "3.8.0"
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
     "prestart": "npm install",
     "start": "webpack-dev-server",
-    "start:build": "webpack --mode=production"
+    "build": "webpack --mode=production"
   }
 }
