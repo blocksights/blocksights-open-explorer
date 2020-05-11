@@ -12,6 +12,7 @@
                 $http.get(appConfig.urls.python_backend + "/header").then(function(response) {
 
                     header = {
+                        time: response.data.time,
                         head_block_number: response.data.head_block_number,
                         accounts_registered_this_interval: response.data.accounts_registered_this_interval,
                         bts_market_cap: response.data.bts_market_cap,
