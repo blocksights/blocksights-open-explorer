@@ -10,7 +10,6 @@
             getHeader: function(callback) {
                 let header;
                 $http.get(appConfig.urls.python_backend + "/header").then(function(response) {
-
                     header = {
                         time: response.data.time,
                         head_block_number: response.data.head_block_number,
@@ -21,6 +20,10 @@
                         committee_count: response.data.committee_count
                     };
                     callback(header);
+                    $http.get(appConfig.urls.python_backend + "/statistics_per_x?days=1").then(function(response) {
+                        header.statistics_per_x = response.data;
+                        callback(header);
+                    });
                 });
             },
 
