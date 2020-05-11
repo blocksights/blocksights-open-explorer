@@ -1,3 +1,11 @@
+<script type="text/ng-template" id="popover.html">
+    <div style="width: 230px">
+        Block Time: {{ dynamic.time }}
+        <br/>
+        Number of Ops last 24Hr: {{dynamic.statistics_per_x.op_count}}
+    </div>
+</script>
+
 <div class="page page-dashboard" data-ng-controller="DashboardCtrl">
     <div class="row">
         <div class="col-lg-6">
@@ -6,8 +14,8 @@
                     <div class="well">
                         <div
                             class="box-info"
-                            popover-trigger="'mouseenter'"
-                            uib-popover="Block Time: {{ dynamic.time }}\\Number of Ops last 24Hr: {{dynamic.statistics_per_x.op_count}}"
+                            uib-popover-template="'popover.html'"
+                            popover-trigger="'mouseover'"
                             popover-placement="bottom-left"
                         >
                             <p class="size-h4">{{dynamic.head_block_number | number}}<span class="size-h4"></span></p>
