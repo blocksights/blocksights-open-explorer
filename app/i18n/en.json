@@ -279,6 +279,8 @@
 
   "Native": "Native",
 
-  "Gateway": "Gateway"
+  "Gateway": "Gateway",
+
+  "Merkle Root": "Merkle Root"
 
 }
