@@ -29,7 +29,9 @@
                         <th ng-click='sortColumn("counter")' ng-class='sortClass("counter")'><span data-translate="Position"></span></th>
                         <th ng-click='sortColumn("id")' ng-class='sortClass("id")'>ID</th>
                         <th ng-click='sortColumn("committee_member_account_name")' ng-class='sortClass("committee_member_account_name")'><span data-translate="Account"></span></th>
-                        <th>Url</th>
+                        <th>
+                            <span data-translate="Url"></span>
+                        </th>
 						<th class="align-right" ng-click='sortColumn("total_votes")' ng-class='sortClass("total_votes")'><span data-translate="Total votes"></span></th>
                     </tr>
                 </thead>
@@ -38,7 +40,11 @@
                     <td>{{ac.counter}}</td>
                     <td><a href="#/objects/{{ac.id}}/">{{ac.id}}</a></td>
                     <td><a href="#/accounts/{{ac.committee_member_account}}/">{{ac.committee_member_account_name}}</a></td>
-                    <td><a href="{{ac.url}}" target="_blank">Link</a></td>
+                    <td>
+                        <a href="{{ac.url}}" target="_blank">
+                            <span data-translate="Link"></span>
+                        </a>
+                    </td>
 					<td class="align-right">{{ac.total_votes | number: 0}}</td>
                 </tbody>
             </table>
@@ -64,7 +70,9 @@
                     <th ng-click='sortColumn2("counter")' ng-class='sortClass2("counter")'><span data-translate="Position"></span></th>
                     <th ng-click='sortColumn2("id")' ng-class='sortClass2("id")'>ID</th>
                     <th ng-click='sortColumn2("committee_member_account_name")' ng-class='sortClass2("committee_member_account_name")'><span data-translate="Account"></span></th>
-                    <th>Url</th>
+                    <th>
+                        <span data-translate="Url"></span>
+                    </th>
                     <th class="align-right" ng-click='sortColumn2("total_votes")' ng-class='sortClass2("total_votes")'><span data-translate="Total votes"></span></th>
                 </tr>
                 </thead>
@@ -73,7 +81,9 @@
                     <td>{{sc.counter}}</td>
                     <td><a href="#/objects/{{sc.id}}/">{{sc.id}}</a></td>
                     <td><a href="#/accounts/{{sc.committee_member_account}}/">{{sc.committee_member_account_name}}</a></td>
-                    <td><a href="{{sc.url}}" target="_blank">Link</a></td>
+                    <td><a href="{{sc.url}}" target="_blank">
+                        <span data-translate="Link"></span>
+                    </a></td>
                     <td class="align-right">{{sc.total_votes | number: 0}}</td>
                 </tbody>
             </table>
