@@ -39,6 +39,8 @@ import {sha256} from "js-sha256";
                         cashback_balance_balance = fullAccount.cashback_balance.balance.amount;
                     }
 
+                    // "free member" & "lifetime member" are translation keys
+                    // if you change it please make sure you change it in translation files
                     let lifetime = "free member";
                     if (fullAccount.account.id === fullAccount.account.lifetime_referrer) {
                         lifetime = "lifetime member";

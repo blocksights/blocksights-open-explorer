@@ -10,7 +10,7 @@
         <div class="col-md-4">
         </div>
         <div class="col-md-4 align-right align-baseline">
-            <span style="font-size: medium">{{account.name}}</span> <br><span style="font-size: smaller">{{account.lifetime}}</span>
+            <span style="font-size: medium">{{account.name}}</span> <br><span style="font-size: smaller">{{account.lifetime | translate}}</span>
         </div>
     </div>
 
@@ -200,7 +200,9 @@
                                             <table class="table" ng-if="owner_keys.length">
                                                 <thead>
                                                 <tr>
-                                                    <th>Key</th>
+                                                    <th>
+                                                        <span data-translate="Key"></span>
+                                                    </th>
                                                     <th class="align-right"><span data-translate="Threshold"></span></th>
                                                 </tr>
                                                 </thead>
@@ -213,7 +215,9 @@
                                             <table class="table" ng-if="owner_accounts.length">
                                                 <thead>
                                                 <tr>
-                                                    <th>Account</th>
+                                                    <th>
+                                                        <span data-translate="Account"></span>
+                                                    </th>
                                                     <th class="align-right"><span data-translate="Threshold"></span></th>
                                                 </tr>
                                                 </thead>
@@ -236,7 +240,7 @@
                                             <table class="table" ng-if="active_keys.length">
                                                 <thead>
                                                 <tr>
-                                                    <th>Key</th>
+                                                    <th><span data-translate="Key"></span></th>
                                                     <th class="align-right"><span data-translate="Threshold"></span></th>
                                                 </tr>
                                                 </thead>
@@ -250,7 +254,9 @@
                                             <table class="table" ng-if="active_accounts.length">
                                                 <thead>
                                                 <tr>
-                                                    <th>Account</th>
+                                                    <th>
+                                                        <span data-translate="Account"></span>
+                                                    </th>
                                                     <th class="align-right"><span data-translate="Threshold"></span></th>
                                                 </tr>
                                                 </thead>
@@ -409,8 +415,8 @@
                                             <span data-translate="Votes"></span>
                                         </li>
                                         <li class="list-group-item">
-                                            <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href="{{committee_url}}">Link</a></span>
-                                            Url
+                                            <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href="{{committee_url}}" data-translate="Link"></a></span>
+                                            <span data-translate="Url"></span>
                                         </li>
                                     </ul>
                                 </div>
@@ -437,8 +443,8 @@
                                             <span data-translate="Votes"></span>
                                         </li>
                                         <li class="list-group-item">
-                                            <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href="{{witness_url}}">Link</a></span>
-                                            Url
+                                            <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href="{{witness_url}}" data-translate="Link"></a></span>
+                                            <span data-translate="Url"></span>
                                         </li>
                                     </ul>
                                 </div>
@@ -476,7 +482,7 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td><span ng-if="!account.total_ops || account.total_ops <= 0">Loading ...</span></td>
+                    <td><span ng-if="!account.total_ops || account.total_ops <= 0"  data-translate="Loading"></span></td>
                     <td></td>
                     <td></td>
                     <td></td>
