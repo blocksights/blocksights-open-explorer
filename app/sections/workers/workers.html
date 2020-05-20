@@ -3,7 +3,10 @@
         <div class="col-md-6">
             <ol class="breadcrumb">
                 <li><a href="#/"><span data-translate="Home"></span></a></li>
-                <li class="active">DAC <a href="#/workers/"><span data-translate="Workers"></span></a></li>
+                <li class="active">
+                    <span data-translate="DAC"></span>
+                    <a href="#/workers/"><span data-translate="Workers"></span></a>
+                </li>
             </ol>
         </div>
         <div class="col-md-6">
@@ -30,7 +33,9 @@
                         <th ng-click='sortColumn("start")' ng-class='sortClass("start")'><span data-translate="Start"></span></th>
                         <th ng-click='sortColumn("end")' ng-class='sortClass("end")'><span data-translate="End"></span></th>
                         <th ng-click='sortColumn("daily_pay")' ng-class='sortClass("daily_pay")'><span data-translate="Daily pay"></span>({{ branding.coreSymbol }})</th>
-						<th>Url</th>
+						<th>
+                            <span data-translate="Url"></span>
+                        </th>
 						<th class="align-right" ng-click='sortColumn("votes_for")' ng-class='sortClass("votes_for")'><span data-translate="Votes for"></span></th>
                         <th ng-click='sortColumn("perc")' ng-class='sortClass("perc")'><span data-translate="Funded"></span></th>
                     </tr>
@@ -44,10 +49,12 @@
                     <td class="align-right">{{w.daily_pay | number}}</td>
 					<td>
                         <div ng-if="w.have_url == 1">
-                            <a href="{{w.url}}" target="_blank">Link</a>
+                            <a href="{{w.url}}" target="_blank">
+                                <span data-translate="Link"></span>
+                            </a>
                         </div>
                         <div ng-if="w.have_url == 0">
-                            No Link
+                            <span data-translate="No Link"></span>
                         </div>
                     </td>
 					<td class="align-right">{{w.votes_for | number: 0}}</td>
@@ -76,8 +83,10 @@
                     <th ng-click='sortColumn2("worker")' ng-class='sortClass2("worker_name")'><span data-translate="worker"></span></th>
                     <th ng-click='sortColumn2("start")' ng-class='sortClass2("start")'><span data-translate="Start"></span></th>
                     <th ng-click='sortColumn2("end")' ng-class='sortClass2("end")'><span data-translate="End"></span></th>
-                    <th class="align-right" ng-click='sortColumn2("daily_pay")' ng-class='sortClass2("daily_pay")'><span data-translate="Daily pay"></span>(BTS)</th>
-                    <th>Url</th>
+                    <th class="align-right" ng-click='sortColumn2("daily_pay")' ng-class='sortClass2("daily_pay")'><span data-translate="Daily pay"></span>(<span data-translate="BTS"></span>)</th>
+                    <th>
+                        <span data-translate="Url"></span>
+                    </th>
                     <th class="align-right" ng-click='sortColumn2("votes_for")' ng-class='sortClass2("votes_for")'><span data-translate="Votes for"></span></th>
                 </tr>
                 </thead>
@@ -90,10 +99,12 @@
                     <td class="align-right">{{w.daily_pay | number}}</td>
                     <td>
                         <div ng-if="w.have_url == 1">
-                            <a href="{{w.url}}" target="_blank">Link</a>
+                            <a href="{{w.url}}" target="_blank">
+                                <span data-translate="Link"></span>
+                            </a>
                         </div>
                         <div ng-if="w.have_url == 0">
-                            No Link
+                            <span data-translate="No Link"></span>
                         </div>
                     </td>
                     <td class="align-right">{{w.votes_for | number: 0}}</td>
