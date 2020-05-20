@@ -281,6 +281,14 @@
 
   "Gateway": "Gateway",
 
-  "Merkle Root": "Merkle Root"
+  "Merkle Root": "Merkle Root",
+
+  "API": "API",
+
+  "Source Code": "Source Code",
+
+  "Toggle navigation": "Toggle navigation",
+
+  "Open Explorer": "Open Explorer"
 
 }
