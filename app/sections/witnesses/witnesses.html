@@ -66,7 +66,9 @@
                     <th ng-click='sortColumn2("counter")' ng-class='sortClass2("counter")'><span data-translate="Position"></span></th>
                     <th ng-click='sortColumn2("id")' ng-class='sortClass2("id")'>ID</th>
                     <th ng-click='sortColumn2("witness_account")' ng-class='sortClass2("witness_account")'><span data-translate="Account"></span></th>
-                    <th>Url</th>
+                    <th>
+                        <span data-translate="Url"></span>
+                    </th>
                     <th class="align-right" ng-click='sortColumn2("total_votes")' ng-class='sortClass2("total_votes")'><span data-translate="Total votes"></span></th>
                     <th class="align-right" ng-click='sortColumn2("total_missed")' ng-class='sortClass2("total_missed")'><span data-translate="Missed"></span></th>
                     <th class="align-right" ng-click='sortColumn2("last_confirmed_block_num")' ng-class='sortClass2("last_confirmed_block_num")'><span data-translate="Last confirmed block"></span></th>
@@ -77,7 +79,11 @@
                     <td>{{w.counter}}</td>
                     <td><a href="#/objects/{{w.id}}/">{{w.id}}</a></td>
                     <td><a href="#/accounts/{{w.witness_account}}/">{{w.witness_account_name}}</a></td>
-                    <td><a href="{{w.url}}" target="_blank">Link</a></td>
+                    <td>
+                        <a href="{{w.url}}" target="_blank">
+                            <span data-translate="Link"></span>
+                        </a>
+                    </td>
                     <td class="align-right">{{w.total_votes | number: 0}}</td>
                     <td class="align-right">{{w.total_missed | number}}</td>
                     <td class="align-right"><a href="#/blocks/{{w.last_confirmed_block_num}}/">{{w.last_confirmed_block_num | number}}</a></td>
