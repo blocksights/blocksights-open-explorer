@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('app').controller('DashboardCtrl', ['$scope', '$timeout', '$window', 'networkService',
-        'chartService', 'appConfig',  DashboardCtrl])
+        'chartService', 'appConfig', '$filter', DashboardCtrl])
 
         .filter('to_trusted', ['$sce', function($sce){
             return function(text) {
@@ -10,7 +10,7 @@
             };
         }]);
 
-    function DashboardCtrl($scope, $timeout, $window, networkService, chartService, appConfig) {
+    function DashboardCtrl($scope, $timeout, $window, networkService, chartService, appConfig, $filter) {
 
         networkService.getHeader(function (returnData) {
             $scope.dynamic = returnData;
@@ -41,33 +41,36 @@
 
         // lazy load on tab change
         $scope.loadTabsCharts = function(tabName) {
+            
+            const loadingText = $filter('translate')('Loading');
+            
             if (tabName == "operations") {
-                $scope.operations_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
+                $scope.operations_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
                 chartService.topOperationsChart(function (returnData) {
                     $scope.operations_chart = returnData;
                 });
             } else if (tabName == "proxies") {
-                $scope.proxies_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
+                $scope.proxies_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
                 chartService.topProxiesChart(function (returnData) {
                     $scope.proxies_chart = returnData;
                 });
             } else if (tabName == "markets") {
-                $scope.markets_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
+                $scope.markets_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
                 chartService.topMarketsChart(function (returnData) {
                     $scope.markets_chart = returnData;
                 });
             } else if (tabName == "smartcoin") {
-                $scope.smartcoins_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
+                $scope.smartcoins_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
                 chartService.topSmartCoinsChart(function (returnData) {
                     $scope.smartcoins_chart = returnData;
                 });
             } else if (tabName == "uia") {
-                $scope.uias_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
+                $scope.uias_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
                 chartService.topUIAsChart(function (returnData) {
                     $scope.uias_chart = returnData;
                 });
             } else if (tabName == "holders") {
-                $scope.holders_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
+                $scope.holders_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
                 chartService.topHoldersChart(function (returnData) {
                     $scope.holders_chart = returnData;
                 });

@@ -18,7 +18,7 @@
                 <div class="form-group col-md-4">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search for active witness" ng-model="search">
+                        <input type="text" class="form-control" placeholder="{{ 'Search for active witness' | translate }}" ng-model="search">
                     </div>
                 </div>
             </form>
@@ -28,8 +28,10 @@
                         <th ng-click='sortColumn("counter")' ng-class='sortClass("counter")'><span data-translate="Position"></span></th>
                         <th ng-click='sortColumn("id")' ng-class='sortClass("id")'>ID</th>
                         <th ng-click='sortColumn("witness_account")' ng-class='sortClass("witness_account")'><span data-translate="Account"></span></th>
-                        <th>Url</th>
-						<th class="align-right" ng-click='sortColumn("total_votes")' ng-class='sortClass("total_votes")'><span data-translate="Total votes"></span>s</th>
+                        <th>
+                            <span data-translate="Url"></span>
+                        </th>
+						<th class="align-right" ng-click='sortColumn("total_votes")' ng-class='sortClass("total_votes")'><span data-translate="Total votes"></span></th>
 						<th class="align-right" ng-click='sortColumn("total_missed")' ng-class='sortClass("total_missed")'><span data-translate="Missed"></span></th>
                         <th class="align-right" ng-click='sortColumn("last_confirmed_block_num")' ng-class='sortClass("last_confirmed_block_num")'><span data-translate="Last confirmed block"></span></th>
                     </tr>
@@ -39,7 +41,11 @@
                     <td>{{w.counter}}</td>
                     <td><a href="#/objects/{{w.id}}/">{{w.id}}</a></td>
                     <td><a href="#/accounts/{{w.witness_account}}/">{{w.witness_account_name}}</a></td>
-                    <td><a href="{{w.url}}" target="_blank">Link</a></td>
+                    <td>
+                        <a href="{{w.url}}" target="_blank">
+                            <span data-translate="Link"></span>
+                        </a>
+                    </td>
 					<td class="align-right">{{w.total_votes | number: 0}}</td>
 					<td class="align-right">{{w.total_missed | number}}</td>
                     <td class="align-right"><a href="#/blocks/{{w.last_confirmed_block_num}}/">{{w.last_confirmed_block_num | number}}</a></td>
@@ -56,7 +62,7 @@
                 <div class="form-group col-md-4">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search for standby witness" ng-model="search2">
+                        <input type="text" class="form-control" placeholder="{{ 'Search for standby witness' | translate }}" ng-model="search2">
                     </div>
                 </div>
             </form>
@@ -66,7 +72,9 @@
                     <th ng-click='sortColumn2("counter")' ng-class='sortClass2("counter")'><span data-translate="Position"></span></th>
                     <th ng-click='sortColumn2("id")' ng-class='sortClass2("id")'>ID</th>
                     <th ng-click='sortColumn2("witness_account")' ng-class='sortClass2("witness_account")'><span data-translate="Account"></span></th>
-                    <th>Url</th>
+                    <th>
+                        <span data-translate="Url"></span>
+                    </th>
                     <th class="align-right" ng-click='sortColumn2("total_votes")' ng-class='sortClass2("total_votes")'><span data-translate="Total votes"></span></th>
                     <th class="align-right" ng-click='sortColumn2("total_missed")' ng-class='sortClass2("total_missed")'><span data-translate="Missed"></span></th>
                     <th class="align-right" ng-click='sortColumn2("last_confirmed_block_num")' ng-class='sortClass2("last_confirmed_block_num")'><span data-translate="Last confirmed block"></span></th>
@@ -77,7 +85,11 @@
                     <td>{{w.counter}}</td>
                     <td><a href="#/objects/{{w.id}}/">{{w.id}}</a></td>
                     <td><a href="#/accounts/{{w.witness_account}}/">{{w.witness_account_name}}</a></td>
-                    <td><a href="{{w.url}}" target="_blank">Link</a></td>
+                    <td>
+                        <a href="{{w.url}}" target="_blank">
+                            <span data-translate="Link"></span>
+                        </a>
+                    </td>
                     <td class="align-right">{{w.total_votes | number: 0}}</td>
                     <td class="align-right">{{w.total_missed | number}}</td>
                     <td class="align-right"><a href="#/blocks/{{w.last_confirmed_block_num}}/">{{w.last_confirmed_block_num | number}}</a></td>

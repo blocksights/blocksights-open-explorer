@@ -51,7 +51,7 @@
                 <div class="form-group col-md-4">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search for an asset" ng-model="search">
+                        <input type="text" class="form-control" placeholder="{{ 'Search for an asset' | translate }}" ng-model="search">
                     </div>
                 </div>
             </form>
@@ -64,7 +64,9 @@
                         <th class="align-right" ng-click='sortColumn("price")' ng-class='sortClass("price")'><span data-translate="Price"></span>
 
                         </th>
-                        <th class="align-right" ng-click='sortColumn("volume")' ng-class='sortClass("volume")'>24H <span data-translate="volume"></span>
+                        <th class="align-right" ng-click='sortColumn("volume")' ng-class='sortClass("volume")'>
+                            <span data-translate="24 Hours"></span>
+                            <span data-translate="volume"></span>
                         </th>
 						<th ng-click='sortColumn("type")' ng-class='sortClass("type")'><span data-translate="Type"></span>
                         </th>
@@ -80,15 +82,35 @@
                 <tr data-ng-repeat="asset in assets | orderBy:column:reverse | filter:search" >
                     <td><img ng-src="{{ asset.image_url || 'images/asset-symbols/bts.png' }}" width="30"/></td>
                     <td><a href='#/assets/{{asset.id}}/'>{{asset.name}}</a></td>
-                    <td class="align-right">{{asset.price | number}} <a href='#/assets/1.3.0/'>BTS</a></td>
-                    <td class="align-right">{{asset.volume | number}} <a href='#/assets/1.3.0/'>BTS</a></td>
-                    <td>{{asset.type}} <span ng-if="asset.market_cap == '-'">(Gateway)</span><span ng-if="asset.market_cap != '-'">(Native)</span></td>
+                    <td class="align-right">{{asset.price | number}}
+                        <a href='#/assets/1.3.0/'>
+                            <span data-translate="BTS"></span>
+                        </a>
+                    </td>
+                    <td class="align-right">
+                        {{asset.volume | number}}
+                        <a href='#/assets/1.3.0/'>
+                            <span data-translate="BTS"></span>
+                        </a>
+                    </td>
+                    <td>
+                        {{asset.type}}
+                        <span ng-if="asset.market_cap == '-'">
+                            (<span data-translate="Gateway"></span>)
+                        </span>
+                        <span ng-if="asset.market_cap != '-'">
+                            (<span data-translate="Native"></span>)
+                        </span>
+                    </td>
 					<td class="align-right">
                         <div ng-if="asset.market_cap == '-'">
                             -
                         </div>
                         <div ng-if="asset.market_cap != '-'">
-                            {{asset.market_cap | number}} <a href='#/assets/1.3.0/'>BTS</a>
+                            {{asset.market_cap | number}}
+                            <a href='#/assets/1.3.0/'>
+                                <span data-translate="BTS"></span>
+                            </a>
                         </div>
                     </td>
                     <td class="align-right">

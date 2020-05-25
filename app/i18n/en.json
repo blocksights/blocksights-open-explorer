@@ -223,5 +223,78 @@
   "No worker proposals found": "No worker proposals found",
   "No proxies found": "No proxies found",
   "No operations found": "No operations found",
-  "An error occurred during loading": "An error occurred during loading"
+  "An error occurred during loading": "An error occurred during loading",
+
+  "Search for a balance": "Search for a balance",
+
+  "Search for a vesting balance": "Search for a vesting balance",
+
+  "Search for account": "Search for account",
+
+  "Search for a market": "Search for a market",
+
+  "Search for a holder": "Search for a holder",
+
+  "Search for an asset": "Search for an asset",
+
+  "Search for active committee member": "Search for active committee member",
+
+  "Search for standby committee member": "Search for standby committee member",
+
+  "Search for a fee": "Search for a fee",
+
+  "Search for an operation": "Search for an operation",
+
+  "Enter block number": "Enter block number",
+
+  "Enter account name or id number": "Enter account name or id number",
+
+  "Enter object id": "Enter object id",
+
+  "Enter asset name or id": "Enter asset name or id",
+
+  "Enter tx hash": "Enter tx hash",
+
+  "Search for active witness": "Search for active witness",
+
+  "Search for standby witness": "Search for standby witness",
+
+  "Search for current workers": "Search for current workers",
+
+  "Search for expired workers": "Search for expired workers",
+
+  "Key": "Key",
+
+  "Link": "Link",
+
+  "Url": "Url",
+
+  "free member": "free member",
+
+  "lifetime member": "lifetime member",
+
+  "24 Hours": "24 HR",
+
+  "BTS": "BTS",
+
+  "Native": "Native",
+
+  "Gateway": "Gateway",
+
+  "Merkle Root": "Merkle Root",
+
+  "API": "API",
+
+  "Source Code": "Source Code",
+
+  "Toggle navigation": "Toggle navigation",
+
+  "Open Explorer": "Open Explorer",
+
+  "Percent of all active Voting Power": "% of all active Voting Power",
+
+  "DAC": "DAC",
+
+  "No Link": "No Link"
+
 }

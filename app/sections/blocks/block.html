@@ -12,7 +12,11 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <a href="#/blocks/{{data.prev}}/"><i class="fas fa-angle-double-left"></i> Block {{data.prev | number}}</a>
+            <a href="#/blocks/{{data.prev}}/">
+                <i class="fas fa-angle-double-left"></i>
+                <span data-translate="Block"></span>
+                {{data.prev | number}}
+            </a>
         </div>
         <div class="col-md-6" align="right">
             <a href="#/blocks/{{data.next}}/"><span data-translate="Block"></span> {{data.next | number}} <i class="fas fa-angle-double-right"></i> </a>
@@ -33,7 +37,7 @@
             </li>
             <li class="list-group-item">
                 <span class="badge" style="background-color: #FFFFFF; color: #000000">{{data.transaction_merkle_root}}</span>
-                Merkle Root
+                <span data-translate="Merkle Root"></span>
             </li>
             <li class="list-group-item">
                 <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href='#/objects/{{data.witness}}/'>{{data.witness}}</a></span>

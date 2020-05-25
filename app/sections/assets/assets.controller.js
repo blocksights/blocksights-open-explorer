@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('app.assets')
-        .controller('assetsCtrl', ['$scope', '$routeParams', '$location', 'utilities', 'assetService', 'chartService',
+        .controller('assetsCtrl', ['$scope', '$routeParams', '$location', 'utilities', 'assetService', 'chartService', '$filter',
             'marketService', assetsCtrl]);
 
-    function assetsCtrl($scope, $routeParams, $location, utilities, assetService, chartService, marketService) {
+    function assetsCtrl($scope, $routeParams, $location, utilities, assetService, chartService, $filter, marketService) {
 
 		const path = $location.path();
 		let name = $routeParams.name;
@@ -37,7 +37,7 @@
                     $scope.dynamic = returnData;
                 });
 
-                $scope.dex_volume_chart = {options: {errorMsg: {text: "Loading ...", left: "center"}}};
+                $scope.dex_volume_chart = {options: {errorMsg: {text: $filter("translate")("Loading ..."), left: "center"}}};
                 chartService.dailyDEXChart(function (returnData) {
                     $scope.dex_volume_chart = returnData;
                 });

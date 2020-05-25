@@ -5,7 +5,7 @@
     "Assets": "资产",
     "Markets": "市场",
     "Accounts": "账户",
-    "Fees": "Fees", "手续费"
+    "Fees": "手续费",
     "Governance": "治理",
     "Committee": "理事会",
     "Witnesses": "见证人",
@@ -218,7 +218,7 @@
     },
 
     "Loading": "正在加载中 ",
-    "No witness candidates found": 没有找到候选见证人",
+    "No witness candidates found": "没有找到候选见证人",
     "No committee candidates found": "没有找到候选理事会成员",
     "No worker proposals found": "没有找到预算项目提案",
     "No proxies found": "没有找到代理人",
