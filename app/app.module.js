@@ -14,6 +14,7 @@
         'angular-google-analytics',
 
         // Custom modules
+        'app.ui',
         'app.nav',
         'app.i18n',
         'app.chart',

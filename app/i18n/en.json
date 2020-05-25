@@ -218,6 +218,8 @@
   },
 
   "Loading": "Loading ...",
+  "Data unavailable": "An error occurred during loading",
+  "No data found": "No data found",
   "No witness candidates found": "No witness candidates found",
   "No committee candidates found": "No committee candidates found",
   "No worker proposals found": "No worker proposals found",
