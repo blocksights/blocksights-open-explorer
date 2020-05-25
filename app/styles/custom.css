@@ -68,14 +68,35 @@
     color: #fff;
     border: 0;
     box-shadow: none;
+    max-width: unset;
 }
 
 .popover.top>.arrow {
-    border-top: none;
+    border-top-color: transparent;
+}
+
+.popover.bottom>.arrow {
+    border-bottom-color: transparent;
+}
+
+.popover.left>.arrow {
+    border-left-color: transparent;
+}
+
+.popover.right>.arrow {
+    border-right-color: transparent;
 }
 
 .popover.top>.arrow:after {
     border-top-color: rgba(0,0,0,0.85);
+}
+
+.popover.bottom>.arrow:after {
+    border-bottom-color: rgba(0,0,0,0.85);
+}
+
+.popover.right>.arrow:after {
+    border-right-color: rgba(0,0,0,0.85);
 }
 
 .popover-content {
