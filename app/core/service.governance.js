@@ -80,7 +80,7 @@
                 });
             },
             getWorkers: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/workers").then(function(response) {
+                return $http.get(appConfig.urls.python_backend + "/workers").then(function(response) {
                     var workers_current = [];
                     var workers_expired = [];
                     var workers = [];
