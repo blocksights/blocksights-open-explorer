@@ -12,13 +12,7 @@
     <div class="panel panel-default">
         <div class="panel-heading"><span data-translate="Witnesses"></span> </div>
         <div class="panel-body table-responsive">
-            <div ng-if="witnesses === undefined">
-                <span data-translate="Loading"></span>
-            </div>
-            <div ng-if="witnesses.length == 0">
-                <span data-translate="No witness candidates found"></span>
-            </div>
-            <table class="table" ng-if="witnesses.length > 0">
+            <table class="table">
                 <thead>
                 <tr>
                     <th></th>
@@ -26,7 +20,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="w in witnesses">
+                <tr ng-if="witnesses === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="witnesses === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="witnesses.length === 0">
+                    <td>
+                        <loading-no-data text="'No witness candidates found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="witnesses !== 'error' && witnesses.length > 0" data-ng-repeat="w in witnesses">
                     <td><a href="#/objects/{{w.id}}/">{{w.witness_account_name}}</a></td>
                     <td class="{{w.tclass1}}">{{w.proxy1}}</td>
                     <td class="{{w.tclass2}}">{{w.proxy2}}</td>
@@ -46,13 +55,7 @@
     <div class="panel panel-default">
         <div class="panel-heading"><span data-translate="Workers"></span> </div>
         <div class="panel-body table-responsive">
-            <div ng-if="workers === undefined">
-                <span data-translate="Loading"></span>
-            </div>
-            <div ng-if="workers.length == 0">
-                <span data-translate="No worker proposals found"></span>
-            </div>
-            <table class="table" ng-if="workers.length > 0">
+            <table class="table">
                 <thead>
                 <tr>
                     <th></th>
@@ -60,7 +63,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="w in workers">
+                <tr ng-if="workers === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="workers === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="workers.length === 0">
+                    <td>
+                        <loading-no-data text="'No workers candidates found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="workers !== 'error' && workers.length > 0" data-ng-repeat="w in workers">
                     <td><a href="#/objects/{{w.id}}/">{{w.id}} - {{w.worker_account_name}}</a><br><font size="-1">{{w.worker_name}}</font></td>
                     <td class="{{w.tclass1}}">{{w.proxy1}}</td>
                     <td class="{{w.tclass2}}">{{w.proxy2}}</td>
@@ -80,13 +98,7 @@
     <div class="panel panel-default">
         <div class="panel-heading"><span data-translate="Committee members"></span> </div>
         <div class="panel-body table-responsive">
-            <div ng-if="committee === undefined">
-                <span data-translate="Loading"></span>
-            </div>
-            <div ng-if="committee.length == 0">
-                <span data-translate="No committee candidates found"></span>
-            </div>
-            <table class="table" ng-if="committee.length > 0">
+            <table class="table">
                 <thead>
                 <tr>
                     <th></th>
@@ -94,7 +106,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="c in committee">
+                <tr ng-if="committee === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="committee === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="committee.length === 0">
+                    <td>
+                        <loading-no-data text="'No committee candidates found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="committee !== 'error' && committee.length > 0" data-ng-repeat="c in committee">
                     <td><a href="#/objects/{{c.id}}/">{{c.committee_account_name}}</a></td>
                     <td class="{{c.tclass1}}">{{c.proxy1}}</td>
                     <td class="{{c.tclass2}}">{{c.proxy2}}</td>

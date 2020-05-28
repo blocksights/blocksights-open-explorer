@@ -179,7 +179,7 @@
                 });
             },
             getProxies: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_proxies").then(function(response) {
+                return $http.get(appConfig.urls.python_backend + "/top_proxies").then(function(response) {
                     var proxies = [];
                     var counter = 1;
                     angular.forEach(response.data, function(value, key) {
@@ -200,7 +200,7 @@
                 });
             },
             getWitnessVotes: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/witnesses_votes").then(function(response2) {
+                return $http.get(appConfig.urls.python_backend + "/witnesses_votes").then(function(response2) {
                     var witnesses = [];
                     angular.forEach(response2.data, function (value, key) {
                         var parsed = {
@@ -218,7 +218,7 @@
                 });
             },
             getWorkersVotes: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/workers_votes").then(function(response2) {
+                return $http.get(appConfig.urls.python_backend + "/workers_votes").then(function(response2) {
                     var workers = [];
                     angular.forEach(response2.data, function (value, key) {
                         var parsed = {
@@ -236,7 +236,7 @@
                 });
             },
             getCommitteeVotes: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/committee_votes").then(function(response) {
+                return $http.get(appConfig.urls.python_backend + "/committee_votes").then(function(response) {
                     var committee = [];
                     angular.forEach(response.data, function (value, key) {
                         var parsed = {
