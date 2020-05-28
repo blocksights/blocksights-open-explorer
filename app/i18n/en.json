@@ -226,6 +226,8 @@
   "No active witness found": "No active witness found",
   "No standby witness found": "No standby witness found",
   "No witness candidates found": "No witness candidates found",
+  "No active committee members found": "No active committee members found",
+  "No standby committee members found": "No standby committee members found",
   "No committee candidates found": "No committee candidates found",
   "No worker proposals found": "No worker proposals found",
   "No proxies found": "No proxies found",
