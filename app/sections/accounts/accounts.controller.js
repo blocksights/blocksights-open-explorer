@@ -247,6 +247,8 @@ import {sha256} from "js-sha256";
             if(path === "/accounts") {
                 accountService.getRichList(function (returnData) {
                     $scope.richs = returnData;
+                }).catch(() => {
+                    $scope.richs = 'error';
                 });
                 utilities.columnsort($scope, "amount", "sortColumn", "sortClass", "reverse", "reverseclass", "column");
 			}

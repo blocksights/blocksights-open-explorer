@@ -31,7 +31,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="rich in richs | orderBy:column:reverse | filter:search">
+                <tr ng-if="richs === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="richs === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="richs.length === 0">
+                    <td>
+                        <loading-no-data text="'No accounts found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="richs !== 'error' && richs.length > 0" data-ng-repeat="rich in richs | orderBy:column:reverse | filter:search">
                     <td><a href='#/accounts/{{rich.id}}/'>{{rich.name}}</a></td>
                     <td class="align-right">{{rich.amount | number: 0}} <a href='#/assets/1.3.0/'>{{ coreSymbol }}</a></td>
                 </tbody>

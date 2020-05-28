@@ -8,7 +8,7 @@
 
         return {
             getRichList: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/accounts").then(function(response) {
+                return $http.get(appConfig.urls.python_backend + "/accounts").then(function(response) {
                     var richs = [];
                     for(var i = 0; i < response.data.length; i++) {
                         var amount = utilities.formatBalance(response.data[i].amount, 5);
