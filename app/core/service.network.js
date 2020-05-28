@@ -19,7 +19,6 @@
                         witness_count: response.data.witness_count,
                         committee_count: response.data.committee_count
                     };
-                    callback(header);
                     $http.get(appConfig.urls.python_backend + "/statistics_per_x?days=1").then(function(response) {
                         header.statistics_per_x = response.data;
                         callback(header);
