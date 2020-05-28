@@ -36,7 +36,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="fee in fees | orderBy:column:reverse | filter:search">
+                <tr ng-if="fees === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="fees === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="fees.length === 0">
+                    <td>
+                        <loading-no-data></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="fees !== 'error' && fees.length > 0" data-ng-repeat="fee in fees | orderBy:column:reverse | filter:search">
                     <td>{{fee.identifier}}</td>
                     <td><span class="badge badge-primary" style="background-color: #{{fee.color}};">{{fee.operation}}</span></td>
                     <td class="align-right">{{fee.basic_fee | number}}</td>

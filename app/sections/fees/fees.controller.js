@@ -8,6 +8,8 @@
 
         networkService.getFees(function (returnData) {
             $scope.fees = returnData;
+        }).catch(() => {
+            $scope.fees = 'error';
         });
 
         utilities.columnsort($scope, "identifier", "sortColumn", "sortClass", "reverse", "reverseclass", "column");

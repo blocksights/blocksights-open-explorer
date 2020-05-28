@@ -159,7 +159,7 @@
             },
             getFees: function(callback) {
                 let fees = [];
-                $http.get(appConfig.urls.python_backend + "/fees").then(function(response) {
+                return $http.get(appConfig.urls.python_backend + "/fees").then(function(response) {
                     let basic_fee = 0;
                     for(var i = 0; i < response.data.parameters.current_fees.parameters.length; i++) {
                         if (response.data.parameters.current_fees.parameters[i][1].fee) {
@@ -180,8 +180,9 @@
                         };
                         fees.push(fee);
                     }
+    
+                    callback(fees);
                 });
-                callback(fees);
             },
             getOperation: function(operation, callback) {
                 let op;
