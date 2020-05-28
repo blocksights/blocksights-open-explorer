@@ -25,7 +25,7 @@
             },
             getAssetMarkets: function(asset_id, callback) {
                 let markets = [];
-                $http.get(appConfig.urls.python_backend + "/markets?asset_id=" + asset_id).then(function(response) {
+                return $http.get(appConfig.urls.python_backend + "/markets?asset_id=" + asset_id).then(function(response) {
                     angular.forEach(response.data, function(value) {
                         const market = {
                             pair: value.pair,

@@ -147,7 +147,7 @@
             },
             getAssetHolders: function(asset_id, precision, callback) {
                 var accounts = [];
-                $http.get(appConfig.urls.python_backend + "/asset_holders?asset_id=" + asset_id)
+                return $http.get(appConfig.urls.python_backend + "/asset_holders?asset_id=" + asset_id)
                     .then(function(response) {
                     angular.forEach(response.data, function(value, key) {
                         var account = {
