@@ -44,6 +44,8 @@
 
                 assetService.getActiveAssets(function (returnData) {
                     $scope.assets = returnData;
+                }).catch(() => {
+                    $scope.assets = 'error';
                 });
 
                 utilities.columnsort($scope, "volume", "sortColumn", "sortClass", "reverse", "reverseclass", "column");
