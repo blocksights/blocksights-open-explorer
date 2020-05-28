@@ -9,6 +9,9 @@
         governanceService.getWitnesses(function (returnData) {
             $scope.active_witnesses = returnData[0];
             $scope.standby_witnesses = returnData[1];
+        }).catch(() => {
+            $scope.active_witnesses = 'error';
+            $scope.standby_witnesses = 'error';
         });
 
         utilities.columnsort($scope, "total_votes", "sortColumn", "sortClass", "reverse", "reverseclass", "column");

@@ -20,6 +20,7 @@
                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
                         <input type="text" class="form-control" placeholder="{{ 'Search for active witness' | translate }}" ng-model="search">
                     </div>
+
                 </div>
             </form>
             <table class="table">
@@ -37,7 +38,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="w in active_witnesses | orderBy:column:reverse | filter:search">
+                <tr ng-if="active_witnesses === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="active_witnesses === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="active_witnesses.length === 0">
+                    <td>
+                        <loading-no-data text="'No active witness found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="active_witnesses !== 'error' && active_witnesses.length > 0" data-ng-repeat="w in active_witnesses | orderBy:column:reverse | filter:search">
                     <td>{{w.counter}}</td>
                     <td><a href="#/objects/{{w.id}}/">{{w.id}}</a></td>
                     <td><a href="#/accounts/{{w.witness_account}}/">{{w.witness_account_name}}</a></td>
@@ -81,7 +97,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="w in standby_witnesses | orderBy:column2:reverse2 | filter:search2">
+                <tr ng-if="standby_witnesses === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="standby_witnesses === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="standby_witnesses.length === 0">
+                    <td>
+                        <loading-no-data text="'No standby witness found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="standby_witnesses !== 'error' && standby_witnesses.length > 0" data-ng-repeat="w in standby_witnesses | orderBy:column2:reverse2 | filter:search2">
                     <td>{{w.counter}}</td>
                     <td><a href="#/objects/{{w.id}}/">{{w.id}}</a></td>
                     <td><a href="#/accounts/{{w.witness_account}}/">{{w.witness_account_name}}</a></td>

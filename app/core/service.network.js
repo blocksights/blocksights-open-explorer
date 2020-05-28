@@ -9,7 +9,7 @@
         return {
             getHeader: function(callback) {
                 let header;
-                $http.get(appConfig.urls.python_backend + "/header").then(function(response) {
+                return $http.get(appConfig.urls.python_backend + "/header").then(function(response) {
                     header = {
                         time: response.data.time,
                         head_block_number: response.data.head_block_number,

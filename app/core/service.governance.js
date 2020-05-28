@@ -45,38 +45,48 @@
                 var active_witnesses = [];
                 var standby_witnesses = [];
                 var witnesses = [];
-
-                networkService.getHeader(function (returnData) {
-                    var witness_count = returnData.witness_count;
-
-                    $http.get(appConfig.urls.python_backend + "/witnesses").then(function(response) {
-                        var counter = 1;
-                        angular.forEach(response.data, function(value, key) {
-                            var parsed = {
-                                id: value.id,
-                                last_aslot: value.last_aslot,
-                                last_confirmed_block_num: value.last_confirmed_block_num,
-                                pay_vb: value.pay_vb,
-                                total_missed: value.total_missed,
-                                total_votes: utilities.formatBalance(value.total_votes, 5),
-                                url: value.url,
-                                witness_account: value.witness_account,
-                                witness_account_name: value.witness_account_name,
-                                counter: counter
-                            };
-
-                            if(counter <= witness_count) {
-                                active_witnesses.push(parsed);
-                            }
-                            else {
-                                standby_witnesses.push(parsed);
-                            }
-                            counter++;
-                        });
+                
+                return new Promise((resolve, reject) => {
+    
+                    networkService.getHeader(function (returnData) {
+                        var witness_count = returnData.witness_count;
+    
+                        $http.get(appConfig.urls.python_backend + "/witnesses").then(function(response) {
+                            var counter = 1;
+                            angular.forEach(response.data, function(value, key) {
+                                var parsed = {
+                                    id: value.id,
+                                    last_aslot: value.last_aslot,
+                                    last_confirmed_block_num: value.last_confirmed_block_num,
+                                    pay_vb: value.pay_vb,
+                                    total_missed: value.total_missed,
+                                    total_votes: utilities.formatBalance(value.total_votes, 5),
+                                    url: value.url,
+                                    witness_account: value.witness_account,
+                                    witness_account_name: value.witness_account_name,
+                                    counter: counter
+                                };
+    
+                                if(counter <= witness_count) {
+                                    active_witnesses.push(parsed);
+                                }
+                                else {
+                                    standby_witnesses.push(parsed);
+                                }
+                                counter++;
+                            });
+            
+                            witnesses[0] = active_witnesses;
+                            witnesses[1] = standby_witnesses;
+                            callback(witnesses);
+                            resolve(witnesses);
+                        }).catch((err) => {
+                            reject(err);
+                        }) ;
+                    }).catch((err) => {
+                        reject(err);
                     });
-                    witnesses[0] = active_witnesses;
-                    witnesses[1] = standby_witnesses;
-                    callback(witnesses);
+                    
                 });
             },
             getWorkers: function(callback) {
