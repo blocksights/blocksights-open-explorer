@@ -31,7 +31,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="market in markets | orderBy:column:reverse | filter:search">
+                <tr ng-if="markets === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="markets === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="markets.length === 0">
+                    <td>
+                        <loading-no-data text="'No markets found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="markets !== 'error' && markets.length > 0" data-ng-repeat="market in markets | orderBy:column:reverse | filter:search">
                     <td><a href='#/markets/{{market.pair}}/'>{{market.pair}}</a></td>
                     <td style="text-align:right">{{market.price | number:10}}</td>
 					<td style="text-align:right">{{market.volume | number}}</td>

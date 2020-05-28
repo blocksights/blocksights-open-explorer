@@ -220,6 +220,7 @@
   "Loading": "Loading ...",
   "Data unavailable": "An error occurred during loading",
   "No data found": "No data found",
+  "No markets found": "No markets found",
   "No transactions found": "No transactions found",
   "No accounts found": "No accounts found",
   "No witness candidates found": "No witness candidates found",
