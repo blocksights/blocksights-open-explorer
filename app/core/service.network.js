@@ -87,7 +87,7 @@
             },
 
             getBigTransactions: function(callback, ofLastHours) {
-                $http.get(
+                return $http.get(
                     appConfig.urls.elasticsearch_wrapper + "/es/account_history" +
                     "?from_date=now-" + ofLastHours + "h" +
                     "&to_date=now" +
