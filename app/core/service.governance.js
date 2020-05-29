@@ -8,18 +8,18 @@
 
         return {
             getCommitteeMembers: function(callback) {
-                var active_committee = [];
-                var standby_committee = [];
-                var committee = [];
-                
                 return new Promise((resolve, reject) => {
                     networkService.getHeader(function (returnData) {
-                        var committee_count = returnData.committee_count;
+                        const active_committee = [];
+                        const standby_committee = [];
+                        const committee = [];
+                        
+                        const committee_count = returnData.committee_count;
         
                         $http.get(appConfig.urls.python_backend + "/committee_members").then(function(response) {
-                            var counter = 1;
+                            let counter = 1;
                             angular.forEach(response.data, function(value, key) {
-                                var parsed = {
+                                const parsed = {
                                     id: value[0].id,
                                     total_votes: utilities.formatBalance(value[0].total_votes, 5),
                                     url: value[0].url,
@@ -52,19 +52,18 @@
                 });
             },
             getWitnesses: function(callback) {
-                var active_witnesses = [];
-                var standby_witnesses = [];
-                var witnesses = [];
-                
                 return new Promise((resolve, reject) => {
     
                     networkService.getHeader(function (returnData) {
-                        var witness_count = returnData.witness_count;
+                        const active_witnesses = [];
+                        const standby_witnesses = [];
+                        const witnesses = [];
+                        const witness_count = returnData.witness_count;
     
                         $http.get(appConfig.urls.python_backend + "/witnesses").then(function(response) {
-                            var counter = 1;
+                            let counter = 1;
                             angular.forEach(response.data, function(value, key) {
-                                var parsed = {
+                                const parsed = {
                                     id: value.id,
                                     last_aslot: value.last_aslot,
                                     last_confirmed_block_num: value.last_confirmed_block_num,
