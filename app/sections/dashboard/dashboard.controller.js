@@ -14,6 +14,8 @@
 
         networkService.getHeader(function (returnData) {
             $scope.dynamic = returnData;
+        }).catch(() => {
+            $scope.dynamic = 'error'
         });
 
         $scope.branding = appConfig.branding;
