@@ -11,6 +11,9 @@
         governanceService.getWorkers(function (returnData) {
             $scope.workers_current = returnData[0];
             $scope.workers_expired = returnData[1];
+        }).catch(() => {
+            $scope.workers_current = 'error';
+            $scope.workers_expired = 'error';
         });
 
         utilities.columnsort($scope, "votes_for", "sortColumn", "sortClass", "reverse", "reverseclass", "column");

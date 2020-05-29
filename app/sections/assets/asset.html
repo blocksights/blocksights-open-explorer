@@ -117,7 +117,22 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr data-ng-repeat="market in markets | orderBy:column:reverse | filter:search">
+                    <tr ng-if="markets === undefined">
+                        <td>
+                            <loading></loading>
+                        </td>
+                    </tr>
+                    <tr ng-if="markets === 'error'">
+                        <td>
+                            <loading-error></loading-error>
+                        </td>
+                    </tr>
+                    <tr ng-if="markets.length === 0">
+                        <td>
+                            <loading-no-data text="'No markets found' | translate"></loading-no-data>
+                        </td>
+                    </tr>
+                    <tr ng-if="markets !== 'error' && markets.length > 0" data-ng-repeat="market in markets | orderBy:column:reverse | filter:search">
                         <td><a href='#/markets/{{market.pair}}/'>{{market.pair}}</a></td>
                         <td class="align-right">{{market.price | number}}</td>
                         <td class="align-right">{{market.volume | number}}</td>
@@ -154,7 +169,22 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr data-ng-repeat="account in accounts | orderBy:column2:reverse2 | filter:search2">
+                    <tr ng-if="accounts === undefined">
+                        <td>
+                            <loading></loading>
+                        </td>
+                    </tr>
+                    <tr ng-if="accounts === 'error'">
+                        <td>
+                            <loading-error></loading-error>
+                        </td>
+                    </tr>
+                    <tr ng-if="accounts.length === 0">
+                        <td>
+                            <loading-no-data text="'No accounts found' | translate"></loading-no-data>
+                        </td>
+                    </tr>
+                    <tr ng-if="accounts !== 'error' && accounts.length > 0" data-ng-repeat="account in accounts | orderBy:column2:reverse2 | filter:search2">
                         <td><a href='#/accounts/{{account.id}}/'>{{account.name}}</a></td>
                         <td class="align-right">{{account.amount | number}}</td>
                     </tbody>

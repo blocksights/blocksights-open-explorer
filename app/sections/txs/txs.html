@@ -25,7 +25,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="trx in transactions">
+                <tr ng-if="transactions === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="transactions === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="transactions.length === 0">
+                    <td>
+                        <loading-no-data text="'No transactions found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="transactions !== 'error' && transactions.length > 0" data-ng-repeat="trx in transactions track by $index">
                     <td><a href='#/txs/{{trx.trx_id}}/'>{{trx.trx_id}}</a></td>
                     <td>{{trx.count | number}}</td>
                 </tbody>

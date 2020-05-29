@@ -2,6 +2,11 @@
 
 require("./app/app.module.js");
 
+require("./app/ui/ui.module.js");
+require("./app/ui/loading.directive.js");
+require("./app/ui/loading-error.directive.js");
+require("./app/ui/loading-no-data.directive.js");
+
 require("./app/sections/layout/nav.module.js");
 require("./app/sections/accounts/accounts.module.js");
 require("./app/sections/assets/assets.module.js");

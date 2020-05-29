@@ -9,7 +9,7 @@
         return {
             getHeader: function(callback) {
                 let header;
-                $http.get(appConfig.urls.python_backend + "/header").then(function(response) {
+                return $http.get(appConfig.urls.python_backend + "/header").then(function(response) {
                     header = {
                         time: response.data.time,
                         head_block_number: response.data.head_block_number,
@@ -19,7 +19,6 @@
                         witness_count: response.data.witness_count,
                         committee_count: response.data.committee_count
                     };
-                    callback(header);
                     $http.get(appConfig.urls.python_backend + "/statistics_per_x?days=1").then(function(response) {
                         header.statistics_per_x = response.data;
                         callback(header);
@@ -87,7 +86,7 @@
             },
 
             getBigTransactions: function(callback, ofLastHours) {
-                $http.get(
+                return $http.get(
                     appConfig.urls.elasticsearch_wrapper + "/es/account_history" +
                     "?from_date=now-" + ofLastHours + "h" +
                     "&to_date=now" +
@@ -159,7 +158,7 @@
             },
             getFees: function(callback) {
                 let fees = [];
-                $http.get(appConfig.urls.python_backend + "/fees").then(function(response) {
+                return $http.get(appConfig.urls.python_backend + "/fees").then(function(response) {
                     let basic_fee = 0;
                     for(var i = 0; i < response.data.parameters.current_fees.parameters.length; i++) {
                         if (response.data.parameters.current_fees.parameters[i][1].fee) {
@@ -180,8 +179,9 @@
                         };
                         fees.push(fee);
                     }
+    
+                    callback(fees);
                 });
-                callback(fees);
             },
             getOperation: function(operation, callback) {
                 let op;

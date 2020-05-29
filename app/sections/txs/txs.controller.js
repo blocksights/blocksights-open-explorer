@@ -15,6 +15,8 @@
                     $scope.data = returnData.meta;
                     $scope.operations = returnData.operations;
                     $scope.count = returnData.operations.length;
+                }).catch(() => {
+                    $scope.operations = 'error';
                 });
             }
         }
@@ -24,7 +26,9 @@
                 $scope.ofLastHours = ofLastHours;
                 networkService.getBigTransactions(function (returnData) {
                     $scope.transactions = returnData;
-                }, ofLastHours);
+                }, ofLastHours).catch(() => {
+                    $scope.transactions = 'error';
+                });
             }
         }
     }

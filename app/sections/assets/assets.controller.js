@@ -21,10 +21,14 @@
                     const precision = returnData.precision;
                     assetService.getAssetHolders(name, precision, function (returnDataHolders) {
                         $scope.accounts = returnDataHolders;
+                    }).catch(() => {
+                        $scope.accounts = 'error';
                     });
                 });
                 marketService.getAssetMarkets(name, function (returnData) {
                     $scope.markets = returnData;
+                }).catch(() => {
+                    $scope.markets = 'error';
                 });
             }
             utilities.columnsort($scope, "volume", "sortColumn", "sortClass", "reverse", "reverseclass", "column");
@@ -44,6 +48,8 @@
 
                 assetService.getActiveAssets(function (returnData) {
                     $scope.assets = returnData;
+                }).catch(() => {
+                    $scope.assets = 'error';
                 });
 
                 utilities.columnsort($scope, "volume", "sortColumn", "sortClass", "reverse", "reverseclass", "column");

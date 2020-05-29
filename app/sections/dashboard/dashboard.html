@@ -138,9 +138,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr ng-if="operations === undefined"><td colspan="3"><span data-translate="Loading"></span></td></tr>
-                <tr ng-if="operations === 'error'"><td colspan="3"><span data-translate="An error occurred during loading"></span></td></tr>
-                <tr ng-if="operations.length == 0"><td colspan="3"><span data-translate="No operations found"></span></td></tr>
+                <tr ng-if="operations === undefined">
+                    <td colspan="3">
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="operations === 'error'">
+                    <td colspan="3">
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="operations.length == 0">
+                    <td colspan="3">
+                        <loading-no-data text="'No operations found' | translate"></loading-no-data>
+                    </td>
+                </tr>
                 <tr ng-if="operations !== 'error' && operations.length > 0" data-ng-repeat="operation in operations track by $index">
                     <td><div ng-bind-html="operation.operation_text | to_trusted" layout-align="center"></div></td>
                     <td><a href='#/operations/{{operation.operation_id}}/'>{{operation.operation_id}}</a></td>

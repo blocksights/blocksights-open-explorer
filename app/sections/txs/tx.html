@@ -15,7 +15,6 @@
             <div class="panel panel-default" >
                 <div class="panel-heading" ><span data-translate="Operations in transaction"></span></div>
                 <div class="panel-body table-responsive">
-
                     <table class="table">
                         <thead>
                         <tr>
@@ -25,7 +24,22 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr data-ng-repeat="op in operations">
+                        <tr ng-if="operations === undefined">
+                            <td>
+                                <loading></loading>
+                            </td>
+                        </tr>
+                        <tr ng-if="operations === 'error'">
+                            <td>
+                                <loading-error></loading-error>
+                            </td>
+                        </tr>
+                        <tr ng-if="operations.length === 0">
+                            <td>
+                                <loading-no-data text="'No operations found' | translate"></loading-no-data>
+                            </td>
+                        </tr>
+                        <tr ng-if="operations !== 'error' && operations.length !== 0" data-ng-repeat="op in operations track by $index">
                             <td><div ng-bind-html="op.operation_text | to_trusted" layout-align="center"></div></td>
                             <td><a href='#/operations/{{op.operation_id}}/'>{{op.operation_id}}</a></td>
                             <td><span class="badge badge-primary" style="background-color: #{{op.op_color}};">{{op.op_type}}</span></td>

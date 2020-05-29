@@ -79,7 +79,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="asset in assets | orderBy:column:reverse | filter:search" >
+                <tr ng-if="assets === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="assets === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="assets.length === 0">
+                    <td>
+                        <loading-no-data text="'No assets found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="assets !== 'error' && assets.length > 0" data-ng-repeat="asset in assets | orderBy:column:reverse | filter:search" >
                     <td><img ng-src="{{ asset.image_url || 'images/asset-symbols/bts.png' }}" width="30"/></td>
                     <td><a href='#/assets/{{asset.id}}/'>{{asset.name}}</a></td>
                     <td class="align-right">{{asset.price | number}}

@@ -9,6 +9,9 @@
         governanceService.getCommitteeMembers(function (returnData) {
             $scope.active_committee = returnData[0];
             $scope.standby_committee = returnData[1];
+        }).catch(() => {
+            $scope.active_committee = 'error';
+            $scope.standby_committee = 'error';
         });
 
         utilities.columnsort($scope, "total_votes", "sortColumn", "sortClass", "reverse", "reverseclass", "column");

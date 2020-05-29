@@ -24,7 +24,9 @@
                     counter++;
                 });
                 $scope.proxies = proxies;
-            });
+            }).catch(() => {
+                $scope.proxies = 'error';
+        });
 
         $scope.column = 'position';
         $scope.reverse = false;

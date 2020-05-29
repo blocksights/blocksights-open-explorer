@@ -41,7 +41,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="w in workers_current | orderBy:column:reverse | filter:search" class="{{w.tclass}}">
+                <tr ng-if="workers_current === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="workers_current === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="workers_current.length === 0">
+                    <td>
+                        <loading-no-data text="'No worker proposals found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="workers_current !== 'error' && workers_current.length > 0" data-ng-repeat="w in workers_current | orderBy:column:reverse | filter:search" class="{{w.tclass}}">
                     <td><a href='#/objects/{{w.id}}/'>{{w.name}}</a> <span class='label label-info'>{{w.voting_now}}</span></td>
                     <td><a href='#/accounts/{{w.worker}}/'>{{w.worker_name}}</a></td>
                     <td>{{w.start}}</td>
@@ -91,7 +106,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="w in workers_expired | orderBy:column2:reverse2 | filter:search2" class="{{w.tclass}}">
+                <tr ng-if="workers_expired === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="workers_expired === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="workers_expired.length === 0">
+                    <td>
+                        <loading-no-data text="'No worker proposals found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="workers_expired !== 'error' && workers_expired.length > 0" data-ng-repeat="w in workers_expired | orderBy:column2:reverse2 | filter:search2" class="{{w.tclass}}">
                     <td><a href='#/objects/{{w.id}}/'>{{w.name}}</a></td>
                     <td><a href='#/accounts/{{w.worker}}/'>{{w.worker_name}}</a></td>
                     <td>{{w.start}}</td>

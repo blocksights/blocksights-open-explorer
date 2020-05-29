@@ -9,56 +9,64 @@
         return {
             getActiveAssets: function(callback) {
                 var assets = [];
-
-                $http.get(appConfig.urls.python_backend + "/assets").then(function (response) {
-
-                    angular.forEach(response.data, function (value, key) {
-
-                        var market_cap;
-                        var supply;
-
-                        if (value.asset_name.indexOf("OPEN") >= 0 || value.asset_name.indexOf("RUDEX") >= 0 ||
-                            value.asset_name.indexOf("BRIDGE") >= 0 || value.asset_name.indexOf("GDEX") >= 0) {
-                            market_cap = "-";
-                            supply = "-";
-                        }
-                        else {
-                            market_cap = Math.round(value.market_cap / 100000); // in bts always by now
-                            var precision = 100000;
-                            if (value.precision) {
-                                precision = Math.pow(10, value.precision);
+                
+                return new Promise((resolve, reject) => {
+    
+                    $http.get(appConfig.urls.python_backend + "/assets").then(function (response) {
+        
+                        angular.forEach(response.data, function (value, key) {
+            
+                            var market_cap;
+                            var supply;
+            
+                            if (value.asset_name.indexOf("OPEN") >= 0 || value.asset_name.indexOf("RUDEX") >= 0 ||
+                                value.asset_name.indexOf("BRIDGE") >= 0 || value.asset_name.indexOf("GDEX") >= 0) {
+                                market_cap = "-";
+                                supply = "-";
                             }
-                            supply = Math.round(value.current_supply / precision);
-                        }
-                        var volume = Math.round(value["24h_volume"]);
-
-                        var asset = {
-                            name: value.asset_name,
-                            id: value.asset_id,
-                            price: value.latest_price,
-                            volume: volume,
-                            type: value.asset_type,
-                            market_cap: market_cap,
-                            supply: supply,
-                            holders: value.holders_count
-                        };
-
-                        /* Todo: create function */
-                        var name_lower = value.asset_name.replace("OPEN.", "").toLowerCase();
-                        var url = "images/asset-symbols/" + name_lower + ".png";
-                        var image_url = "";
-                        $http({method: 'GET', url: url}).then(function successCallback(response) {
-                            image_url = "images/asset-symbols/" + name_lower + ".png";
-                            asset.image_url = image_url;
-                            assets.push(asset);
-                        }, function errorCallback(response) {
-                            image_url = "images/asset-symbols/white.png";
-                            asset.image_url = image_url;
-                            assets.push(asset);
+                            else {
+                                market_cap = Math.round(value.market_cap / 100000); // in bts always by now
+                                var precision = 100000;
+                                if (value.precision) {
+                                    precision = Math.pow(10, value.precision);
+                                }
+                                supply = Math.round(value.current_supply / precision);
+                            }
+                            var volume = Math.round(value["24h_volume"]);
+            
+                            var asset = {
+                                name: value.asset_name,
+                                id: value.asset_id,
+                                price: value.latest_price,
+                                volume: volume,
+                                type: value.asset_type,
+                                market_cap: market_cap,
+                                supply: supply,
+                                holders: value.holders_count
+                            };
+            
+                            /* Todo: create function */
+                            var name_lower = value.asset_name.replace("OPEN.", "").toLowerCase();
+                            var url = "images/asset-symbols/" + name_lower + ".png";
+                            var image_url = "";
+                            $http({method: 'GET', url: url}).then(function successCallback(response) {
+                                image_url = "images/asset-symbols/" + name_lower + ".png";
+                                asset.image_url = image_url;
+                                assets.push(asset);
+                            }, function errorCallback(response) {
+                                image_url = "images/asset-symbols/white.png";
+                                asset.image_url = image_url;
+                                assets.push(asset);
+                            });
+            
                         });
-
+                        resolve(assets);
+                        
+                        callback(assets);
+                    }).catch((err) => {
+                        reject(err);
                     });
-                    callback(assets);
+                    
                 });
             },
             getDexVolume: function(callback) {
@@ -139,7 +147,7 @@
             },
             getAssetHolders: function(asset_id, precision, callback) {
                 var accounts = [];
-                $http.get(appConfig.urls.python_backend + "/asset_holders?asset_id=" + asset_id)
+                return $http.get(appConfig.urls.python_backend + "/asset_holders?asset_id=" + asset_id)
                     .then(function(response) {
                     angular.forEach(response.data, function(value, key) {
                         var account = {
