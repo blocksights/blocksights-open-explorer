@@ -234,6 +234,12 @@
   "No worker proposals found": "No worker proposals found",
   "No proxies found": "No proxies found",
   "No operations found": "No operations found",
+  "No data about operations": "No data about operations",
+  "No data about proxies": "No data about proxies",
+  "No data about markets": "No data about markets",
+  "No data about smartcoins": "No data about smartcoins",
+  "No data about UIAs": "No data about UIAs",
+  "No data about holders": "No data about holders",
   "An error occurred during loading": "An error occurred during loading",
 
   "Search for a balance": "Search for a balance",

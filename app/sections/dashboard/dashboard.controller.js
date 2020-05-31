@@ -46,33 +46,56 @@
             
             if (tabName == "operations") {
                 $scope.operations_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
-                chartService.topOperationsChart(function (returnData) {
+                
+                chartService.topOperationsChart().then((returnData) => {
                     $scope.operations_chart = returnData;
+                }).catch(() => {
+                    $scope.operations_chart = chartService.noDataPieChart($filter('translate')('No data about operations'));
                 });
+                
             } else if (tabName == "proxies") {
                 $scope.proxies_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
-                chartService.topProxiesChart(function (returnData) {
+                
+                chartService.topProxiesChart().then((returnData) => {
                     $scope.proxies_chart = returnData;
+                }).catch(() => {
+                    $scope.proxies_chart = chartService.noDataPieChart($filter('translate')('No data about proxies'));
                 });
+                
             } else if (tabName == "markets") {
                 $scope.markets_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
-                chartService.topMarketsChart(function (returnData) {
+                
+                chartService.topMarketsChart().then((returnData) => {
                     $scope.markets_chart = returnData;
+                }).catch(() => {
+                    $scope.markets_chart = chartService.noDataPieChart($filter('translate')('No data about markets'));
                 });
+                
             } else if (tabName == "smartcoin") {
                 $scope.smartcoins_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
-                chartService.topSmartCoinsChart(function (returnData) {
+    
+                chartService.topSmartCoinsChart().then((returnData) => {
                     $scope.smartcoins_chart = returnData;
+                }).catch(() => {
+                    $scope.smartcoins_chart = chartService.noDataPieChart($filter('translate')('No data about smartcoins'));
                 });
+                
             } else if (tabName == "uia") {
                 $scope.uias_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
-                chartService.topUIAsChart(function (returnData) {
+    
+                chartService.topUIAsChart().then((returnData) => {
                     $scope.uias_chart = returnData;
+                }).catch(() => {
+                    $scope.uias_chart = chartService.noDataPieChart($filter('translate')('No data about UIAs'));
                 });
+                
             } else if (tabName == "holders") {
                 $scope.holders_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
-                chartService.topHoldersChart(function (returnData) {
+                
+                chartService.topHoldersChart().then((returnData) => {
                     $scope.holders_chart = returnData;
+                }).catch(() => {
+                    $scope.holders_chart = chartService.noDataPieChart($filter('translate')('No data about holders'));
                 });
             }
         };
