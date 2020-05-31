@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('app').controller('DashboardCtrl', ['$scope', '$timeout', '$window', 'networkService',
+    angular.module('app').controller('DashboardCtrl', ['$scope', 'Notify', '$timeout', '$window', 'networkService',
         'chartService', 'appConfig', '$filter', DashboardCtrl])
 
         .filter('to_trusted', ['$sce', function($sce){
@@ -10,11 +10,12 @@
             };
         }]);
 
-    function DashboardCtrl($scope, $timeout, $window, networkService, chartService, appConfig, $filter) {
+    function DashboardCtrl($scope, Notify, $timeout, $window, networkService, chartService, appConfig, $filter) {
 
         networkService.getHeader(function (returnData) {
             $scope.dynamic = returnData;
         }).catch(() => {
+            showLoadingErrorNotification();
             $scope.dynamic = 'error'
         });
 
@@ -36,6 +37,7 @@
                     }
                 }
             }).catch(err => {
+                showLoadingErrorNotification();
                 $scope.operations = "error";
             });
         };
@@ -53,6 +55,7 @@
                     $scope.operations_chart = returnData;
                 }).catch(() => {
                     $scope.operations_chart = chartService.noDataPieChart($filter('translate')('No data about operations'));
+                    showLoadingErrorNotification();
                 });
                 
             } else if (tabName == "proxies") {
@@ -62,6 +65,7 @@
                     $scope.proxies_chart = returnData;
                 }).catch(() => {
                     $scope.proxies_chart = chartService.noDataPieChart($filter('translate')('No data about proxies'));
+                    showLoadingErrorNotification();
                 });
                 
             } else if (tabName == "markets") {
@@ -71,6 +75,7 @@
                     $scope.markets_chart = returnData;
                 }).catch(() => {
                     $scope.markets_chart = chartService.noDataPieChart($filter('translate')('No data about markets'));
+                    showLoadingErrorNotification();
                 });
                 
             } else if (tabName == "smartcoin") {
@@ -80,6 +85,7 @@
                     $scope.smartcoins_chart = returnData;
                 }).catch(() => {
                     $scope.smartcoins_chart = chartService.noDataPieChart($filter('translate')('No data about smartcoins'));
+                    showLoadingErrorNotification();
                 });
                 
             } else if (tabName == "uia") {
@@ -89,6 +95,7 @@
                     $scope.uias_chart = returnData;
                 }).catch(() => {
                     $scope.uias_chart = chartService.noDataPieChart($filter('translate')('No data about UIAs'));
+                    showLoadingErrorNotification();
                 });
                 
             } else if (tabName == "holders") {
@@ -98,12 +105,21 @@
                     $scope.holders_chart = returnData;
                 }).catch(() => {
                     $scope.holders_chart = chartService.noDataPieChart($filter('translate')('No data about holders'));
+                    showLoadingErrorNotification();
                 });
             }
         };
 
         // laod default tab
         $scope.currentTabIndex = 0;
-        $scope.loadTabsCharts("operations")
+        $scope.loadTabsCharts("operations");
+        
+        function showLoadingErrorNotification() {
+            Notify.error({
+                key: 'dashboardError',
+                message: 'Request to the server failed',
+                allowMultiple: false,
+            });
+        }
     }
 })();

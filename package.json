@@ -37,5 +37,8 @@
     "prestart": "npm install",
     "start": "webpack-dev-server",
     "build": "webpack --mode=production"
+  },
+  "dependencies": {
+    "angular-ui-notification": "^0.3.6"
   }
 }

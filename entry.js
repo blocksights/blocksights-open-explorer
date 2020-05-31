@@ -2,10 +2,13 @@
 
 require("./app/app.module.js");
 
+require("./node_modules/angular-ui-notification/dist/angular-ui-notification");
+
 require("./app/ui/ui.module.js");
 require("./app/ui/loading.directive.js");
 require("./app/ui/loading-error.directive.js");
 require("./app/ui/loading-no-data.directive.js");
+require("./app/ui/notify.service.js");
 
 require("./app/sections/layout/nav.module.js");
 require("./app/sections/accounts/accounts.module.js");
