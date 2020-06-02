@@ -2,10 +2,55 @@
     'use strict';
 
     angular.module('app').factory('chartService', chartService);
-    chartService.$inject = ['$http', 'appConfig', 'utilities'];
+    chartService.$inject = ['$http', 'appConfig', 'utilities', '$filter'];
 
-    function chartService($http, appConfig, utilities) {
-
+    function chartService($http, appConfig, utilities, $filter) {
+    
+        function noDataPieChart(message = $filter('translate')('No data found')) {
+            const options = {
+                "animation":true,
+                "calculable":true,
+                "legend": {
+                    orient: 'vertical',
+                    x: 'left',
+                    data: [message],
+                },
+                "series":[
+                    {
+                        label: {
+                            normal: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                show: true,
+                                textStyle: {
+                                    fontSize: '18'
+                                }
+                            }
+                        },
+                        "color":[
+                            "#DDDDDD"
+                        ],
+                        "type":"pie",
+                        "radius": ['50%', '70%'],
+                        "data":[
+                            {
+                                "value": 0,
+                                "name": message,
+                                itemStyle: {
+                                    normal: {
+                                        color: '#DEDEDE'
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            };
+            return {options: options};
+        }
+        
         function errorChart(message) {
             const options = {
                 "animation":true,
@@ -51,6 +96,7 @@
         }
 
         return {
+            noDataPieChart: noDataPieChart,
             dailyDEXChart: function(callback) {
 
                 var dex_volume_chart = {};
@@ -127,397 +173,438 @@
                     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
                 }
             },
-            topOperationsChart: function(callback) {
-                $http.get(appConfig.urls.elasticsearch_wrapper +
-                    "/es/account_history?from_date=now-180d&to_date=now&type=aggs&agg_field=operation_type&size=10")
-                    .then(function(response) {
-
-                    var legends = [];
-                    var data = [];
-                    var c = 0;
-                    for(var i = 0; i < response.data.length; i++) {
-
-                        ++c;
-                        if(c > 7) { break; }
-
-                        var name =  utilities.operationType(response.data[i].key)[0];
-                        var color =  utilities.operationType(response.data[i].key)[1];
-
-                        data.push({
-                            value: response.data[i].doc_count,
-                            name: name,
-                            itemStyle: {
-                                normal: {
-                                    color: '#' + color
-                                }
-                            }
-                        });
-
-                        legends.push(name);
-                    }
-                    var operations_chart = {};
-                    operations_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: legends,
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            name: 'Operation Type',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            data: data,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
+            topOperationsChart: function() {
+                return new Promise((resolve, reject) => {
+    
+                    $http.get(appConfig.urls.elasticsearch_wrapper +
+                        "/es/account_history?from_date=now-180d&to_date=now&type=aggs&agg_field=operation_type&size=10")
+                         .then(function(response) {
+        
+                             var legends = [];
+                             var data = [];
+                             var c = 0;
+                             for(var i = 0; i < response.data.length; i++) {
+            
+                                 ++c;
+                                 if(c > 7) { break; }
+            
+                                 var name =  utilities.operationType(response.data[i].key)[0];
+                                 var color =  utilities.operationType(response.data[i].key)[1];
+            
+                                 data.push({
+                                     value: response.data[i].doc_count,
+                                     name: name,
+                                     itemStyle: {
+                                         normal: {
+                                             color: '#' + color
+                                         }
+                                     }
+                                 });
+            
+                                 legends.push(name);
+                             }
+                             var operations_chart = {};
+                             operations_chart.options = {
+                                 animation: true,
+                                 tooltip: {
+                                     trigger: 'item',
+                                     formatter: "{a} <br/>{b} : {c} ({d}%)"
+                                 },
+                                 legend: {
+                                     orient: 'vertical',
+                                     x: 'left',
+                                     data: legends,
+                                 },
+                                 toolbox: {
+                                     show: true,
+                                     feature: {
+                                         saveAsImage: {show: true, title: "save as image"}
+                                     }
+                                 },
+                                 calculable: true,
+                                 series: [{
+                                     name: 'Operation Type',
+                                     type: 'pie',
+                                     radius: ['50%', '70%'],
+                                     data: data,
+                                     label: {
+                                         normal: {
+                                             show: false,
+                                             position: 'center'
+                                         },
+                                         emphasis: {
+                                             show: true,
+                                             textStyle: {
+                                                 fontSize: '30',
+                                                 fontWeight: 'bold'
+                                             }
+                                         }
+                                     },
+                                     labelLine: {
+                                         normal: {
+                                             show: false
+                                         }
+                                     }
+                                 }]
+                             };
+                             resolve(operations_chart);
+                         }).catch((err) => {
+                             reject();
+                    });
+                    
+                });
+                
+            },
+            topProxiesChart: function() {
+    
+                return new Promise((resolve, reject) => {
+    
+                    $http.get(appConfig.urls.python_backend + "/top_proxies").then(function(response) {
+        
+                        const data = [];
+                        const amountToDisplay = 10;
+                        let i;
+                        for (i in response.data) {
+                            data.push({
+                                value: response.data[i].bts_weight,
+                                name: response.data[i].name
+                            });
+                            if (data.length >= amountToDisplay) break;
+                        }
+                        var proxies_chart = {};
+                        proxies_chart.options = {
+                            animation: true,
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                x: 'left',
+                                data: data.map(x => x.name)
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    saveAsImage: {show: true, title: "Save as image"}
                                 }
                             },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            }
-                        }]
-                    };
-                    callback(operations_chart);
-                }).catch((err) => callback(errorChart("Error loading")));
-            },
-            topProxiesChart: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_proxies").then(function(response) {
-
-                    const data = [];
-                    const amountToDisplay = 10;
-                    let i;
-                    for (i in response.data) {
-                        data.push({
-                            value: response.data[i].bts_weight,
-                            name: response.data[i].name
-                        });
-                        if (data.length >= amountToDisplay) break;
-                    }
-                    var proxies_chart = {};
-                    proxies_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: data.map(x => x.name)
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "Save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                            name: 'Proxies',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
+                            calculable: true,
+                            series: [{
+                                color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
+                                name: 'Proxies',
+                                type: 'pie',
+                                radius: ['50%', '70%'],
+                                itemStyle: {
+                                    normal: {
+                                        label: {
+                                            show: false
+                                        },
+                                        labelLine: {
+                                            show: false
+                                        }
                                     },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true,
-                                        position: 'center',
-                                        textStyle: {
-                                            fontSize: '30',
-                                            fontWeight: 'bold'
+                                    emphasis: {
+                                        label: {
+                                            show: true,
+                                            position: 'center',
+                                            textStyle: {
+                                                fontSize: '30',
+                                                fontWeight: 'bold'
+                                            }
                                         }
                                     }
+                                },
+                                data: data
+                            }]
+                        };
+                        resolve(proxies_chart);
+                    }).catch((err) => {
+                        reject(err);
+                    });
+                    
+                });
+                
+            },
+            topMarketsChart: function() {
+    
+                return new Promise((resolve, reject) => {
+    
+                    $http.get(appConfig.urls.python_backend + "/top_markets").then(function(response) {
+        
+                        const data = [];
+                        const amountToDisplay = 10;
+                        let i;
+                        for (i in response.data) {
+                            data.push({
+                                value: response.data[i]["24h_volume"],
+                                name: response.data[i].pair
+                            });
+                            if (data.length >= amountToDisplay) break;
+                        }
+        
+                        var markets_chart = {};
+                        markets_chart.options = {
+                            animation: true,
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                x: 'left',
+                                data: data.map(x => x.name)
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    saveAsImage: {show: true, title: "save as image"}
                                 }
                             },
-                            data: data
-                        }]
-                    };
-                    callback(proxies_chart);
-                }).catch((err) => callback(errorChart("Error loading")));
-            },
-            topMarketsChart: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_markets").then(function(response) {
-
-                    const data = [];
-                    const amountToDisplay = 10;
-                    let i;
-                    for (i in response.data) {
-                        data.push({
-                            value: response.data[i]["24h_volume"],
-                            name: response.data[i].pair
-                        });
-                        if (data.length >= amountToDisplay) break;
-                    }
-
-                    var markets_chart = {};
-                    markets_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: data.map(x => x.name)
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                            name: 'Traffic source',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
+                            calculable: true,
+                            series: [{
+                                color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
+                                name: 'Traffic source',
+                                type: 'pie',
+                                radius: ['50%', '70%'],
+                                itemStyle: {
+                                    normal: {
+                                        label: {
+                                            show: false
+                                        },
+                                        labelLine: {
+                                            show: false
+                                        }
                                     },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true,
-                                        position: 'center',
-                                        textStyle: {
-                                            fontSize: '30',
-                                            fontWeight: 'bold'
+                                    emphasis: {
+                                        label: {
+                                            show: true,
+                                            position: 'center',
+                                            textStyle: {
+                                                fontSize: '30',
+                                                fontWeight: 'bold'
+                                            }
                                         }
                                     }
+                                },
+                                data: data
+                            }]
+                        };
+                        resolve(markets_chart);
+                    }).catch((err) => {
+                        reject(err);
+                    });
+                    
+                });
+            },
+            topSmartCoinsChart: function() {
+    
+                return new Promise((resolve, reject) => {
+                    $http.get(appConfig.urls.python_backend + "/top_smartcoins").then(function(response) {
+        
+                        const data = [];
+                        const amountToDisplay = 10;
+                        let i;
+                        for (i in response.data) {
+                            data.push({
+                                value: response.data[i]["24h_volume"],
+                                name: response.data[i].asset_name
+                            });
+                            if (data.length >= amountToDisplay) break;
+                        }
+        
+                        var smartcoins_chart = {};
+                        smartcoins_chart.options = {
+                            animation: true,
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                x: 'left',
+                                data: data.map(x => x.name)
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    saveAsImage: {show: true, title: "save as image"}
                                 }
                             },
-                            data: data
-                        }]
-                    };
-                    callback(markets_chart);
-                }).catch((err) => callback(errorChart("Error loading")));
-            },
-            topSmartCoinsChart: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_smartcoins").then(function(response) {
-
-                    const data = [];
-                    const amountToDisplay = 10;
-                    let i;
-                    for (i in response.data) {
-                        data.push({
-                            value: response.data[i]["24h_volume"],
-                            name: response.data[i].asset_name
-                        });
-                        if (data.length >= amountToDisplay) break;
-                    }
-
-                    var smartcoins_chart = {};
-                    smartcoins_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: data.map(x => x.name)
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                            name: 'Top Smartcoins',
-                            type: 'pie',
-                            roseType: 'radius',
-                            max: 40,
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
+                            calculable: true,
+                            series: [{
+                                color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
+                                name: 'Top Smartcoins',
+                                type: 'pie',
+                                roseType: 'radius',
+                                max: 40,
+                                itemStyle: {
+                                    normal: {
+                                        label: {
+                                            show: false
+                                        },
+                                        labelLine: {
+                                            show: false
+                                        }
                                     },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true
-                                    },
-                                    labelLine: {
-                                        show: true
-                                    }
-                                }
-                            },
-                            data: data
-                        }]
-                    };
-                    callback(smartcoins_chart);
-                }).catch((err) => callback(errorChart("Error loading")));
-            },
-            topUIAsChart: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_uias").then(function(response) {
-
-                    const data = [];
-                    const amountToDisplay = 10;
-                    let i;
-                    for (i in response.data) {
-                        data.push({
-                            value: response.data[i]["24h_volume"],
-                            name: response.data[i].asset_name
-                        });
-                        if (data.length >= amountToDisplay) break;
-                    }
-
-                    var uias_chart = {};
-                    uias_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: data.map(x => x.name)
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                            name: 'Top User Issued Assets',
-                            type: 'pie',
-                            roseType: 'radius',
-                            max: 40,
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
-                                    },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true
-                                    },
-                                    labelLine: {
-                                        show: true
-                                    }
-                                }
-                            },
-                            data: data
-                        }]
-                    };
-                    callback(uias_chart);
-                }).catch((err) => callback(errorChart("Error loading")));
-            },
-            topHoldersChart: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_holders").then(function(response) {
-
-                    const data = [];
-                    const amountToDisplay = 10;
-                    let i;
-                    for (i in response.data) {
-                        data.push({
-                            value: response.data[i].amount,
-                            name: response.data[i].account_name
-                        });
-                        if (data.length >= amountToDisplay) break;
-                    }
-
-                    var holders_chart = {};
-                    holders_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: data.map(x => x.name)
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                            name: 'Holders',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
-                                    },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true,
-                                        position: 'center',
-                                        textStyle: {
-                                            fontSize: '30',
-                                            fontWeight: 'bold'
+                                    emphasis: {
+                                        label: {
+                                            show: true
+                                        },
+                                        labelLine: {
+                                            show: true
                                         }
                                     }
+                                },
+                                data: data
+                            }]
+                        };
+                        resolve(smartcoins_chart);
+                    }).catch((err) => {
+                        reject(err);
+                    });
+                });
+                
+            },
+            topUIAsChart: function() {
+    
+                return new Promise((resolve, reject) => {
+                    $http.get(appConfig.urls.python_backend + "/top_uias").then(function(response) {
+        
+                        const data = [];
+                        const amountToDisplay = 10;
+                        let i;
+                        for (i in response.data) {
+                            data.push({
+                                value: response.data[i]["24h_volume"],
+                                name: response.data[i].asset_name
+                            });
+                            if (data.length >= amountToDisplay) break;
+                        }
+        
+                        var uias_chart = {};
+                        uias_chart.options = {
+                            animation: true,
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                x: 'left',
+                                data: data.map(x => x.name)
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    saveAsImage: {show: true, title: "save as image"}
                                 }
                             },
-                            data: data
-                        }]
-                    };
-                    callback(holders_chart);
-                }).catch((err) => callback(errorChart("Error loading")));
+                            calculable: true,
+                            series: [{
+                                color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
+                                name: 'Top User Issued Assets',
+                                type: 'pie',
+                                roseType: 'radius',
+                                max: 40,
+                                itemStyle: {
+                                    normal: {
+                                        label: {
+                                            show: false
+                                        },
+                                        labelLine: {
+                                            show: false
+                                        }
+                                    },
+                                    emphasis: {
+                                        label: {
+                                            show: true
+                                        },
+                                        labelLine: {
+                                            show: true
+                                        }
+                                    }
+                                },
+                                data: data
+                            }]
+                        };
+                        resolve(uias_chart);
+                    }).catch((err) => {
+                        reject(err);
+                    });
+                });
+                
+            },
+            topHoldersChart: function() {
+    
+                return new Promise((resolve, reject) => {
+                    $http.get(appConfig.urls.python_backend + "/top_holders").then(function(response) {
+        
+                        const data = [];
+                        const amountToDisplay = 10;
+                        let i;
+                        for (i in response.data) {
+                            data.push({
+                                value: response.data[i].amount,
+                                name: response.data[i].account_name
+                            });
+                            if (data.length >= amountToDisplay) break;
+                        }
+        
+                        var holders_chart = {};
+                        holders_chart.options = {
+                            animation: true,
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                            },
+                            legend: {
+                                orient: 'vertical',
+                                x: 'left',
+                                data: data.map(x => x.name)
+                            },
+                            toolbox: {
+                                show: true,
+                                feature: {
+                                    saveAsImage: {show: true, title: "save as image"}
+                                }
+                            },
+                            calculable: true,
+                            series: [{
+                                color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
+                                name: 'Holders',
+                                type: 'pie',
+                                radius: ['50%', '70%'],
+                                itemStyle: {
+                                    normal: {
+                                        label: {
+                                            show: false
+                                        },
+                                        labelLine: {
+                                            show: false
+                                        }
+                                    },
+                                    emphasis: {
+                                        label: {
+                                            show: true,
+                                            position: 'center',
+                                            textStyle: {
+                                                fontSize: '30',
+                                                fontWeight: 'bold'
+                                            }
+                                        }
+                                    }
+                                },
+                                data: data
+                            }]
+                        };
+                        resolve(holders_chart);
+                    }).catch((err) => {
+                        reject(err);
+                    });
+                    
+                });
+                
             }
         };
     }

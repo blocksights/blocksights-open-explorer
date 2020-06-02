@@ -47,6 +47,7 @@ const CSS = [
     '../node_modules/components-font-awesome/css/solid.min.css',
     '../node_modules/angular-loading-bar/build/loading-bar.min.css',
     '../node_modules/bootstrap/dist/css/bootstrap.min.css',
+    '../node_modules/angular-ui-notification/dist/angular-ui-notification.css',
     "styles/custom.css"
 ];
 
