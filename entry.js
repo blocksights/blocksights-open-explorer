@@ -29,6 +29,7 @@ require("./app/chart/chart.module.js");
 require("./app/core/app.config.js");
 require("./app/core/app.utilities.js");
 
+require("./app/core/api.config.js");
 require("./app/core/service.network.js");
 require("./app/core/service.market.js");
 require("./app/core/service.asset.js");
