@@ -99,6 +99,10 @@
     border-right-color: rgba(0,0,0,0.85);
 }
 
+img.inlineLoading {
+    margin: -5px 0;
+}
+
 .popover-content {
     word-break: break-all;
 }
