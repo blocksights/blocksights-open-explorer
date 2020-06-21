@@ -6,8 +6,14 @@
     function Loading() {
         
         return {
+            scope: {
+                text: '='
+            },
             restrict: 'E',
-            template: '<span><span data-translate="Data unavailable"></span></span>'
+            template: `<span>
+                           <span ng-if="text !== undefined">{{text}}</span>
+                           <span ng-if="text === undefined" data-translate="Data unavailable"></span>
+                       </span>`
         }
         
     }
