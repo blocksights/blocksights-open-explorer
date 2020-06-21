@@ -9,7 +9,7 @@
         return {
             getHeader: function(callback) {
                 let header;
-                return $http.get(appConfig.urls.python_backend + "/header").then(function(response) {
+                return $http.get(appConfig.urls.python_backend() + "/header").then(function(response) {
                     header = {
                         time: response.data.time,
                         head_block_number: response.data.head_block_number,
@@ -17,10 +17,11 @@
                         bts_market_cap: response.data.bts_market_cap,
                         quote_volume: response.data.quote_volume,
                         witness_count: response.data.witness_count,
-                        committee_count: response.data.committee_count
+                        committee_count: response.data.committee_count,
+                        chain_id: response.data.chain_id,
                     };
                     callback(header);
-                    $http.get(appConfig.urls.python_backend + "/statistics_per_x?days=1").then(function(response) {
+                    $http.get(appConfig.urls.python_backend() + "/statistics_per_x?days=1").then(function(response) {
                         header.statistics_per_x = response.data;
                         callback(header);
                     });
@@ -28,13 +29,13 @@
             },
 
             getBigBlocks: function(callback) {
-                $http.get(appConfig.urls.elasticsearch_wrapper +
+                $http.get(appConfig.urls.elasticsearch_wrapper() +
                     "/es/account_history?from_date=now-1w&to_date=now&type=aggs&agg_field=block_data.block_num&size=20")
                     .then(function (response) {
 
                     let blocks = [];
                     angular.forEach(response.data, function (value) {
-                        $http.get(appConfig.urls.python_backend + "/block?block_num=" + value.key).then(function (response) {
+                        $http.get(appConfig.urls.python_backend() + "/block?block_num=" + value.key).then(function (response) {
 
                             const parsed = {
                                 block_num: value.key,
@@ -49,7 +50,7 @@
                 });
             },
             getLastOperations: function(limit, from, callback) {
-                return $http.get(appConfig.urls.elasticsearch_wrapper + "/es/account_history"
+                return $http.get(appConfig.urls.elasticsearch_wrapper() + "/es/account_history"
                     + "?size=" + limit
                     + "&from_=" + from
                     + "&from_date=now-180d"
@@ -88,7 +89,7 @@
 
             getBigTransactions: function(callback, ofLastHours) {
                 return $http.get(
-                    appConfig.urls.elasticsearch_wrapper + "/es/account_history" +
+                    appConfig.urls.elasticsearch_wrapper() + "/es/account_history" +
                     "?from_date=now-" + ofLastHours + "h" +
                     "&to_date=now" +
                     "&type=aggs" +
@@ -111,7 +112,7 @@
             },
 
             getTransaction: function(trx, callback) {
-                return $http.get(appConfig.urls.elasticsearch_wrapper + "/es/trx?trx=" + trx +
+                return $http.get(appConfig.urls.elasticsearch_wrapper() + "/es/trx?trx=" + trx +
                     "&sort=-operation_history.sequence"
                 ).then(function(response) {
                     if (response.data && response.data.length == 0) {
@@ -159,7 +160,7 @@
             },
             getFees: function(callback) {
                 let fees = [];
-                return $http.get(appConfig.urls.python_backend + "/fees").then(function(response) {
+                return $http.get(appConfig.urls.python_backend() + "/fees").then(function(response) {
                     let basic_fee = 0;
                     for(var i = 0; i < response.data.parameters.current_fees.parameters.length; i++) {
                         if (response.data.parameters.current_fees.parameters[i][1].fee) {
@@ -186,7 +187,7 @@
             },
             getOperation: function(operation, callback) {
                 let op;
-                $http.get(appConfig.urls.python_backend + "/operation?operation_id=" + operation).then(function(response) {
+                $http.get(appConfig.urls.python_backend() + "/operation?operation_id=" + operation).then(function(response) {
                     const raw_obj = response.data.op;
                     const op_type =  utilities.operationType(response.data.op_type);
 
@@ -213,7 +214,7 @@
             },
             getBlock: function(block_num, callback) {
                 let block;
-                $http.get(appConfig.urls.python_backend + "/block?block_num=" + block_num).then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/block?block_num=" + block_num).then(function (response) {
                     let operations_count = 0;
                     for (var i = 0; i < response.data.transactions.length; i++) {
                         operations_count = operations_count + response.data.transactions[i].operations.length;
@@ -235,7 +236,7 @@
                 });
             },
             getObject: function(object, callback) {
-                $http.get(appConfig.urls.python_backend + "/object?object=" + object).then(function(response) {
+                $http.get(appConfig.urls.python_backend() + "/object?object=" + object).then(function(response) {
                     const object_id = response.data.id;
                     const object_type = utilities.objectType(object_id);
 

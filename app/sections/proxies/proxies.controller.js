@@ -7,7 +7,7 @@
 
     function proxiesCtrl($scope, $filter, $routeParams, $http, appConfig, utilities) {
 
-        $http.get(appConfig.urls.python_backend + "/top_proxies").then(function(response) {
+        $http.get(appConfig.urls.python_backend() + "/top_proxies").then(function(response) {
                 let proxies = [];
                 let counter = 1;
                 angular.forEach(response.data, function(value, key) {

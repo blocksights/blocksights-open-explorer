@@ -8,7 +8,7 @@
 
         return {
             getRichList: function(callback) {
-                return $http.get(appConfig.urls.python_backend + "/accounts").then(function(response) {
+                return $http.get(appConfig.urls.python_backend() + "/accounts").then(function(response) {
                     var richs = [];
                     for(var i = 0; i < response.data.length; i++) {
                         var amount = utilities.formatBalance(response.data[i].amount, 5);
@@ -27,7 +27,7 @@
                 var results = [];
                 var is_worker = false;
                 var worker_votes = 0;
-                $http.get(appConfig.urls.python_backend + "/workers").then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/workers").then(function (response) {
                     for (var i = 0; i < response.data.length; i++) {
                         var worker_account = response.data[i][0].worker_account;
                         if (worker_account === account_id) {
@@ -45,7 +45,7 @@
                 var results = [];
                 var is_witness = false;
                 var witness_votes = 0;
-                $http.get(appConfig.urls.python_backend + "/witnesses").then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/witnesses").then(function (response) {
                     for (var i = 0; i < response.data.length; i++) {
                         var witness_account = response.data[i].witness_account;
                         if (witness_account === account_id) {
@@ -67,7 +67,7 @@
                 var results = [];
                 var is_committee_member = false;
                 var committee_votes = 0;
-                $http.get(appConfig.urls.python_backend + "/committee_members").then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/committee_members").then(function (response) {
                     for (var i = 0; i < response.data.length; i++) {
                         var committee_member_account = response.data[i][0].committee_member_account;
                         if (committee_member_account === account_id) {
@@ -90,7 +90,7 @@
                 var results = [];
                 var is_proxy = false;
                 var proxy_votes = 0;
-                $http.get(appConfig.urls.python_backend + "/top_proxies").then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/top_proxies").then(function (response) {
                     for (var i = 0; i < response.data.length; i++) {
                         var proxy_account = response.data[i].id;
                         if (proxy_account === account_id) {
@@ -106,7 +106,7 @@
             },
             getReferrers: function(account_id, page, callback) {
                 var results = [];
-                $http.get(appConfig.urls.python_backend + "/all_referrers?account_id=" + account_id + "&page=" + page)
+                $http.get(appConfig.urls.python_backend() + "/all_referrers?account_id=" + account_id + "&page=" + page)
                     .then(function (response) {
 
                     for (var i = 0; i < response.data.length; i++) {
@@ -121,7 +121,7 @@
             },
             getReferrerCount: function(account, callback) {
                 var count = 0;
-                $http.get(appConfig.urls.python_backend + "/referrer_count?account_id=" + account)
+                $http.get(appConfig.urls.python_backend() + "/referrer_count?account_id=" + account)
                     .then(function (response) {
                     count = response.data;
                     callback(count);
@@ -129,7 +129,7 @@
             },
             getFullAccount: function(account, callback) {
                 var full_account = {};
-                $http.get(appConfig.urls.python_backend + "/full_account?account_id=" + account)
+                $http.get(appConfig.urls.python_backend() + "/full_account?account_id=" + account)
                     .then(function (response) {
                     full_account  = response.data;
                     callback(full_account);
@@ -137,7 +137,7 @@
             },
             getTotalAccountOps: function(account_id, callback) {
                 // @deprecated creates massive load, remove
-                $http.get(appConfig.urls.elasticsearch_wrapper + "/es/account_history?account_id="+account_id+
+                $http.get(appConfig.urls.elasticsearch_wrapper() + "/es/account_history?account_id="+account_id+
                     "&from_date=2015-10-10&to_date=now&type=count").then(function(response) {
                         var count = 0;
                         angular.forEach(response.data, function (value, key) {
@@ -148,7 +148,7 @@
             },
             getAccountName: function(account_id, callback) {
                 var account_name = "";
-                $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + account_id)
+                $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + account_id)
                     .then(function (response) {
                     account_name = response.data;
                     callback(account_name);
@@ -166,7 +166,7 @@
                         results.push(authline);
                     }
                     else if(type === "account") {
-                        $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + value[0])
+                        $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + value[0])
                             .then(function (response) {
                             authline = {
                                 account: value[0],
@@ -230,7 +230,7 @@
                         type = "Other";
                         account = "No name";
                     }
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + account)
                         .then(function (response) {
                         var parsed = {
                             id: value.id,
@@ -288,7 +288,7 @@
                 }
             },
             getAccountHistory: function(account_id, start, limit, callback) {
-                return $http.get(appConfig.urls.elasticsearch_wrapper + "/es/account_history?account_id=" +
+                return $http.get(appConfig.urls.elasticsearch_wrapper() + "/es/account_history?account_id=" +
                     account_id + (start != null ? "&search_after=" + start : "") + "&size=" + limit + "&sort_by=-account_history.sequence")
                     .then(function (response) {
 
@@ -328,7 +328,7 @@
             },
             getVotingStats: function(account_id, callback) {
                 $http.get(
-                    appConfig.urls.python_backend + "/account_voting_power?account_id=" + account_id
+                    appConfig.urls.python_backend() + "/account_voting_power?account_id=" + account_id
                 ).then(
                     function (response) {
                         callback(response.data);

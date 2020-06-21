@@ -39,15 +39,15 @@
 
                     operation_account = from;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
                             // get me the to name:
-                            $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + to)
+                            $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + to)
                                 .then(function (response_name_to) {
                                     var to_name = response_name_to.data;
 
-                                    $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + amount_asset_id)
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_asset_id)
                                         .then(function (response_asset) {
 
                                             var asset_name = response_asset.data.symbol;
@@ -77,10 +77,10 @@
                     var min_to_receive_asset_id = operation.min_to_receive.asset_id;
                     var min_to_receive_amount = operation.min_to_receive.amount;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + amount_to_sell_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_to_sell_asset_id)
                                 .then(function (response_asset1) {
 
                                     var sell_asset_name = response_asset1.data.symbol;
@@ -89,7 +89,7 @@
                                     var divideby = Math.pow(10, sell_asset_precision);
                                     var sell_amount = Number(amount_to_sell_amount / divideby);
 
-                                    $http.get(appConfig.urls.python_backend + "/asset?asset_id=" +
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" +
                                         min_to_receive_asset_id)
                                         .then(function (response_asset2) {
 
@@ -116,7 +116,7 @@
                     fee_paying_account = operation.fee_paying_account;
                     operation_account = fee_paying_account;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
@@ -129,15 +129,15 @@
                     var delta_collateral_asset_id = operation.delta_collateral.asset_id;
                     var delta_debt_asset_id = operation.delta_debt.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + funding_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + funding_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + delta_collateral_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + delta_collateral_asset_id)
                                 .then(function (response_asset1) {
 
                                     var asset1 = response_asset1.data.symbol;
 
-                                    $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + delta_debt_asset_id)
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + delta_debt_asset_id)
                                         .then(function (response_asset2) {
 
                                             var asset2 = response_asset2.data.symbol;
@@ -161,11 +161,11 @@
                     var receives_asset_id = operation.receives.asset_id;
                     var receives_amount = operation.receives.amount;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + pays_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + pays_asset_id)
                                 .then(function (response_asset1) {
 
                                     var pays_asset_name = response_asset1.data.symbol;
@@ -175,7 +175,7 @@
 
                                     var p_amount = parseFloat(pays_amount / divideby);
 
-                                    $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + receives_asset_id)
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + receives_asset_id)
                                         .then(function (response_asset2) {
 
                                             var receive_asset_name = response_asset2.data.symbol;
@@ -203,7 +203,7 @@
                     var name =  operation.name;
                     operation_account = registrar;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
@@ -212,7 +212,7 @@
 
                             if(registrar !== referrer) {
 
-                                $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + referrer)
+                                $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + referrer)
                                     .then(function (response_name2) {
 
                                         operation_text = operation_text + " thanks to " + "<a href='/#/accounts/" +
@@ -228,7 +228,7 @@
                 else if (operation_type === 6) {
                     operation_account = operation.account;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
@@ -243,10 +243,10 @@
                     var type = "whitelisted";
                     if(new_listing == 2) type = "blacklisted";
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                        $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + account_to_list)
+                        $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + account_to_list)
                             .then(function (response_name2) {
 
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
@@ -260,7 +260,7 @@
                 else if (operation_type === 8) {
                     operation_account = operation.account_to_upgrade;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
@@ -271,7 +271,7 @@
                 else if (operation_type === 10) {
                     operation_account = operation.issuer;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
                                 "</a> created the asset " + "<a href='/#/assets/" + operation.symbol + "'>" + operation.symbol +
@@ -285,10 +285,10 @@
                     var asset_to_issue_amount = operation.asset_to_issue.amount;
                     var asset_to_issue_asset_id = operation.asset_to_issue.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + issuer)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + issuer)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + asset_to_issue_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_to_issue_asset_id)
                                 .then(function (response_asset) {
 
                                     var asset_name = response_asset.data.symbol;
@@ -297,7 +297,7 @@
                                     var divideby = Math.pow(10, asset_precision);
                                     var amount = Number(asset_to_issue_amount / divideby);
 
-                                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + issue_to_account)
+                                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + issue_to_account)
                                         .then(function (response_name2) {
 
                                         operation_text = "<a href='/#/accounts/" + issuer + "'>" + response_name.data +
@@ -318,10 +318,10 @@
                     var amount_to_reserve_amount = operation.amount_to_reserve.amount;
                     var amount_to_reserve_asset_id = operation.amount_to_reserve.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + amount_to_reserve_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_to_reserve_asset_id)
                                 .then(function (response_asset) {
 
                                     var asset_name = response_asset.data.symbol;
@@ -344,10 +344,10 @@
                     var asset_id =  operation.asset_id;
                     operation_account = publisher;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_id)
                                 .then(function (response_asset) {
 
                                     operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
@@ -362,7 +362,7 @@
                     fee_paying_account = operation.fee_paying_account;
                     operation_account = fee_paying_account;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
                                 "</a>  created a proposal";
@@ -374,7 +374,7 @@
                     var proposal = operation.proposal;
                     operation_account = fee_paying_account;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
                                 "</a>  updated ";
@@ -390,10 +390,10 @@
                     var amount_amount = operation.amount_.amount;
                     var amount_asset_id = operation.amount_.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + amount_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_asset_id)
                                 .then(function (response_asset) {
 
                                     var asset_name = response_asset.data.symbol;
@@ -417,10 +417,10 @@
                     var total_claimed_amount = operation.total_claimed.amount;
                     var total_claimed_asset_id = operation.total_claimed.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + total_claimed_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + total_claimed_asset_id)
                                 .then(function (response_asset) {
 
                                     var asset_name = response_asset.data.symbol;
@@ -446,10 +446,10 @@
                     var debt_covered_amount = operation.debt_covered.amount;
                     var debt_covered_asset_id = operation.debt_covered.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" +
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" +
                                 additional_collateral_asset_id)
                                 .then(function (additional_collateral_asset) {
 
@@ -458,7 +458,7 @@
                                     var divideby1 = Math.pow(10, asset_precision1);
                                     var amount1 = Number(additional_collateral_amount / divideby1);
 
-                                    $http.get(appConfig.urls.python_backend + "/asset?asset_id=" +
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" +
                                         debt_covered_asset_id)
                                         .then(function (debt_covered_asset) {
 
@@ -488,10 +488,10 @@
 
                     var to = operation.to;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_id)
                                 .then(function (asset) {
 
                                     var asset_name = asset.data.symbol;
@@ -499,7 +499,7 @@
                                     var divideby = Math.pow(10, asset_precision);
                                     var amount = Number(amount_ / divideby);
 
-                                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + to)
+                                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + to)
                                         .then(function (response_name2) {
 
                                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
@@ -517,7 +517,7 @@
                     operation_account = operation.redeemer;
                     var htlc_id = operation.htlc_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
@@ -529,7 +529,7 @@
                     operation_account = operation.from;
                     var htlc_id = operation.htlc_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
@@ -541,7 +541,7 @@
                     operation_account = operation.update_issuer;
                     var htlc_id = operation.htlc_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
@@ -553,7 +553,7 @@
                     operation_account = operation.to;
                     var htlc_id = operation.htlc_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
                             operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +

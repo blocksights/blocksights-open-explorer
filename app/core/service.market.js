@@ -9,7 +9,7 @@
         return {
             getActiveMarkets: function(lastXHours, callback) {
                 let markets = [];
-                return $http.get(appConfig.urls.python_backend + "/most_active_markets?of_last_hours=" + lastXHours).then(function(response) {
+                return $http.get(appConfig.urls.python_backend() + "/most_active_markets?of_last_hours=" + lastXHours).then(function(response) {
 
                     angular.forEach(response.data, function(value) {
                         const market = {
@@ -25,7 +25,7 @@
             },
             getAssetMarkets: function(asset_id, callback) {
                 let markets = [];
-                return $http.get(appConfig.urls.python_backend + "/markets?asset_id=" + asset_id).then(function(response) {
+                return $http.get(appConfig.urls.python_backend() + "/markets?asset_id=" + asset_id).then(function(response) {
                     angular.forEach(response.data, function(value) {
                         const market = {
                             pair: value.pair,
@@ -41,7 +41,7 @@
                 let order_book = [];
                 let asks = [];
                 let bids = [];
-                $http.get(appConfig.urls.python_backend + "/order_book?base=" + base + "&quote=" + quote + "&limit=10")
+                $http.get(appConfig.urls.python_backend() + "/order_book?base=" + base + "&quote=" + quote + "&limit=10")
                     .then(function(response) {
 
                     let total = 0;
@@ -77,7 +77,7 @@
             },
             getGroupedOrderBook: function(base, quote, base_precision, quote_precision, callback) {
                 let grouped = [];
-                $http.get(appConfig.urls.python_backend + "/grouped_limit_orders?base=" + base + "&quote=" +
+                $http.get(appConfig.urls.python_backend() + "/grouped_limit_orders?base=" + base + "&quote=" +
                     quote + "&group=10&limit=10")
                     .then(function(response) {
 
@@ -134,14 +134,14 @@
             },
             getAssetPrecision: function(asset_id, callback) {
                 let precision;
-                $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + asset_id).then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_id).then(function (response) {
                     precision = response.data.precision;
                     callback(precision);
                 });
             },
             getTicker: function(base, quote, callback) {
                 let ticker = {};
-                $http.get(appConfig.urls.python_backend + "/ticker?base=" + base + "&quote=" + quote)
+                $http.get(appConfig.urls.python_backend() + "/ticker?base=" + base + "&quote=" + quote)
                     .then(function(response) {
                     const ticker = {
                         price: response.data.latest,

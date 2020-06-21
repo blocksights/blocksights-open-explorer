@@ -100,8 +100,8 @@
             dailyDEXChart: function(callback) {
 
                 var dex_volume_chart = {};
-                $http.get(appConfig.urls.python_backend + "/daily_volume_dex_dates").then(function (response) {
-                    $http.get(appConfig.urls.python_backend + "/daily_volume_dex_data").then(function (response2) {
+                $http.get(appConfig.urls.python_backend() + "/daily_volume_dex_dates").then(function (response) {
+                    $http.get(appConfig.urls.python_backend() + "/daily_volume_dex_data").then(function (response2) {
 
                         dex_volume_chart.options = {
                             animation: true,
@@ -154,7 +154,7 @@
                     interval: '60',
                     container_id: "tv_chart_container",
                     //	BEWARE: no trailing slash is expected in feed URL
-                    datafeed: new Datafeeds.UDFCompatibleDatafeed(appConfig.urls.udf_wrapper),
+                    datafeed: new Datafeeds.UDFCompatibleDatafeed(appConfig.urls.udf_wrapper()),
                     library_path: "charting_library/",
                     locale: getParameterByName('lang') || "en",
                     //	Regression Trend-related functionality is not implemented yet, so it's hidden for a while
@@ -176,7 +176,7 @@
             topOperationsChart: function() {
                 return new Promise((resolve, reject) => {
     
-                    $http.get(appConfig.urls.elasticsearch_wrapper +
+                    $http.get(appConfig.urls.elasticsearch_wrapper() +
                         "/es/account_history?from_date=now-180d&to_date=now&type=aggs&agg_field=operation_type&size=10")
                          .then(function(response) {
         
@@ -259,7 +259,7 @@
     
                 return new Promise((resolve, reject) => {
     
-                    $http.get(appConfig.urls.python_backend + "/top_proxies").then(function(response) {
+                    $http.get(appConfig.urls.python_backend() + "/top_proxies").then(function(response) {
         
                         const data = [];
                         const amountToDisplay = 10;
@@ -330,7 +330,7 @@
     
                 return new Promise((resolve, reject) => {
     
-                    $http.get(appConfig.urls.python_backend + "/top_markets").then(function(response) {
+                    $http.get(appConfig.urls.python_backend() + "/top_markets").then(function(response) {
         
                         const data = [];
                         const amountToDisplay = 10;
@@ -400,7 +400,7 @@
             topSmartCoinsChart: function() {
     
                 return new Promise((resolve, reject) => {
-                    $http.get(appConfig.urls.python_backend + "/top_smartcoins").then(function(response) {
+                    $http.get(appConfig.urls.python_backend() + "/top_smartcoins").then(function(response) {
         
                         const data = [];
                         const amountToDisplay = 10;
@@ -469,7 +469,7 @@
             topUIAsChart: function() {
     
                 return new Promise((resolve, reject) => {
-                    $http.get(appConfig.urls.python_backend + "/top_uias").then(function(response) {
+                    $http.get(appConfig.urls.python_backend() + "/top_uias").then(function(response) {
         
                         const data = [];
                         const amountToDisplay = 10;
@@ -538,7 +538,7 @@
             topHoldersChart: function() {
     
                 return new Promise((resolve, reject) => {
-                    $http.get(appConfig.urls.python_backend + "/top_holders").then(function(response) {
+                    $http.get(appConfig.urls.python_backend() + "/top_holders").then(function(response) {
         
                         const data = [];
                         const amountToDisplay = 10;

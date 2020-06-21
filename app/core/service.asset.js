@@ -12,7 +12,7 @@
                 
                 return new Promise((resolve, reject) => {
     
-                    $http.get(appConfig.urls.python_backend + "/assets").then(function (response) {
+                    $http.get(appConfig.urls.python_backend() + "/assets").then(function (response) {
         
                         angular.forEach(response.data, function (value, key) {
             
@@ -71,7 +71,7 @@
             },
             getDexVolume: function(callback) {
                 var dex;
-                $http.get(appConfig.urls.python_backend + "/dex_total_volume").then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/dex_total_volume").then(function (response) {
                     dex = {
                         volume_core_asset: response.data.volume_core_asset,
                         market_cap_core_asset: response.data.market_cap_core_asset
@@ -81,7 +81,7 @@
             },
             getAssetFull: function(asset_id, callback) {
 
-                $http.get(appConfig.urls.python_backend + "/asset_and_volume?asset_id=" + asset_id)
+                $http.get(appConfig.urls.python_backend() + "/asset_and_volume?asset_id=" + asset_id)
                     .then(function(response) {
 
                     var type;
@@ -147,7 +147,7 @@
             },
             getAssetHolders: function(asset_id, precision, callback) {
                 var accounts = [];
-                return $http.get(appConfig.urls.python_backend + "/asset_holders?asset_id=" + asset_id)
+                return $http.get(appConfig.urls.python_backend() + "/asset_holders?asset_id=" + asset_id)
                     .then(function(response) {
                     angular.forEach(response.data, function(value, key) {
                         var account = {
@@ -161,7 +161,7 @@
                 });
             },
             getAssetHoldersCount: function(asset_id, callback) {
-                $http.get(appConfig.urls.python_backend + "/asset_holders_count?asset_id=" + asset_id)
+                $http.get(appConfig.urls.python_backend() + "/asset_holders_count?asset_id=" + asset_id)
                     .then(function(response) {
                     var holders_count = response.data;
                     callback(holders_count);
@@ -169,7 +169,7 @@
             },
             getAssetNameAndPrecision: function(asset_id, callback) {
                 var results = {};
-                $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + asset_id).then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_id).then(function (response) {
                     results.symbol = response.data.symbol;
                     results.precision = response.data.precision;
                     callback(results);
