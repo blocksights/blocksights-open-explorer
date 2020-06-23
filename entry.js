@@ -8,6 +8,7 @@ require("./app/ui/ui.module.js");
 require("./app/ui/loading.directive.js");
 require("./app/ui/loading-error.directive.js");
 require("./app/ui/loading-no-data.directive.js");
+require("./app/ui/responsive-table.directive.js");
 require("./app/ui/notify.service.js");
 
 require("./app/sections/layout/nav.module.js");
