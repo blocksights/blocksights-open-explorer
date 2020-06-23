@@ -59,7 +59,82 @@
         </ul>
     </div>
 
-    <div class="panel panel-default">
+    <div class="checkbox" style="margin-bottom: 20px;">
+        <label>
+            <input type="checkbox" id="blankCheckbox" ng-model="showRawData"> <span data-translate="Show transactions raw data"></span>
+        </label>
+    </div>
+
+    <div class="row" ng-repeat="(trxId, transaction) in transactions" ng-show="!showRawData">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading"> <strong><span data-translate="Transaction"></span> {{$index + 1}}:</strong> <a href="#/txs/{{trxId}}">{{trxId}}</a></div>
+
+                <div class="panel-body table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th><span data-translate="Operation"></span></th>
+                            <th><span data-translate="ID"></span></th>
+                            <th><span data-translate="Type"></span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-if="transaction.operations === undefined">
+                            <td>
+                                <loading></loading>
+                            </td>
+                        </tr>
+                        <tr ng-if="transaction.operations === 'error'">
+                            <td>
+                                <loading-error></loading-error>
+                            </td>
+                        </tr>
+                        <tr ng-if="transaction.operations.length === 0">
+                            <td>
+                                <loading-no-data text="'No operations found' | translate"></loading-no-data>
+                            </td>
+                        </tr>
+                        <tr ng-if="transaction.operations !== 'error' && transaction.operations.length !== 0" data-ng-repeat="op in transaction.operations track by $index">
+                            <td><div ng-bind-html="op.operation_text | to_trusted" layout-align="center"></div></td>
+                            <td><a href='#/operations/{{op.operation_id}}/'>{{op.operation_id}}</a></td>
+                            <td><span class="badge badge-primary" style="background-color: #{{op.op_color}};">{{op.op_type}}</span></td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading"> <strong data-translate="Transaction Details"></strong></div>
+
+                <div class="panel-body table-responsive">
+                    <table class="table">
+                        <tr>
+                            <td><span data-translate="Hash"></span>:</td>
+                            <td>{{transaction.data.hash}}</td>
+                        </tr>
+                        <tr>
+                            <td><span data-translate="Block"></span>:</td>
+                            <td><a href="#/blocks/{{transaction.data.block_num}}/">{{transaction.data.block_num | number}}</a></td>
+                        </tr>
+                        <tr>
+                            <td><span data-translate="Date"></span>:</td>
+                            <td>{{transaction.data.date}}</td>
+                        </tr>
+                        <tr>
+                            <td><span data-translate="Operations in transaction"></span>:</td>
+                            <td>{{(transaction.operations && transaction.operations.length || 0) | number}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default" ng-show="showRawData">
         <div class="panel-heading">
             <h3 class="panel-title"><span data-translate="Transactions raw data"></span></h3>
         </div>

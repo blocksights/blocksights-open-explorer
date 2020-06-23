@@ -107,6 +107,8 @@
   "Transactions in block": "Transactions in block",
   "Operations in block": "Operations in block",
   "Transactions raw data": "Transactions raw data",
+  "Show transactions raw data": "Show transactions raw data",
+  "Transaction Details": "Transaction Details",
 
   "Biggest network blocks": "Biggest network blocks",
   "Date": "Date",
