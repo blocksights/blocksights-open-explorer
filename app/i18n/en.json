@@ -241,6 +241,13 @@
   "No data about UIAs": "No data about UIAs",
   "No data about holders": "No data about holders",
   "An error occurred during loading": "An error occurred during loading",
+  "Select another network": "Select another network",
+
+  "Mainnet": "Mainnet",
+  "Testnet": "Testnet",
+  "Switch Network": "Switch Network",
+  "Explorer Settings": "Explorer Settings",
+  "Dark Mode": "Dark Mode",
 
   "Search for a balance": "Search for a balance",
 

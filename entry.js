@@ -10,6 +10,9 @@ require("./app/ui/loading-error.directive.js");
 require("./app/ui/loading-no-data.directive.js");
 require("./app/ui/notify.service.js");
 
+require("./app/sections/network_dropdown/network_dropdown.module");
+require("./app/sections/network_dropdown/network_dropdown.directive");
+require("./app/sections/network_dropdown/network_dropdown.service");
 require("./app/sections/layout/nav.module.js");
 require("./app/sections/accounts/accounts.module.js");
 require("./app/sections/assets/assets.module.js");
@@ -29,6 +32,7 @@ require("./app/chart/chart.module.js");
 require("./app/core/app.config.js");
 require("./app/core/app.utilities.js");
 
+require("./app/core/api.provider.js");
 require("./app/core/api.config.js");
 require("./app/core/service.network.js");
 require("./app/core/service.market.js");

@@ -39,7 +39,9 @@ const HTML = [
 
     "sections/witnesses/witnesses.html",
 
-    "sections/workers/workers.html"
+    "sections/workers/workers.html",
+    
+    "sections/network_dropdown/network_dropdown.html"
 ];
 
 const CSS = [

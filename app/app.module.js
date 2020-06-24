@@ -15,6 +15,7 @@
 
         // Custom modules
         'app.ui',
+        'app.network_dropdown',
         'app.nav',
         'app.i18n',
         'app.chart',
