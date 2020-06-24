@@ -106,3 +106,9 @@ img.inlineLoading {
 .popover-content {
     word-break: break-all;
 }
+
+.collapse-table {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}

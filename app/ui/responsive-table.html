@@ -1,0 +1,56 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th class="{{ mobileSectionClass }}">
+                <img src="images/plus.svg" class="collapse-table" ng-show="!getRowToggleAllState()" ng-click="toggleAllRows()"/>
+                <img src="images/minus.svg" class="collapse-table" ng-show="getRowToggleAllState()" ng-click="toggleAllRows()"/>
+            </th>
+            <th ng-repeat="column in columns track by column.title" class="{{ columnClass[column.title] ||  '' }}">
+                {{column.title}}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-if="loading && !loadingError">
+            <td colspan={{columns.length+1}}>
+                <loading></loading>
+            </td>
+        </tr>
+        <tr ng-if="loadingError">
+            <td colspan={{columns.length+1}}>
+                <loading-error data-text="loadingErrorMessage"></loading-error>
+            </td>
+        </tr>
+        <tr ng-if="!loading && !loadingError && data.length === 0">
+            <td colspan={{columns.length+1}}>
+                <loading-no-data data-text="noDataText"></loading-no-data>
+            </td>
+        </tr>
+        <tr ng-if="!loading && !loadingError && data.length > 0" ng-repeat-start="item in data">
+            <td class="{{ mobileSectionClass }}">
+                <img src="images/plus.svg" class="collapse-table" ng-show="!rowsState[$index]" ng-click="toggleRow($index)"/>
+                <img src="images/minus.svg" class="collapse-table" ng-show="rowsState[$index]" ng-click="toggleRow($index)"/>
+            </td>
+            <td ng-repeat="column in columns track by column.title" class="{{ columnClass[column.title] ||  '' }}">
+                <div ng-bind-html="column.html ? (column.html(item[column.index], item) | to_trusted) : (item[column.index] | to_trusted)"></div>
+            </td>
+        </tr>
+        <tr ng-repeat-end class="{{ mobileSectionClass || '' }}" ng-show="rowsState[$index]" style="margin-bottom: 12px;">
+
+            <td colspan="{{columns.length + 1}}">
+                <table style="margin-bottom: 12px;">
+                    <tr ng-repeat="column in columns track by column.title" class="{{ mobileColumnClass[column.title] ||  '' }}">
+                        <td style="max-width: 50%; min-width: 30%;padding-top: 6px;">
+                            <strong>
+                                {{column.title}}:
+                            </strong>
+                        </td>
+                        <td>
+                            <div ng-bind-html="column.html ? (column.html(item[column.index], item) | to_trusted) : (item[column.index] | to_trusted)" style="padding-left: 12px;padding-top: 6px;"></div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+</table>
