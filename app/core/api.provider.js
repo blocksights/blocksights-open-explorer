@@ -18,6 +18,8 @@
  * @property {string} chainId - the chainId string to match active Blockchain
  */
 
+import {getAvailableEndpoints} from "../branding";
+
 (function () {
     
     angular.module('app')
@@ -104,6 +106,13 @@
             disableLocalStorageSync: () => localStorageSync = false,
             $get: ($localStorage) => {
                 
+                function _saveEndpointToLocalStorage(endpoint) {
+                    $localStorage.api = {
+                        ...$localStorage.api,
+                        endpoint: endpoint,
+                    };
+                }
+                
                 function getApiUrl() {
                     
                     /** if sync with localStorage turned on  */
@@ -112,13 +121,19 @@
                         
                         /** if sync is on and user has endpoint in localStorage */
                         if($localStorage.api && $localStorage.api.endpoint && $localStorage.api.endpoint.url) {
-                            _setActiveEndpoint($localStorage.api.endpoint);
+                            
+                            const isStoredEndpointAvailable = getAvailableEndpoints().some((endpoint) => endpoint.url === $localStorage.api.endpoint);
+                            
+                            /** if endpoint saved to localStorage no longer exists - save default active endpoint to localStorage */
+                            if(isStoredEndpointAvailable) {
+                                _setActiveEndpoint($localStorage.api.endpoint);
+                            } else {
+                                _saveEndpointToLocalStorage(activeEndpoint);
+                            }
+                            
                         } else {
                             /** if sync is on and user has not endpoint in localStorage */
-                            $localStorage.api = {
-                                ...$localStorage.api,
-                                endpoint: activeEndpoint,
-                            };
+                            _saveEndpointToLocalStorage(activeEndpoint);
                         }
                         
                     }
@@ -132,11 +147,7 @@
                     _setActiveEndpoint(endpoint);
                     
                     if(localStorageSync) {
-                        $localStorage.api = {
-                            ...$localStorage.api,
-                            endpoint: endpoint,
-                        };
-                        
+                        _saveEndpointToLocalStorage(endpoint);
                     }
                     
                 }
