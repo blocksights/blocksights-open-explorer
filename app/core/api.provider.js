@@ -26,6 +26,8 @@
     function apiProvider() {
         let activeEndpoint = '';
         let activeBlockchain = '';
+        let localStorageSync = false;
+        let localStorageSyncSuccess = false;
         
         let endpointsList = [];
         let blockchainsList = [];
@@ -34,7 +36,7 @@
          * Set active endpoint for api url
          * @param {Endpoint} endpoint
          */
-        function setActiveEndpoint(endpoint){
+        function _setActiveEndpoint(endpoint){
             if(!endpoint.translate || !endpoint.url)
                 throw new Error('endpoint should have a translate and url');
             
@@ -72,12 +74,12 @@
                 });
                 
                 if(endpoint.isDefault)
-                    setActiveEndpoint(endpoint);
+                    _setActiveEndpoint(endpoint);
             });
             
             // if default endpoint is not specified we use first element of array
             if(!activeEndpoint)
-                setActiveEndpoint(list[0]);
+                _setActiveEndpoint(list[0]);
         }
     
         /** Accepts the list of available chains
@@ -98,12 +100,52 @@
         return {
             setKnownEndpoints: setEndpoints,
             setKnownBlockchains: setKnownBlockchains,
-            $get: () => {
+            enableLocalStorageSync: () => localStorageSync = true,
+            disableLocalStorageSync: () => localStorageSync = false,
+            $get: ($localStorage) => {
+                
+                function getApiUrl() {
+                    
+                    /** if sync with localStorage turned on  */
+                    if(localStorageSync && !localStorageSyncSuccess) {
+                        localStorageSyncSuccess = true;
+                        
+                        /** if sync is on and user has endpoint in localStorage */
+                        if($localStorage.api && $localStorage.api.endpoint && $localStorage.api.endpoint.url) {
+                            _setActiveEndpoint($localStorage.api.endpoint);
+                        } else {
+                            /** if sync is on and user has not endpoint in localStorage */
+                            $localStorage.api = {
+                                ...$localStorage.api,
+                                endpoint: activeEndpoint,
+                            };
+                        }
+                        
+                    }
+                    
+                    return activeEndpoint && activeEndpoint.url;
+                }
+                
+                /** this method is public and store the choice in localStorage */
+                function setActiveEndpoint(endpoint) {
+                    
+                    _setActiveEndpoint(endpoint);
+                    
+                    if(localStorageSync) {
+                        $localStorage.api = {
+                            ...$localStorage.api,
+                            endpoint: endpoint,
+                        };
+                        
+                    }
+                    
+                }
+                
                 return {
                     setActiveBlockchain: setActiveBlockchain,
                     setActiveEndpoint: setActiveEndpoint,
                     /** @returns {string} - active endpoint url */
-                    getApiUrl: () => activeEndpoint && activeEndpoint.url,
+                    getApiUrl: getApiUrl,
                     /** @returns {string|undefined} - active chain title translation */
                     getActiveChainTranslation: () => activeBlockchain && activeBlockchain.translate,
                     /** @returns {Endpoint[]} - returns an array of all endpoints */

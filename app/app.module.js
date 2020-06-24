@@ -3,6 +3,7 @@
 
     angular.module('app', [
         // Angular modules
+        'ngStorage',
         'ngRoute',
         'ngAnimate',
         'ngAria',

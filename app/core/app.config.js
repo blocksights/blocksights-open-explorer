@@ -41,6 +41,8 @@ import {getGATag, getConnections, getConfig} from "../branding";
             }
         ]);
         
+        ApiProvider.enableLocalStorageSync();
+        
     }]);
 
     function appConfig(Api) {
