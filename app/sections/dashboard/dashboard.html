@@ -127,41 +127,14 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-body table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th><span data-translate="Operation"></span></th>
-                        <th>ID</th>
-                        <th><span data-translate="Date and time"></span></th>
-                        <th><span data-translate="Block"></span></th>
-                        <th><span data-translate="Type"></span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr ng-if="operations === undefined">
-                    <td colspan="3">
-                        <loading></loading>
-                    </td>
-                </tr>
-                <tr ng-if="operations === 'error'">
-                    <td colspan="3">
-                        <loading-no-data text="'No data about operations' | translate"></loading-no-data>
-                    </td>
-                </tr>
-                <tr ng-if="operations.length == 0">
-                    <td colspan="3">
-                        <loading-no-data text="'No operations found' | translate"></loading-no-data>
-                    </td>
-                </tr>
-                <tr ng-if="operations !== 'error' && operations.length > 0" data-ng-repeat="operation in operations track by $index">
-                    <td><div ng-bind-html="operation.operation_text | to_trusted" layout-align="center"></div></td>
-                    <td><a href='#/operations/{{operation.operation_id}}/'>{{operation.operation_id}}</a></td>
-                    <td>{{operation.time}}</td>
-					<td><a href='#/blocks/{{operation.block_num}}/'>{{operation.block_num | number}} </a></td>
-                    <td><span class="badge badge-primary" style="background-color: #{{operation.color}};">{{operation.type}}</span></td>
-                </tr>
-                </tbody>
-            </table>
+
+
+            <responsive-table data-data="operations"
+                              data-columns="operationsColumns"
+                              data-loading="operationsLoading"
+                              data-loading-error="operationsLoadingError">
+            </responsive-table>
+
             <footer class="table-footer">
                 <div class="row">
                     <div class="col-md-6 page-num-info">
@@ -179,6 +152,7 @@
                     </div>
                 </div>
             </footer>
+
         </div>
     </div>
 </div>
