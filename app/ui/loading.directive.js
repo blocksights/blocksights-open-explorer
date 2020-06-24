@@ -7,7 +7,10 @@
     
         return {
             restrict: 'E',
-            template: '<span><img src="images/loading.svg" class=""/><span data-translate="Loading"></span></span>'
+            scope: {
+              stripImageHeight: '='
+            },
+            template: '<span><img src="images/loading.svg" ng-class="{inlineLoading: stripImageHeight}"/><span data-translate="Loading"></span></span>'
         }
         
     }

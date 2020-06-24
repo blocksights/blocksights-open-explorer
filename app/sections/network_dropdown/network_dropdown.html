@@ -1,0 +1,30 @@
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+
+        <span ng-if="activeChainTitle!=='error'">{{activeChainTitle ? (activeChainTitle | translate) : ''}} </span>
+
+        <loading strip-image-height="true" ng-if="!activeChainTitle"></loading>
+
+        <loading-error text="'Select another network' | translate" ng-if="activeChainTitle === 'error'"></loading-error>
+
+        <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="dropdown-header">{{ 'Switch Network' | translate }}</li>
+
+        <li ng-repeat="endpoint in endpoints"><a href="" ng-click="setEndpoint(endpoint)">{{endpoint.translate | translate }}</a></li>
+
+        <li class="dropdown-header">{{'Explorer Settings' | translate }}</li>
+        <li>
+            <a href="" ng-click="onDarkModeToggle()">
+                <div class="checkbox" style="margin: 0;">
+                    <label>
+                        <input type="checkbox" ng-model="darkMode">
+                        {{ 'Dark Mode' | translate }}
+                    </label>
+                </div>
+
+            </a>
+        </li>
+    </ul>
+</li>

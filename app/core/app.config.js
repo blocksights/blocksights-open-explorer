@@ -1,10 +1,10 @@
-import {getGATag, getConnections, getConfig} from "../branding";
+import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getConfig} from "../branding";
 
 (function() {
     'use strict';
 
     angular.module('app')
-        .factory('appConfig', [appConfig]);
+        .factory('appConfig', ['Api', appConfig]);
 
     let gatag = getGATag();
     if (gatag != null) {
@@ -16,9 +16,26 @@ import {getGATag, getConnections, getConfig} from "../branding";
 
     angular.module('app').config(['$locationProvider', function($locationProvider) {
         $locationProvider.hashPrefix('');
+    }]).config(['ApiProvider', function (ApiProvider) {
+    
+        /**
+         * Tell ApiProvider what are the endpoints and chains we will handle and display as available for our user
+         */
+        
+        ApiProvider.setKnownEndpoints(
+            getAvailableEndpoints()
+        );
+    
+        ApiProvider.setKnownBlockchains(
+            getAvailableBlockchains()
+        );
+        
+        ApiProvider.enableLocalStorageSync();
+        
     }]);
 
-    function appConfig() {
+    function appConfig(Api) {
+        
         var pageTransitionOpts = [
             {
                 name: 'Fade up',
@@ -55,9 +72,9 @@ import {getGATag, getConnections, getConfig} from "../branding";
             gray:       '#DCDCDC'
         };
         var urls = {
-            python_backend: getConnections().api,
-            elasticsearch_wrapper: getConnections().api,
-            udf_wrapper: getConnections().api + "/udf"
+            python_backend: Api.getApiUrl,
+            elasticsearch_wrapper: Api.getApiUrl,
+            udf_wrapper: () => Api.getApiUrl() + "/udf"
         };
         return {
             pageTransitionOpts: pageTransitionOpts,

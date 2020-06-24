@@ -12,7 +12,7 @@ module.exports = {
         vendor: ['jquery', 'angular', 'bootstrap', 'angular-route', 'angular-animate', 'angular-aria',
             'angular-ui-bootstrap', 'angular-loading-bar', 'angular-websocket', 'angular-google-analytics',
             'angular-translate', 'angular-translate-loader-static-files', 'echarts', 'angular-echarts-lite',
-            'js-sha256'],
+            'js-sha256', 'ngstorage'],
         app: "./entry.js"
     },
     output: {
