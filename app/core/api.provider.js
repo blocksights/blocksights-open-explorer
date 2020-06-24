@@ -8,8 +8,10 @@
 
 /**
  * @typedef {Object} Endpoint
- * @property {string} translate - the translate of network to display it on UI
- * @property {string} url - the url of the backend
+ * @property {string}   translate   - the translate of network to display it on UI
+ * @property {string}   url         - the url of the backend
+ * @property {boolean}  isDefault   - if true, this endpoint will be used like a default but only in case if user
+ *                                    doesn't have a saved endpoint to his localStorage
  * */
 
 /**
