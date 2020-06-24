@@ -1,4 +1,4 @@
-import {getGATag, getConnections, getConfig} from "../branding";
+import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getConfig} from "../branding";
 
 (function() {
     'use strict';
@@ -22,24 +22,13 @@ import {getGATag, getConnections, getConfig} from "../branding";
          * Tell ApiProvider what are the endpoints and chains we will handle and display as available for our user
          */
         
-        ApiProvider.setKnownEndpoints([
-            {
-                translate: 'Mainnet',
-                url: 'https://api.mvsdna.com/openexplorer',
-            },
-            {
-                translate: 'Testnet',
-                url: 'https://api.mvsdna.com/openexplorer',
-                isDefault: true,
-            }
-        ]);
+        ApiProvider.setKnownEndpoints(
+            getAvailableEndpoints()
+        );
     
-        ApiProvider.setKnownBlockchains([
-            {
-                translate: 'Testnet',
-                chainId: '93b266081a68bea383ef613753a9cafaa01b3b7b04ed00a01e5dec5de8cb4983'
-            }
-        ]);
+        ApiProvider.setKnownBlockchains(
+            getAvailableBlockchains()
+        );
         
         ApiProvider.enableLocalStorageSync();
         

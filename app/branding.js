@@ -2,11 +2,23 @@ export function getGATag() {
     return null;
 }
 
-export function getConnections() {
-    return {
-        blockchain: "wss://eu.nodes.bitshares.ws/",
-        api: "http://127.0.0.1:5000/openexplorer"  // "http://127.0.0.1:5000/"
-    }
+export function getAvailableEndpoints() {
+    return [
+        {
+            translate: 'Testnet',
+            url: 'http://127.0.0.1:5000/openexplorer',
+            isDefault: true,
+        }
+    ];
+}
+
+export function getAvailableBlockchains() {
+    return [
+        {
+            translate: 'Testnet',
+            chainId: ''
+        }
+    ];
 }
 
 export function getConfig() {
