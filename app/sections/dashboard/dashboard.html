@@ -8,9 +8,9 @@
 
 <div class="page page-dashboard" data-ng-controller="DashboardCtrl">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-5">
             <div class="row text-center">
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div
                             class="box-info"
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
                             <p class="size-h4">{{dynamic !== 'error' ? (dynamic.accounts_registered_this_interval | number) : ('No Data' | translate) }} <span class="size-h4"></span></p>
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
                             <p class="size-h4">{{dynamic !== 'error' ? (dynamic.bts_market_cap | number) : ('No Data' | translate) }} </p>
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
                             <p class="size-h4">{{dynamic !== 'error' ? (dynamic.quote_volume | number) : ('No Data' | translate) }} </p>
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
                             <p class="size-h4">{{dynamic !== 'error' ? (dynamic.witness_count | number) : ('No Data' | translate) }} </p>
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
                             <p class="size-h4">{{dynamic !== 'error' ? (dynamic.committee_count | number) : ('No Data' | translate) }} </p>
@@ -65,7 +65,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-7">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <ul class="nav nav-tabs" role="tablist">
@@ -92,9 +92,8 @@
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="operations">
-                            <div style="width:100%;">
-                                <lz-chart config="operations_chart.options" style="min-height: 200px; width: 100%; min-width: 400px; margin-top: 10px"></lz-chart>
-                            </div></div>
+                            <pie-chart options="chartsData.operations_chart" allow-fullscreen-for-mobile="true" class="dashboard-operations-chart"></pie-chart>
+                        </div>
                         <div role="tabpanel" class="tab-pane" id="proxies">
                             <div style="width:100%">
                                 <lz-chart config="proxies_chart.options" style="min-height: 200px; width: 100%; min-width: 400px; margin-top: 10px"></lz-chart>

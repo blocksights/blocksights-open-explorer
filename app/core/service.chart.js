@@ -6,7 +6,7 @@
 
     function chartService($http, appConfig, utilities, $filter) {
     
-        function noDataPieChart(message = $filter('translate')('No data found')) {
+        function _deprecated_noDataPieChart(message = $filter('translate')('No data found')) {
             const options = {
                 "animation":true,
                 "calculable":true,
@@ -52,52 +52,102 @@
         }
         
         function errorChart(message) {
-            const options = {
-                "animation":true,
-                "calculable":true,
-                "title": {"text": message, "left":"center"},
-                "series":[
-                    {
-                        "color":[
-                            "#DDDDDD"
-                        ],
-                        "name":"Top Smartcoins",
-                        "type":"pie",
-                        "roseType":"radius",
-                        "max":40,
-                        "itemStyle":{
-                            "normal":{
-                                "label":{
-                                    "show":false
-                                },
-                                "labelLine":{
-                                    "show":false
-                                }
-                            },
-                            "emphasis":{
-                                "label":{
-                                    "show":true
-                                },
-                                "labelLine":{
-                                    "show":true
-                                }
-                            }
-                        },
-                        "data":[
-                            {
-                                "value":23
-                            }
-                        ]
-                    }
-                ]
-            };
-            return {options: options}
-            return {options: {errorMsg: {text: "asdsd", left: "center"}}};
+            return noChartWithMessage(message ? message : $filter('translate')('Data unavailable'))
         }
 
+        function noChartWithMessage(message) {
+            return {
+                title: {
+                    text: ''
+                },
+                lang: {
+                    noData: message
+                }
+            };
+        }
+    
+        function noDataChart(message) {
+            return noChartWithMessage(message ? message : $filter('translate')('No data found'))
+        }
+        
+        function loadingChart(message) {
+            return noChartWithMessage(message ? message : $filter('translate')('Loading'))
+        }
+        
+        /**
+         * Returns the config for highcharts pie chart
+         *
+         * @param {object} params
+         * @param {string} [params.title] - The chart title
+         * @param {array} [params.data] - The chart data
+         *
+         * */
+        function pieChart(params) {
+            
+            return {
+                title: {
+                    text: params.title || ''
+                },
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie',
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <br>{point.percentage:.1f} % ({point.y})'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                legend: {
+                    itemMarginTop: 5,
+                    itemMarginBottom: 5,
+                    align: 'left',
+                    layout: 'vertical',
+                    verticalAlign: 'top',
+                },
+                responsive: {
+                    rules: [{
+                        chartOptions: {
+                            legend: {
+                                enabled: false
+                            }
+                        },
+                        condition: {
+                            maxWidth: 580
+                        }
+                    }]
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>:<br>{point.percentage:.1f} % ({point.y})',
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    name: $filter('translate')('Operations'),
+                    colorByPoint: true,
+        
+                    data: params.data || [],
+                }]
+            };
+            
+        }
+        
         return {
-            noDataPieChart: noDataPieChart,
-            dailyDEXChart: function(callback) {
+            noDataChart               : noDataChart,
+            errorChart                : errorChart,
+            loadingChart              : loadingChart,
+            _deprecated_noDataPieChart: _deprecated_noDataPieChart,
+            dailyDEXChart             : function(callback) {
 
                 var dex_volume_chart = {};
                 $http.get(appConfig.urls.python_backend() + "/daily_volume_dex_dates").then(function (response) {
@@ -173,87 +223,42 @@
                     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
                 }
             },
-            topOperationsChart: function() {
+            topOperationsChart: function () {
                 return new Promise((resolve, reject) => {
     
                     $http.get(appConfig.urls.elasticsearch_wrapper() +
                         "/es/account_history?from_date=now-180d&to_date=now&type=aggs&agg_field=operation_type&size=10")
                          .then(function(response) {
-        
-                             var legends = [];
-                             var data = [];
-                             var c = 0;
-                             for(var i = 0; i < response.data.length; i++) {
-            
+                             
+                             const legends = [];
+                             const data = [];
+                             
+                             let c = 0;
+                             
+                             for(let i = 0; i < response.data.length; i++) {
                                  ++c;
+                                 
                                  if(c > 7) { break; }
-            
-                                 var name =  utilities.operationType(response.data[i].key)[0];
-                                 var color =  utilities.operationType(response.data[i].key)[1];
-            
+    
+                                 const name =  utilities.operationType(response.data[i].key)[0];
+                                 const color =  utilities.operationType(response.data[i].key)[1];
+                                 
                                  data.push({
-                                     value: response.data[i].doc_count,
+                                     y: response.data[i].doc_count,
                                      name: name,
-                                     itemStyle: {
-                                         normal: {
-                                             color: '#' + color
-                                         }
-                                     }
+                                     color: `#${color}`,
                                  });
-            
-                                 legends.push(name);
                              }
-                             var operations_chart = {};
-                             operations_chart.options = {
-                                 animation: true,
-                                 tooltip: {
-                                     trigger: 'item',
-                                     formatter: "{a} <br/>{b} : {c} ({d}%)"
-                                 },
-                                 legend: {
-                                     orient: 'vertical',
-                                     x: 'left',
-                                     data: legends,
-                                 },
-                                 toolbox: {
-                                     show: true,
-                                     feature: {
-                                         saveAsImage: {show: true, title: "save as image"}
-                                     }
-                                 },
-                                 calculable: true,
-                                 series: [{
-                                     name: 'Operation Type',
-                                     type: 'pie',
-                                     radius: ['50%', '70%'],
-                                     data: data,
-                                     label: {
-                                         normal: {
-                                             show: false,
-                                             position: 'center'
-                                         },
-                                         emphasis: {
-                                             show: true,
-                                             textStyle: {
-                                                 fontSize: '30',
-                                                 fontWeight: 'bold'
-                                             }
-                                         }
-                                     },
-                                     labelLine: {
-                                         normal: {
-                                             show: false
-                                         }
-                                     }
-                                 }]
-                             };
-                             resolve(operations_chart);
+    
+                             resolve(
+                                 pieChart({
+                                    data: data
+                                 })
+                             );
                          }).catch((err) => {
-                             reject();
+                             reject(err);
                     });
-                    
-                });
-                
+                })
             },
             topProxiesChart: function() {
     

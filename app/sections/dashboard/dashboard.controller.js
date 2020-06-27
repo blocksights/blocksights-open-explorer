@@ -75,6 +75,10 @@
             });
         };
         $scope.select(1);
+        
+        $scope.chartsData = {
+            operations_chart: chartService.loadingChart()
+        };
 
         // lazy load on tab change
         $scope.loadTabsCharts = function(tabName) {
@@ -82,14 +86,17 @@
             const loadingText = $filter('translate')('Loading');
             
             if (tabName == "operations") {
-                $scope.operations_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
                 
-                chartService.topOperationsChart().then((returnData) => {
-                    $scope.operations_chart = returnData;
-                }).catch(() => {
-                    $scope.operations_chart = chartService.noDataPieChart($filter('translate')('No data about operations'));
-                    showLoadingErrorNotification();
-                });
+                if(!$scope.chartsData.operations_chart.data) {
+                    
+                    chartService.topOperationsChart().then((returnData) => {
+                        $scope.chartsData.operations_chart = returnData;
+                    }).catch(() => {
+                        $scope.chartsData.operations_chart = chartService.noDataChart($filter('translate')('No data about operations'));
+                        showLoadingErrorNotification();
+                    });
+                    
+                }
                 
             } else if (tabName == "proxies") {
                 $scope.proxies_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
@@ -97,7 +104,7 @@
                 chartService.topProxiesChart().then((returnData) => {
                     $scope.proxies_chart = returnData;
                 }).catch(() => {
-                    $scope.proxies_chart = chartService.noDataPieChart($filter('translate')('No data about proxies'));
+                    $scope.proxies_chart = chartService._deprecated_noDataPieChart($filter('translate')('No data about proxies'));
                     showLoadingErrorNotification();
                 });
                 
@@ -107,7 +114,7 @@
                 chartService.topMarketsChart().then((returnData) => {
                     $scope.markets_chart = returnData;
                 }).catch(() => {
-                    $scope.markets_chart = chartService.noDataPieChart($filter('translate')('No data about markets'));
+                    $scope.markets_chart = chartService._deprecated_noDataPieChart($filter('translate')('No data about markets'));
                     showLoadingErrorNotification();
                 });
                 
@@ -117,7 +124,7 @@
                 chartService.topSmartCoinsChart().then((returnData) => {
                     $scope.smartcoins_chart = returnData;
                 }).catch(() => {
-                    $scope.smartcoins_chart = chartService.noDataPieChart($filter('translate')('No data about smartcoins'));
+                    $scope.smartcoins_chart = chartService._deprecated_noDataPieChart($filter('translate')('No data about smartcoins'));
                     showLoadingErrorNotification();
                 });
                 
@@ -127,7 +134,7 @@
                 chartService.topUIAsChart().then((returnData) => {
                     $scope.uias_chart = returnData;
                 }).catch(() => {
-                    $scope.uias_chart = chartService.noDataPieChart($filter('translate')('No data about UIAs'));
+                    $scope.uias_chart = chartService._deprecated_noDataPieChart($filter('translate')('No data about UIAs'));
                     showLoadingErrorNotification();
                 });
                 
@@ -137,7 +144,7 @@
                 chartService.topHoldersChart().then((returnData) => {
                     $scope.holders_chart = returnData;
                 }).catch(() => {
-                    $scope.holders_chart = chartService.noDataPieChart($filter('translate')('No data about holders'));
+                    $scope.holders_chart = chartService._deprecated_noDataPieChart($filter('translate')('No data about holders'));
                     showLoadingErrorNotification();
                 });
             }

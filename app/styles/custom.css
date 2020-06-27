@@ -107,6 +107,28 @@ img.inlineLoading {
     word-break: break-all;
 }
 
+.dashboard-operations-chart .highcharts-container {
+    height: 300px;
+}
+
+@media(min-width: 768px) and (max-width: 1200px) {
+    .dashboard-operations-chart .highcharts-container {
+        height: 300px;
+    }
+}
+
+#highcharts-enter-fullscreen-button {
+    display: block;
+    width: 130px;
+    margin: 0 auto;
+}
+
+@media(min-width: 768px) {
+    #highcharts-enter-fullscreen-button {
+        display: none;
+    }
+}
+
 .collapse-table {
     width: 18px;
     height: 18px;
