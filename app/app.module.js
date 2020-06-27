@@ -15,6 +15,7 @@
         'angular-google-analytics',
 
         // Custom modules
+        'app.highcharts',
         'app.ui',
         'app.network_dropdown',
         'app.nav',

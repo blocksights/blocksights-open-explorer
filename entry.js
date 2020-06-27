@@ -10,6 +10,8 @@ require("./app/ui/loading-error.directive.js");
 require("./app/ui/loading-no-data.directive.js");
 require("./app/ui/responsive-table.directive.js");
 require("./app/ui/notify.service.js");
+require("./app/highcharts/highcharts.module.js");
+require("./app/highcharts/pie-chart.directive.js");
 
 require("./app/sections/network_dropdown/network_dropdown.module");
 require("./app/sections/network_dropdown/network_dropdown.directive");
