@@ -310,60 +310,19 @@
                         let i;
                         for (i in response.data) {
                             data.push({
-                                value: response.data[i]["24h_volume"],
+                                y: response.data[i]["24h_volume"],
                                 name: response.data[i].pair
                             });
                             if (data.length >= amountToDisplay) break;
                         }
+                        
+                        resolve(pieChart({
+                            series: {
+                                title:  $filter('translate')('Traffic Source')
+                            },
+                            data: data,
+                        }));
         
-                        var markets_chart = {};
-                        markets_chart.options = {
-                            animation: true,
-                            tooltip: {
-                                trigger: 'item',
-                                formatter: "{a} <br/>{b} : {c} ({d}%)"
-                            },
-                            legend: {
-                                orient: 'vertical',
-                                x: 'left',
-                                data: data.map(x => x.name)
-                            },
-                            toolbox: {
-                                show: true,
-                                feature: {
-                                    saveAsImage: {show: true, title: "save as image"}
-                                }
-                            },
-                            calculable: true,
-                            series: [{
-                                color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                                name: 'Traffic source',
-                                type: 'pie',
-                                radius: ['50%', '70%'],
-                                itemStyle: {
-                                    normal: {
-                                        label: {
-                                            show: false
-                                        },
-                                        labelLine: {
-                                            show: false
-                                        }
-                                    },
-                                    emphasis: {
-                                        label: {
-                                            show: true,
-                                            position: 'center',
-                                            textStyle: {
-                                                fontSize: '30',
-                                                fontWeight: 'bold'
-                                            }
-                                        }
-                                    }
-                                },
-                                data: data
-                            }]
-                        };
-                        resolve(markets_chart);
                     }).catch((err) => {
                         reject(err);
                     });

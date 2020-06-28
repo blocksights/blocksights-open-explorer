@@ -79,6 +79,7 @@
         $scope.chartsData = {
             operations_chart: chartService.loadingChart(),
             proxies_chart: chartService.loadingChart(),
+            markets_chart: chartService.loadingChart(),
         };
 
         // lazy load on tab change
@@ -115,14 +116,15 @@
                 }
                 
             } else if (tabName == "markets") {
-                $scope.markets_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
-                
-                chartService.topMarketsChart().then((returnData) => {
-                    $scope.markets_chart = returnData;
-                }).catch(() => {
-                    $scope.markets_chart = chartService._deprecated_noDataPieChart($filter('translate')('No data about markets'));
-                    showLoadingErrorNotification();
-                });
+                if(isChartLoading($scope.chartsData.markets_chart)) {
+
+                    chartService.topMarketsChart().then((returnData) => {
+                        $scope.chartsData.markets_chart = returnData;
+                    }).catch(() => {
+                        $scope.chartsData.markets_chart = chartService.noDataChart($filter('translate')('No data about markets'));
+                        showLoadingErrorNotification();
+                    });
+                }
                 
             } else if (tabName == "smartcoin") {
                 $scope.smartcoins_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
