@@ -383,59 +383,19 @@
                         let i;
                         for (i in response.data) {
                             data.push({
-                                value: response.data[i]["24h_volume"],
+                                y: response.data[i]["24h_volume"],
                                 name: response.data[i].asset_name
                             });
                             if (data.length >= amountToDisplay) break;
                         }
-        
-                        var uias_chart = {};
-                        uias_chart.options = {
-                            animation: true,
-                            tooltip: {
-                                trigger: 'item',
-                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        
+                        resolve(pieChart({
+                            noData: $filter('translate')('No data about UIAs'),
+                            series: {
+                                title: $filter('translate')('Top User Issued Assets')
                             },
-                            legend: {
-                                orient: 'vertical',
-                                x: 'left',
-                                data: data.map(x => x.name)
-                            },
-                            toolbox: {
-                                show: true,
-                                feature: {
-                                    saveAsImage: {show: true, title: "save as image"}
-                                }
-                            },
-                            calculable: true,
-                            series: [{
-                                color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                                name: 'Top User Issued Assets',
-                                type: 'pie',
-                                roseType: 'radius',
-                                max: 40,
-                                itemStyle: {
-                                    normal: {
-                                        label: {
-                                            show: false
-                                        },
-                                        labelLine: {
-                                            show: false
-                                        }
-                                    },
-                                    emphasis: {
-                                        label: {
-                                            show: true
-                                        },
-                                        labelLine: {
-                                            show: true
-                                        }
-                                    }
-                                },
-                                data: data
-                            }]
-                        };
-                        resolve(uias_chart);
+                            data: data,
+                        }));
                     }).catch((err) => {
                         reject(err);
                     });

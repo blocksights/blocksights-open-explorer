@@ -81,6 +81,7 @@
             proxies_chart: chartService.loadingChart(),
             markets_chart: chartService.loadingChart(),
             smartcoins_chart: chartService.loadingChart(),
+            uias_chart: chartService.loadingChart(),
         };
 
         // lazy load on tab change
@@ -138,14 +139,14 @@
                 }
                 
             } else if (tabName == "uia") {
-                $scope.uias_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
-    
-                chartService.topUIAsChart().then((returnData) => {
-                    $scope.uias_chart = returnData;
-                }).catch(() => {
-                    $scope.uias_chart = chartService._deprecated_noDataPieChart($filter('translate')('No data about UIAs'));
-                    showLoadingErrorNotification();
-                });
+                if(isChartLoading($scope.chartsData.uias_chart)) {
+                    chartService.topUIAsChart().then((returnData) => {
+                        $scope.chartsData.uias_chart = returnData;
+                    }).catch(() => {
+                        $scope.chartsData.uias_chart = chartService.noDataChart($filter('translate')('No data about UIAs'));
+                        showLoadingErrorNotification();
+                    });
+                }
                 
             } else if (tabName == "holders") {
                 $scope.holders_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
