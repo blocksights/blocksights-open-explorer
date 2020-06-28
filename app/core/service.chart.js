@@ -348,63 +348,25 @@
                     $http.get(appConfig.urls.python_backend() + "/top_smartcoins").then(function(response) {
         
                         const data = [];
-                        const amountToDisplay = 10;
+                        const AMOUNT_TO_DISPLAY = 10;
                         let i;
+                        
                         for (i in response.data) {
                             data.push({
-                                value: response.data[i]["24h_volume"],
+                                y: response.data[i]["24h_volume"],
                                 name: response.data[i].asset_name
                             });
-                            if (data.length >= amountToDisplay) break;
+                            if (data.length >= AMOUNT_TO_DISPLAY) break;
                         }
-        
-                        var smartcoins_chart = {};
-                        smartcoins_chart.options = {
-                            animation: true,
-                            tooltip: {
-                                trigger: 'item',
-                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        
+                        resolve(pieChart({
+                            noData: $filter('translate')('No data about smartcoins'),
+                            series: {
+                                title: $filter('translate')('Top Smartcoins')
                             },
-                            legend: {
-                                orient: 'vertical',
-                                x: 'left',
-                                data: data.map(x => x.name)
-                            },
-                            toolbox: {
-                                show: true,
-                                feature: {
-                                    saveAsImage: {show: true, title: "save as image"}
-                                }
-                            },
-                            calculable: true,
-                            series: [{
-                                color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                                name: 'Top Smartcoins',
-                                type: 'pie',
-                                roseType: 'radius',
-                                max: 40,
-                                itemStyle: {
-                                    normal: {
-                                        label: {
-                                            show: false
-                                        },
-                                        labelLine: {
-                                            show: false
-                                        }
-                                    },
-                                    emphasis: {
-                                        label: {
-                                            show: true
-                                        },
-                                        labelLine: {
-                                            show: true
-                                        }
-                                    }
-                                },
-                                data: data
-                            }]
-                        };
-                        resolve(smartcoins_chart);
+                            data: data,
+                        }));
+                        
                     }).catch((err) => {
                         reject(err);
                     });

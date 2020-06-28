@@ -80,6 +80,7 @@
             operations_chart: chartService.loadingChart(),
             proxies_chart: chartService.loadingChart(),
             markets_chart: chartService.loadingChart(),
+            smartcoins_chart: chartService.loadingChart(),
         };
 
         // lazy load on tab change
@@ -127,14 +128,14 @@
                 }
                 
             } else if (tabName == "smartcoin") {
-                $scope.smartcoins_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
-    
-                chartService.topSmartCoinsChart().then((returnData) => {
-                    $scope.smartcoins_chart = returnData;
-                }).catch(() => {
-                    $scope.smartcoins_chart = chartService._deprecated_noDataPieChart($filter('translate')('No data about smartcoins'));
-                    showLoadingErrorNotification();
-                });
+                if(isChartLoading($scope.chartsData.smartcoins_chart)) {
+                    chartService.topSmartCoinsChart().then((returnData) => {
+                        $scope.chartsData.smartcoins_chart = returnData;
+                    }).catch(() => {
+                        $scope.chartsData.smartcoins_chart = chartService.noDataChart($filter('translate')('No data about smartcoins'));
+                        showLoadingErrorNotification();
+                    });
+                }
                 
             } else if (tabName == "uia") {
                 $scope.uias_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
