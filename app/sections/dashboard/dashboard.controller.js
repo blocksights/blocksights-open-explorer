@@ -86,9 +86,13 @@
             
             const loadingText = $filter('translate')('Loading');
             
+            const isChartLoading = (chartDataItem) => {
+                return chartDataItem && !chartDataItem.series;
+            };
+            
             if (tabName == "operations") {
                 
-                if(!$scope.chartsData.operations_chart.data) {
+                if(isChartLoading($scope.chartsData.operations_chart)) {
                     
                     chartService.topOperationsChart().then((returnData) => {
                         $scope.chartsData.operations_chart = returnData;
@@ -100,7 +104,7 @@
                 }
                 
             } else if (tabName == "proxies") {
-                if(!$scope.chartsData.proxies_chart.data) {
+                if(isChartLoading($scope.chartsData.proxies_chart)) {
     
                     chartService.topProxiesChart().then((returnData) => {
                         $scope.chartsData.proxies_chart = returnData;
