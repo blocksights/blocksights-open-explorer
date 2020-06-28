@@ -77,7 +77,8 @@
         $scope.select(1);
         
         $scope.chartsData = {
-            operations_chart: chartService.loadingChart()
+            operations_chart: chartService.loadingChart(),
+            proxies_chart: chartService.loadingChart(),
         };
 
         // lazy load on tab change
@@ -99,14 +100,15 @@
                 }
                 
             } else if (tabName == "proxies") {
-                $scope.proxies_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};
-                
-                chartService.topProxiesChart().then((returnData) => {
-                    $scope.proxies_chart = returnData;
-                }).catch(() => {
-                    $scope.proxies_chart = chartService._deprecated_noDataPieChart($filter('translate')('No data about proxies'));
-                    showLoadingErrorNotification();
-                });
+                if(!$scope.chartsData.proxies_chart.data) {
+    
+                    chartService.topProxiesChart().then((returnData) => {
+                        $scope.chartsData.proxies_chart = returnData;
+                    }).catch(() => {
+                        $scope.chartsData.proxies_chart = chartService.noDataChart($filter('translate')('No data about proxies'));
+                        showLoadingErrorNotification();
+                    });
+                }
                 
             } else if (tabName == "markets") {
                 $scope.markets_chart = {options: {errorMsg: {text: loadingText, left: "center"}}};

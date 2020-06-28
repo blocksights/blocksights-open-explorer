@@ -254,7 +254,10 @@
     
                              resolve(
                                  pieChart({
-                                    data: data
+                                     series: {
+                                        title: $filter('translate')('Operations')
+                                     },
+                                     data: data
                                  })
                              );
                          }).catch((err) => {
@@ -269,63 +272,26 @@
                     $http.get(appConfig.urls.python_backend() + "/top_proxies").then(function(response) {
         
                         const data = [];
-                        const amountToDisplay = 10;
+                        const AMOUNT_TO_DISPLAY = 10;
+                        
                         let i;
+                        
                         for (i in response.data) {
+                            
                             data.push({
-                                value: response.data[i].bts_weight,
+                                y: response.data[i].bts_weight,
                                 name: response.data[i].name
                             });
-                            if (data.length >= amountToDisplay) break;
+                            
+                            if (data.length >= AMOUNT_TO_DISPLAY) break;
                         }
-                        var proxies_chart = {};
-                        proxies_chart.options = {
-                            animation: true,
-                            tooltip: {
-                                trigger: 'item',
-                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        
+                        resolve(pieChart({
+                            series: {
+                                title: $filter('translate')('Proxies')
                             },
-                            legend: {
-                                orient: 'vertical',
-                                x: 'left',
-                                data: data.map(x => x.name)
-                            },
-                            toolbox: {
-                                show: true,
-                                feature: {
-                                    saveAsImage: {show: true, title: "Save as image"}
-                                }
-                            },
-                            calculable: true,
-                            series: [{
-                                color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                                name: 'Proxies',
-                                type: 'pie',
-                                radius: ['50%', '70%'],
-                                itemStyle: {
-                                    normal: {
-                                        label: {
-                                            show: false
-                                        },
-                                        labelLine: {
-                                            show: false
-                                        }
-                                    },
-                                    emphasis: {
-                                        label: {
-                                            show: true,
-                                            position: 'center',
-                                            textStyle: {
-                                                fontSize: '30',
-                                                fontWeight: 'bold'
-                                            }
-                                        }
-                                    }
-                                },
-                                data: data
-                            }]
-                        };
-                        resolve(proxies_chart);
+                            data: data
+                        }));
                     }).catch((err) => {
                         reject(err);
                     });
