@@ -410,62 +410,23 @@
                         const data = [];
                         const amountToDisplay = 10;
                         let i;
+                        
                         for (i in response.data) {
                             data.push({
-                                value: response.data[i].amount,
+                                y: response.data[i].amount,
                                 name: response.data[i].account_name
                             });
                             if (data.length >= amountToDisplay) break;
                         }
         
-                        var holders_chart = {};
-                        holders_chart.options = {
-                            animation: true,
-                            tooltip: {
-                                trigger: 'item',
-                                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        resolve(pieChart({
+                            series: {
+                                title: $filter('translate')('Holders')
                             },
-                            legend: {
-                                orient: 'vertical',
-                                x: 'left',
-                                data: data.map(x => x.name)
-                            },
-                            toolbox: {
-                                show: true,
-                                feature: {
-                                    saveAsImage: {show: true, title: "save as image"}
-                                }
-                            },
-                            calculable: true,
-                            series: [{
-                                color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                                name: 'Holders',
-                                type: 'pie',
-                                radius: ['50%', '70%'],
-                                itemStyle: {
-                                    normal: {
-                                        label: {
-                                            show: false
-                                        },
-                                        labelLine: {
-                                            show: false
-                                        }
-                                    },
-                                    emphasis: {
-                                        label: {
-                                            show: true,
-                                            position: 'center',
-                                            textStyle: {
-                                                fontSize: '30',
-                                                fontWeight: 'bold'
-                                            }
-                                        }
-                                    }
-                                },
-                                data: data
-                            }]
-                        };
-                        resolve(holders_chart);
+                            noData: $filter('translate')('No data about holders'),
+                            data: data,
+                        }));
+                        
                     }).catch((err) => {
                         reject(err);
                     });
