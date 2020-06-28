@@ -79,12 +79,22 @@
          *
          * @param {object}  params
          * @param {string}  [params.title]          - The chart title
+         * @param {string}  [params.noData]         - The no data message
          * @param {array}   [params.data]           - The chart data
          * @param {object}  [params.series]         - The chart series options
          * @param {object}  [params.series.title]   - The title of series
          *
          * */
         function pieChart(params) {
+            
+            /**
+             * For some reason, if to pass the series with empty data array, the highcharts throws the error
+             * To avoid this, the code below does the check for empty data and returns the noDataChart
+             * instead of pieChart
+             * */
+            if(Array.isArray(params.data) && params.data.length === 0) {
+                return noDataChart(params.noData);
+            }
             
             return {
                 title: {
@@ -254,6 +264,7 @@
     
                              resolve(
                                  pieChart({
+                                     noData: $filter('translate')('No data about operations'),
                                      series: {
                                         title: $filter('translate')('Operations')
                                      },
@@ -287,6 +298,7 @@
                         }
                         
                         resolve(pieChart({
+                            noData: $filter('translate')('No data about proxies'),
                             series: {
                                 title: $filter('translate')('Proxies')
                             },
@@ -317,6 +329,7 @@
                         }
                         
                         resolve(pieChart({
+                            noData: $filter('translate')('No data about markets'),
                             series: {
                                 title:  $filter('translate')('Traffic Source')
                             },
