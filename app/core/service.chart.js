@@ -77,9 +77,11 @@
         /**
          * Returns the config for highcharts pie chart
          *
-         * @param {object} params
-         * @param {string} [params.title] - The chart title
-         * @param {array} [params.data] - The chart data
+         * @param {object}  params
+         * @param {string}  [params.title]          - The chart title
+         * @param {array}   [params.data]           - The chart data
+         * @param {object}  [params.series]         - The chart series options
+         * @param {object}  [params.series.title]   - The title of series
          *
          * */
         function pieChart(params) {
@@ -133,7 +135,7 @@
                     }
                 },
                 series: [{
-                    name: $filter('translate')('Operations'),
+                    name: params && params.series && params.series.title || $filter('translate')('Series Label'),
                     colorByPoint: true,
         
                     data: params.data || [],
