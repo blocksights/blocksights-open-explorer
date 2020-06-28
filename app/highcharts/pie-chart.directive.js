@@ -22,13 +22,12 @@ noDataToDisplayHighchartsPlugin(Highcharts);
         return {
             restrict: 'E',
             replace: true,
-            template: '<div><div id="pie-chart" class="highcharts-container"></div><div ng-if="allowFullscreenForMobile" ng-click="enterFullscreen()" id="highcharts-enter-fullscreen-button" class="btn btn-default" data-translate="Show in fullscreen"></div></div>',
+            template: '<div><div class="highcharts-container"></div><div ng-if="allowFullscreenForMobile" ng-click="enterFullscreen()" id="highcharts-enter-fullscreen-button" class="btn btn-default" data-translate="Show in fullscreen"></div></div>',
             scope: {
                 options: '=',
                 allowFullscreenForMobile: '='
             },
-            link: function (scope) {
-                
+            link: function (scope, element) {
                 let chart, optionsWatcher;
                 
                 scope.enterFullscreen = enterFullscreen;
@@ -38,7 +37,7 @@ noDataToDisplayHighchartsPlugin(Highcharts);
                 
                 function init() {
                     if(scope.options) {
-                        chart = Highcharts.chart("pie-chart", scope.options);
+                        chart = Highcharts.chart(element.find('.highcharts-container')[0], scope.options);
                     }
                 }
                 
