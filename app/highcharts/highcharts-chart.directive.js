@@ -4,7 +4,7 @@ import noDataToDisplayHighchartsPlugin from 'highcharts/modules/no-data-to-displ
 noDataToDisplayHighchartsPlugin(Highcharts);
 
 /**
- * <pie-chart options={highchartOptions} allow-fullscreen-for-mobile-></pie-chart>
+ * <highcharts-chart options={highchartOptions} allow-fullscreen-for-mobile-></highcharts-chart>
  *
  * === Options ===
  *
@@ -16,7 +16,7 @@ noDataToDisplayHighchartsPlugin(Highcharts);
 
 (function () {
     
-    angular.module('app.highcharts').directive('pieChart', ['$window', pieChart]);
+    angular.module('app.highcharts').directive('highchartsChart', ['$window', pieChart]);
     
     function pieChart() {
         return {
