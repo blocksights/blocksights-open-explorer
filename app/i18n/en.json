@@ -119,6 +119,8 @@
   "Daily DEX Volume Chart Title": "Daily DEX Volume in {{symbol}} for the last 30 days",
   "No data about volume": "No data about volume",
   "Daily DEX Volume Chart Series Title": "{{symbol}} Volume",
+  "Block number symbol": "Block #",
+  "Operations Count": "Operations Count",
 
   "Committee members": "Committee members",
   "Current active committee members": "Current active committee members",
@@ -137,6 +139,8 @@
   "Basic": "Basic",
   "Premium": "Premium",
   "Price per KB": "Price per KB",
+
+  "per Block": "per Block",
 
   "Objects": "Objects",
   "Exploring object": "Exploring object",

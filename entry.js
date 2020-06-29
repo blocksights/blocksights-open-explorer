@@ -9,6 +9,7 @@ require("./app/ui/loading.directive.js");
 require("./app/ui/loading-error.directive.js");
 require("./app/ui/loading-no-data.directive.js");
 require("./app/ui/responsive-table.directive.js");
+require("./app/ui/account-name.directive.js");
 require("./app/ui/notify.service.js");
 require("./app/highcharts/highcharts.module.js");
 require("./app/highcharts/highcharts-chart.directive.js");
@@ -37,6 +38,7 @@ require("./app/core/app.utilities.js");
 
 require("./app/core/api.provider.js");
 require("./app/core/api.config.js");
+require("./app/core/service.witness.js");
 require("./app/core/service.network.js");
 require("./app/core/service.market.js");
 require("./app/core/service.asset.js");

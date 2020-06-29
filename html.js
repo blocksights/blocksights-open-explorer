@@ -24,6 +24,8 @@ const HTML = [
     "sections/txs/txs.html",
     "sections/voting/voting.html",
     "sections/witnesses/witnesses.html",
+    "sections/witnesses/witness.html",
+
     "sections/workers/workers.html",
 
     "ui/responsive-table.html",

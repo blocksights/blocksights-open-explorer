@@ -159,3 +159,7 @@ img.inlineLoading {
     height: 18px;
     cursor: pointer;
 }
+
+.witness-blocks-produced-chart .highcharts-container {
+    height: 250px;
+}

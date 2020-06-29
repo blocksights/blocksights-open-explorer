@@ -5,7 +5,7 @@
     chartService.$inject = ['$http', 'appConfig', 'utilities', '$filter'];
 
     function chartService($http, appConfig, utilities, $filter) {
-        
+
         function errorChart(message) {
             return noChartWithMessage(message ? message : $filter('translate')('Data unavailable'))
         }
@@ -20,15 +20,15 @@
                 }
             };
         }
-    
+
         function noDataChart(message) {
             return noChartWithMessage(message ? message : $filter('translate')('No data found'))
         }
-        
+
         function loadingChart(message) {
             return noChartWithMessage(message ? message : $filter('translate')('Loading'))
         }
-        
+
         /**
          * Returns the config for highcharts pie chart
          *
@@ -41,7 +41,7 @@
          *
          * */
         function pieChart(params) {
-            
+
             /**
              * For some reason, if to pass the series with empty data array, the highcharts throws the error
              * To avoid this, the code below does the check for empty data and returns the noDataChart
@@ -50,7 +50,7 @@
             if(Array.isArray(params.data) && params.data.length === 0) {
                 return noDataChart(params.noData);
             }
-            
+
             return {
                 title: {
                     text: params.title || ''
@@ -102,13 +102,13 @@
                 series: [{
                     name: params && params.series && params.series.title || $filter('translate')('Series Label'),
                     colorByPoint: true,
-        
+
                     data: params.data || [],
                 }]
             };
-            
+
         }
-    
+
         /**
          * @param {object}  params
          * @param {array}   params.categories       -
@@ -116,24 +116,29 @@
          * @param {string}  [params.title]          -
          * @param {object}  [params.series]         -
          * @param {string}  [params.series.title]   -
+         * @param {object}  [params.xAxis.title]    - title for xAxis
+         * @param {object}  [params.yAxis.title]    - title for yAxis
          */
-        
+
         function barChart(params) {
-            
+
             return {
                 chart: {
-                  type: 'column'
+                    type: 'column'
                 },
                 title: {
                     text: params.title || '',
                 },
                 yAxis: {
                     title: {
-                        text: ''
+                        text: params && params.yAxis && params.yAxis.title || ''
                     },
                 },
                 xAxis: {
                     type: 'category',
+                    title: {
+                        text: params && params.xAxis && params.xAxis.title || ''
+                    },
                     categories: params.categories || [],
                     labels: {
                         style: {
@@ -200,7 +205,7 @@
                 },
             };
         }
-        
+
         return {
             noDataChart               : noDataChart,
             errorChart                : errorChart,
@@ -208,10 +213,10 @@
             dailyDEXChart             : function() {
 
                 return new Promise((resolve, reject) => {
-    
+
                     $http.get(appConfig.urls.python_backend() + "/daily_volume_dex_dates").then(function (response) {
                         $http.get(appConfig.urls.python_backend() + "/daily_volume_dex_data").then(function (response2) {
-                            
+
                             const chartData = barChart({
                                 categories: response.data,
                                 title: $filter('translate')('Daily DEX Volume Chart Title', {
@@ -224,18 +229,18 @@
                                 },
                                 data: response2.data,
                             });
-                            
+
                             resolve(chartData);
-                            
+
                         }).catch((err) => {
                             reject(err);
                         });
                     }).catch((err) => {
                         reject(err);
                     });
-                    
+
                 });
-                
+
             },
             TradingView: function(base, quote) {
                 var widget = window.tvWidget = new TradingView.widget({
@@ -265,66 +270,65 @@
             },
             topOperationsChart: function () {
                 return new Promise((resolve, reject) => {
-    
+
                     $http.get(appConfig.urls.elasticsearch_wrapper() +
                         "/es/account_history?from_date=now-180d&to_date=now&type=aggs&agg_field=operation_type&size=10")
-                         .then(function(response) {
-                             
-                             const legends = [];
-                             const data = [];
-                             
-                             let c = 0;
-                             
-                             for(let i = 0; i < response.data.length; i++) {
-                                 ++c;
-                                 
-                                 if(c > 7) { break; }
-    
-                                 const name =  utilities.operationType(response.data[i].key)[0];
-                                 const color =  utilities.operationType(response.data[i].key)[1];
-                                 
-                                 data.push({
-                                     y: response.data[i].doc_count,
-                                     name: name,
-                                     color: `#${color}`,
-                                 });
-                             }
-    
-                             resolve(
-                                 pieChart({
-                                     noData: $filter('translate')('No data about operations'),
-                                     series: {
+                        .then(function(response) {
+
+                            const legends = [];
+                            const data = [];
+
+                            let c = 0;
+
+                            for(let i = 0; i < response.data.length; i++) {
+                                ++c;
+
+                                if(c > 7) { break; }
+
+                                const name =  utilities.operationType(response.data[i].key)[0];
+                                const color =  utilities.operationType(response.data[i].key)[1];
+
+                                data.push({
+                                    y: response.data[i].doc_count,
+                                    name: name,
+                                    color: `#${color}`,
+                                });
+                            }
+
+                            resolve(
+                                pieChart({
+                                    noData: $filter('translate')('No data about operations'),
+                                    series: {
                                         title: $filter('translate')('Operations')
-                                     },
-                                     data: data
-                                 })
-                             );
-                         }).catch((err) => {
-                             reject(err);
+                                    },
+                                    data: data
+                                })
+                            );
+                        }).catch((err) => {
+                        reject(err);
                     });
                 })
             },
             topProxiesChart: function() {
-    
+
                 return new Promise((resolve, reject) => {
-    
+
                     $http.get(appConfig.urls.python_backend() + "/top_proxies").then(function(response) {
-        
                         const data = [];
                         const AMOUNT_TO_DISPLAY = 10;
-                        
+
                         let i;
-                        
+
                         for (i in response.data) {
-                            
+
                             data.push({
                                 y: response.data[i].bts_weight,
                                 name: response.data[i].name
                             });
-                            
+
                             if (data.length >= AMOUNT_TO_DISPLAY) break;
                         }
-                        
+
                         resolve(pieChart({
                             noData: $filter('translate')('No data about proxies'),
                             series: {
@@ -335,16 +339,15 @@
                     }).catch((err) => {
                         reject(err);
                     });
-                    
+
                 });
-                
+
             },
             topMarketsChart: function() {
-    
+
                 return new Promise((resolve, reject) => {
-    
+
                     $http.get(appConfig.urls.python_backend() + "/top_markets").then(function(response) {
-        
                         const data = [];
                         const amountToDisplay = 10;
                         let i;
@@ -355,7 +358,7 @@
                             });
                             if (data.length >= amountToDisplay) break;
                         }
-                        
+
                         resolve(pieChart({
                             noData: $filter('translate')('No data about markets'),
                             series: {
@@ -363,22 +366,21 @@
                             },
                             data: data,
                         }));
-        
+
                     }).catch((err) => {
                         reject(err);
                     });
-                    
+
                 });
             },
             topSmartCoinsChart: function() {
-    
+
                 return new Promise((resolve, reject) => {
                     $http.get(appConfig.urls.python_backend() + "/top_smartcoins").then(function(response) {
-        
                         const data = [];
                         const AMOUNT_TO_DISPLAY = 10;
                         let i;
-                        
+
                         for (i in response.data) {
                             data.push({
                                 y: response.data[i]["24h_volume"],
@@ -386,7 +388,7 @@
                             });
                             if (data.length >= AMOUNT_TO_DISPLAY) break;
                         }
-                        
+
                         resolve(pieChart({
                             noData: $filter('translate')('No data about smartcoins'),
                             series: {
@@ -394,18 +396,17 @@
                             },
                             data: data,
                         }));
-                        
+
                     }).catch((err) => {
                         reject(err);
                     });
                 });
-                
+
             },
             topUIAsChart: function() {
-    
+
                 return new Promise((resolve, reject) => {
                     $http.get(appConfig.urls.python_backend() + "/top_uias").then(function(response) {
-        
                         const data = [];
                         const amountToDisplay = 10;
                         let i;
@@ -416,7 +417,7 @@
                             });
                             if (data.length >= amountToDisplay) break;
                         }
-                        
+
                         resolve(pieChart({
                             noData: $filter('translate')('No data about UIAs'),
                             series: {
@@ -428,25 +429,29 @@
                         reject(err);
                     });
                 });
-                
+
+            },
+            votingActivityChart: function() {
+                console.log("todo")
+                return null;
             },
             topHoldersChart: function() {
-    
+
                 return new Promise((resolve, reject) => {
-                    $http.get(appConfig.urls.python_backend() + "/top_holders").then(function(response) {
-        
+                    $http.get(appConfig.urls.python_backend() + "/top_holders").then(function (response) {
+
                         const data = [];
                         const amountToDisplay = 10;
                         let i;
-                        
+
                         for (i in response.data) {
                             data.push({
                                 y: response.data[i].amount,
-                                name: response.data[i].account_name
+                                name : response.data[i].account_name
                             });
                             if (data.length >= amountToDisplay) break;
                         }
-        
+
                         resolve(pieChart({
                             series: {
                                 title: $filter('translate')('Holders')
@@ -454,14 +459,37 @@
                             noData: $filter('translate')('No data about holders'),
                             data: data,
                         }));
-                        
+
                     }).catch((err) => {
                         reject(err);
                     });
-                    
+
                 });
-                
-            }
+
+            },
+            blocksProducedChart: function () {
+                return new Promise((resolve, reject) => {
+                    $http.get(appConfig.urls.python_backend() + "/block_statistics").then((response) => {
+
+                        resolve(barChart({
+                            categories: response.data.block_num,
+                            xAxis: {
+                                title: $filter('translate')('Block number symbol')
+                            },
+                            yAxis: {
+                                title: $filter('translate')('Operations Count')
+                            },
+                            series: {
+                                title: $filter('translate')('Operations')
+                            },
+                            data: response.data.op_count
+                        }));
+
+                    }).catch((err) => {
+                        reject(err);
+                    })
+                });
+            },
         };
     }
 
