@@ -43,7 +43,7 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",
-            Highcharts: "Highcharts"
+            Highcharts: "highcharts"
         }),
 
         new CopyWebpackPlugin([{
