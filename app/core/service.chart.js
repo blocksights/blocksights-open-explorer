@@ -5,51 +5,6 @@
     chartService.$inject = ['$http', 'appConfig', 'utilities', '$filter'];
 
     function chartService($http, appConfig, utilities, $filter) {
-    
-        function _deprecated_noDataPieChart(message = $filter('translate')('No data found')) {
-            const options = {
-                "animation":true,
-                "calculable":true,
-                "legend": {
-                    orient: 'vertical',
-                    x: 'left',
-                    data: [message],
-                },
-                "series":[
-                    {
-                        label: {
-                            normal: {
-                                show: false,
-                                position: 'center'
-                            },
-                            emphasis: {
-                                show: true,
-                                textStyle: {
-                                    fontSize: '18'
-                                }
-                            }
-                        },
-                        "color":[
-                            "#DDDDDD"
-                        ],
-                        "type":"pie",
-                        "radius": ['50%', '70%'],
-                        "data":[
-                            {
-                                "value": 0,
-                                "name": message,
-                                itemStyle: {
-                                    normal: {
-                                        color: '#DEDEDE'
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                ]
-            };
-            return {options: options};
-        }
         
         function errorChart(message) {
             return noChartWithMessage(message ? message : $filter('translate')('Data unavailable'))
@@ -250,7 +205,6 @@
             noDataChart               : noDataChart,
             errorChart                : errorChart,
             loadingChart              : loadingChart,
-            _deprecated_noDataPieChart: _deprecated_noDataPieChart,
             dailyDEXChart             : function() {
 
                 return new Promise((resolve, reject) => {
