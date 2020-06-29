@@ -16,11 +16,16 @@
             <ul class="nav navbar-nav">
                 <li><a href="#/dashboard"><span data-translate="Dashboard"></span></a></li>
                 <li><a href="#/search"><span data-translate="Search"></span></a></li>
-                <li><a href="#/txs"><span data-translate="Transactions"></span></a></li>
-                <li><a href="#/assets"><span data-translate="Assets"></span></a></li>
-                <li><a href="#/markets"><span data-translate="Markets"></span></a></li>
-                <li><a href="#/accounts"><span data-translate="Accounts"></span></a></li>
-                <li><a href="#/fees"><span data-translate="Fees"></span></a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Explore"></span> <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/txs"><span data-translate="Transactions"></span></a></li>
+                        <li><a href="#/assets"><span data-translate="Assets"></span></a></li>
+                        <li><a href="#/markets"><span data-translate="Markets"></span></a></li>
+                        <li><a href="#/accounts"><span data-translate="Accounts"></span></a></li>
+                        <li><a href="#/fees"><span data-translate="Fees"></span></a></li>
+                    </ul>
+                </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Governance"></span> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
