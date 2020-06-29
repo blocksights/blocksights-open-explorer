@@ -116,6 +116,9 @@
   "Traffic Source": "Traffic Source",
   "Top Smartcoins": "Top Smartcoins",
   "Top User Issued Assets": "Top User Issued Assets",
+  "Daily DEX Volume Chart Title": "Daily DEX Volume in {{symbol}} for the last 30 days",
+  "No data about volume": "No data about volume",
+  "Daily DEX Volume Chart Series Title": "{{symbol}} Volume",
 
   "Committee members": "Committee members",
   "Current active committee members": "Current active committee members",

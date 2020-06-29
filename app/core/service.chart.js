@@ -153,61 +153,135 @@
             };
             
         }
+    
+        /**
+         * @param {object}  params
+         * @param {array}   params.categories       -
+         * @param {array}   params.data             -
+         * @param {string}  [params.title]          -
+         * @param {object}  [params.series]         -
+         * @param {string}  [params.series.title]   -
+         */
+        
+        function barChart(params) {
+            
+            return {
+                chart: {
+                  type: 'column'
+                },
+                title: {
+                    text: params.title || '',
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    },
+                },
+                xAxis: {
+                    type: 'category',
+                    categories: params.categories || [],
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: params && params.series && params.series.title || $filter('translate')('Series Label'),
+                    data: params.data,
+                }],
+                responsive: {
+                    rules: [{
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 20
+                                }
+                            }
+                        },
+                        condition: {
+                            maxWidth: 360,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 15
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 360,
+                            maxWidth: 550,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 10
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 550,
+                            maxWidth: 750,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 8
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 750,
+                        }
+                    }]
+                },
+            };
+        }
         
         return {
             noDataChart               : noDataChart,
             errorChart                : errorChart,
             loadingChart              : loadingChart,
             _deprecated_noDataPieChart: _deprecated_noDataPieChart,
-            dailyDEXChart             : function(callback) {
+            dailyDEXChart             : function() {
 
-                var dex_volume_chart = {};
-                $http.get(appConfig.urls.python_backend() + "/daily_volume_dex_dates").then(function (response) {
-                    $http.get(appConfig.urls.python_backend() + "/daily_volume_dex_data").then(function (response2) {
-
-                        dex_volume_chart.options = {
-                            animation: true,
-                            title: {
-                                text: 'Daily DEX Volume in ' + appConfig.branding.coreSymbol + ' for the last 30 days'
-                            },
-                            tooltip: {
-                                trigger: 'axis'
-                            },
-                            toolbox: {
-                                show: true,
-                                feature: {
-                                    saveAsImage: {show: true, title: "save as image"}
-                                }
-                            },
-                            xAxis: [{
-                                boundaryGap: true,
-                                data: response.data
-                            }],
-                            yAxis: [{
-                                type: 'value',
-                                scale: true,
-                                axisLabel: {
-                                    formatter: function (value) {
-                                        return value;
-                                    }
-                                }
-                            }],
-                            calculable: true,
-                            series: [{
-                                name: 'Volume',
-                                type: 'bar',
-                                itemStyle: {
-                                    normal: {
-                                        color: 'green',
-                                        borderColor: 'green'
-                                    }
+                return new Promise((resolve, reject) => {
+    
+                    $http.get(appConfig.urls.python_backend() + "/daily_volume_dex_dates").then(function (response) {
+                        $http.get(appConfig.urls.python_backend() + "/daily_volume_dex_data").then(function (response2) {
+                            
+                            const chartData = barChart({
+                                categories: response.data,
+                                title: $filter('translate')('Daily DEX Volume Chart Title', {
+                                    symbol: appConfig.branding.coreSymbol
+                                }),
+                                series: {
+                                    title: $filter('translate')('Daily DEX Volume Chart Series Title', {
+                                        symbol: appConfig.branding.coreSymbol
+                                    }),
                                 },
-                                data: response2.data
-                            }]
-                        };
-                        callback(dex_volume_chart);
+                                data: response2.data,
+                            });
+                            
+                            resolve(chartData);
+                            
+                        }).catch((err) => {
+                            reject(err);
+                        });
+                    }).catch((err) => {
+                        reject(err);
                     });
+                    
                 });
+                
             },
             TradingView: function(base, quote) {
                 var widget = window.tvWidget = new TradingView.widget({

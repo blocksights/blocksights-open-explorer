@@ -129,6 +129,31 @@ img.inlineLoading {
     }
 }
 
+@media (max-width: 767px) {
+    /* xs */
+    .assets-bar-chart .highcharts-container {
+        height: 250px;
+    }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+    /* sm */
+    .assets-bar-chart .highcharts-container {
+        height: 250px;
+    }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+   /* md */
+    .assets-bar-chart .highcharts-container {
+        height: 350px;
+    }
+}
+@media (min-width: 1200px) {
+   /* lg */
+    .assets-bar-chart .highcharts-container {
+        height: 350px;
+    }
+}
+
 .collapse-table {
     width: 18px;
     height: 18px;

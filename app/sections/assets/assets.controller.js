@@ -3,9 +3,9 @@
 
     angular.module('app.assets')
         .controller('assetsCtrl', ['$scope', '$routeParams', '$location', 'utilities', 'assetService', 'chartService', '$filter',
-            'marketService', assetsCtrl]);
+            'marketService', 'Notify', assetsCtrl]);
 
-    function assetsCtrl($scope, $routeParams, $location, utilities, assetService, chartService, $filter, marketService) {
+    function assetsCtrl($scope, $routeParams, $location, utilities, assetService, chartService, $filter, marketService, Notify) {
 
 		const path = $location.path();
 		let name = $routeParams.name;
@@ -41,9 +41,12 @@
                     $scope.dynamic = returnData;
                 });
 
-                $scope.dex_volume_chart = {options: {errorMsg: {text: $filter("translate")("Loading ..."), left: "center"}}};
-                chartService.dailyDEXChart(function (returnData) {
+                $scope.dex_volume_chart = chartService.loadingChart();
+                chartService.dailyDEXChart().then(function (returnData) {
                     $scope.dex_volume_chart = returnData;
+                }).catch(() => {
+                    $scope.dex_volume_chart = chartService.noDataChart($filter('translate')('No data about volume'));
+                    showLoadingErrorNotification();
                 });
 
                 assetService.getActiveAssets(function (returnData) {
@@ -55,6 +58,15 @@
                 utilities.columnsort($scope, "volume", "sortColumn", "sortClass", "reverse", "reverseclass", "column");
             }
 		}
+    
+        function showLoadingErrorNotification() {
+            Notify.error({
+                key: 'assetsError',
+                message: 'Request to the server failed',
+                allowMultiple: false,
+            });
+        }
+		
     }
 
 })();
