@@ -106,7 +106,7 @@ import {getAvailableEndpoints} from "../branding";
             setKnownBlockchains: setKnownBlockchains,
             enableLocalStorageSync: () => localStorageSync = true,
             disableLocalStorageSync: () => localStorageSync = false,
-            $get: ($localStorage) => {
+            $get: ['$localStorage', ($localStorage) => {
                 
                 function _saveEndpointToLocalStorage(endpoint) {
                     $localStorage.api = {
@@ -167,7 +167,7 @@ import {getAvailableEndpoints} from "../branding";
                     getBlockchainsList: () => blockchainsList,
                     
                 }
-            }
+            }]
         }
     }
     

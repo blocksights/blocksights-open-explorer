@@ -78,7 +78,7 @@
 (function (){
 
     angular.module('app.ui')
-        .directive('responsiveTable', [responsiveTable]);
+        .directive('responsiveTable', responsiveTable);
     
     function responsiveTable() {
         return {
@@ -92,7 +92,7 @@
                 'data': '=',
             },
             templateUrl: `html/responsive-table.html`,
-            controller: ($scope) => {
+            controller: ['$scope', ($scope) => {
                 
                 // prefixes for bootstrap's breakpoints
                 const VISIBLE_BOOTSTRAP_CLASSNAME_PREFIX = 'visible-';
@@ -202,7 +202,7 @@
                     
                     return classNames.join(' ');
                 }
-            }
+            }]
         };
     }
     
