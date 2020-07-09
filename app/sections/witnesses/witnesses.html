@@ -55,7 +55,7 @@
                 </tr>
                 <tr ng-if="active_witnesses !== 'error' && active_witnesses.length > 0" data-ng-repeat="w in active_witnesses | orderBy:column:reverse | filter:search">
                     <td>{{w.counter}}</td>
-                    <td><a href="#/objects/{{w.id}}/">{{w.id}}</a></td>
+                    <td><a href="#/witness/{{w.id}}/">{{w.id}}</a></td>
                     <td><a href="#/accounts/{{w.witness_account}}/">{{w.witness_account_name}}</a></td>
                     <td>
                         <a href="{{w.url}}" target="_blank">
@@ -114,7 +114,7 @@
                 </tr>
                 <tr ng-if="standby_witnesses !== 'error' && standby_witnesses.length > 0" data-ng-repeat="w in standby_witnesses | orderBy:column2:reverse2 | filter:search2">
                     <td>{{w.counter}}</td>
-                    <td><a href="#/objects/{{w.id}}/">{{w.id}}</a></td>
+                    <td><a href="#/witness/{{w.id}}/">{{w.id}}</a></td>
                     <td><a href="#/accounts/{{w.witness_account}}/">{{w.witness_account_name}}</a></td>
                     <td>
                         <a href="{{w.url}}" target="_blank">

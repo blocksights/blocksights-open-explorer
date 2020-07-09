@@ -36,7 +36,7 @@
                     </td>
                 </tr>
                 <tr ng-if="witnesses !== 'error' && witnesses.length > 0" data-ng-repeat="w in witnesses">
-                    <td><a href="#/objects/{{w.id}}/">{{w.witness_account_name}}</a></td>
+                    <td><a href="#/witness/{{w.id}}/">{{w.witness_account_name}}</a></td>
                     <td class="{{w.tclass1}}">{{w.proxy1}}</td>
                     <td class="{{w.tclass2}}">{{w.proxy2}}</td>
                     <td class="{{w.tclass3}}">{{w.proxy3}}</td>
