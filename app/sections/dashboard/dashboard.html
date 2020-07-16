@@ -34,7 +34,7 @@
                 <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
-                            <p class="size-h4">{{dynamic !== 'error' ? (dynamic.bts_market_cap | number) : ('No Data' | translate) }} </p>
+                            <p class="size-h4">{{dynamic !== 'error' ? (dynamic.core_supply | number) : ('No Data' | translate) }} </p>
                             <p class="text-muted text-small">{{ branding.coreSymbol }} <span data-translate="general.SUPPLY"></span></p>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                     <div class="well">
                         <div class="box-info">
                             <p class="size-h4">{{dynamic !== 'error' ? (dynamic.quote_volume | number) : ('No Data' | translate) }} </p>
-                            <p class="text-muted text-small">{{ branding.coreSymbol }}/BTC <span data-translate="general.VOLUME"></span></p>
+                            <p class="text-muted text-small">{{ branding.coreSymbol }}/{{dynamic.quote_volume}} <span data-translate="general.VOLUME"></span></p>
                         </div>
                     </div>
                 </div>

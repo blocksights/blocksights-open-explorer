@@ -25,6 +25,7 @@ export function getConfig() {
     return {
         name: "BitShares",
         coreSymbol: "BTS",
+        defaultQuote: "EUR",
         example: {
             block: 19446934,
             account: "alfredo-worker",

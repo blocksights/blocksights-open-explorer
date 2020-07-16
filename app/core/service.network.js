@@ -9,13 +9,14 @@
         return {
             getHeader: function(callback) {
                 let header;
-                return $http.get(appConfig.urls.python_backend() + "/header").then(function(response) {
+                return $http.get(appConfig.urls.python_backend() + "/header?default_quote=" + appConfig.branding.defaultQuote).then(function(response) {
                     header = {
                         time: response.data.time,
                         head_block_number: response.data.head_block_number,
                         accounts_registered_this_interval: response.data.accounts_registered_this_interval,
-                        bts_market_cap: response.data.bts_market_cap,
+                        core_supply: response.data.core_supply,
                         quote_volume: response.data.quote_volume,
+                        quote_symbol: response.data.quote_symbol,
                         witness_count: response.data.witness_count,
                         committee_count: response.data.committee_count,
                         chain_id: response.data.chain_id,
@@ -181,7 +182,7 @@
                         };
                         fees.push(fee);
                     }
-    
+
                     callback(fees);
                 });
             },
