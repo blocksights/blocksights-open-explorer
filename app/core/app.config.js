@@ -17,25 +17,25 @@ import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getConfig} fro
     angular.module('app').config(['$locationProvider', function($locationProvider) {
         $locationProvider.hashPrefix('');
     }]).config(['ApiProvider', function (ApiProvider) {
-    
+
         /**
          * Tell ApiProvider what are the endpoints and chains we will handle and display as available for our user
          */
-        
+
         ApiProvider.setKnownEndpoints(
             getAvailableEndpoints()
         );
-    
+
         ApiProvider.setKnownBlockchains(
             getAvailableBlockchains()
         );
-        
+
         ApiProvider.enableLocalStorageSync();
-        
+
     }]);
 
     function appConfig(Api) {
-        
+
         var pageTransitionOpts = [
             {
                 name: 'Fade up',
@@ -55,10 +55,11 @@ import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getConfig} fro
         var year = date.getFullYear();
         var branding = getConfig();
         var main = {
-            brand: branding.name + " Explorer",
+            brand: branding.name + " Open Explorer",
             name: branding.name,
-            api_link: "https://github.com/bitshares/bitshares-explorer-api",
-            source_code_link: "https://github.com/bitshares/open-explorer",
+            api_link: "https://eu.elasticsearch.bitshares.ws/",
+            source_code_link: null,
+            fork_of: "https://github.com/bitshares/open-explorer",
             year: year,
             pageTransition: pageTransitionOpts[0]
         };

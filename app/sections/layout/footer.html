@@ -1,2 +1,27 @@
-<span class="pull-right">{{main.brand}} | <a href="{{main.source_code_link}}" target="_blank"> <span data-translate="Source Code"></span> </a> | <a href="{{main.api_link}}" terget="_blank"><span data-translate="API"></span></a></span>
+<span class="pull-right">
+    {{main.brand}} |
+    <span ng-if="main.fork_of != null">
+        <a
+            href="{{main.fork_of}}"
+            target="_blank"
+        >
+            <span data-translate="Private Fork"></span>
+        </a> |
+    </span>
+    <span ng-else>
+        <a
+            ng-if="main.source_code_link"
+            href="{{main.source_code_link}}"
+            target="_blank"
+        >
+            <span data-translate="Source Code"></span>
+        </a> |
+    </span>
+    <a
+        href="{{main.api_link}}"
+        target="_blank"
+    >
+        <span data-translate="API"></span>
+    </a>
+</span>
 <span data-translate="COPYRIGHT"></span> {{main.year}}
