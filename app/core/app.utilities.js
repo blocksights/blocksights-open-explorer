@@ -560,6 +560,19 @@
                                 "</a> refund HTLC";
                             callback(operation_text);
                         });
+                } else if (operation_type === 20) { // Witness create
+                    console.log(operation)
+
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation.witness_account)
+                        .then(function (witness_account_name) {
+                            witness_account_name = witness_account_name.data;
+                            let witness_account_l = "<a href='/#/accounts/" + operation.witness_account + "'>" + witness_account_name + "</a>";
+                            // fixme: check link sanitation
+                            let witness_url_l = "<a target='_blank' href='" + operation.url + "' rel='noopener noreferrer'>link</a>";
+                            operation_text = witness_account_l + " become a witness candidate (" + witness_url_l + ") and offers "
+                                + formatNumber(operation.block_producer_reward_pct / 100)  + "% contribution coefficient"
+                            callback(operation_text);
+                        });
                 }
                 else {
                     operation_text = "Type" + operation_type + " (beautifier missing): " + JSON.stringify(operation).substr(0, 25) + " ...";
