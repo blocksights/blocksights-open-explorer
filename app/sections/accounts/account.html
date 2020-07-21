@@ -347,7 +347,7 @@
                                             <td><a href="#/objects/{{v.id}}/">{{v.id}}</a> <font size="-1"> - {{v.votable_object_name}}</font></td>
                                             <td>{{v.type}}</td>
                                             <td><a href="#/accounts/{{v.account}}/">{{v.account_name}}</a></td>
-                                            <td>{{v.votes_for | number}}</td>
+                                            <td>{{(v.votes_for / 100000) | number}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -358,7 +358,7 @@
                         <uib-tab ng-if="referrers.length" index="6" class="text-small"><uib-tab-heading><span data-translate="Referral"></span></uib-tab-heading>
                             <br>
                             <div class="panel panel-default">
-                                <div class="panel-heading"> <b>{{referral_count}}</b> <span data-translate="referred accounts"></span>.</div>
+                                <div class="panel-heading"> <b>{{referral_count.value}}</b> <span data-translate="referred accounts"></span>.</div>
                                 <div class="panel-body table-responsive">
 
                                     <table class="table">
@@ -455,6 +455,29 @@
                         <uib-tab ng-if="is_worker == true" index="10" class="text-small"><uib-tab-heading><span data-translate="Worker"></span></uib-tab-heading>
                             <br>
                             <span data-translate="Votes"></span> {{worker_votes | number:0}}
+                        </uib-tab>
+
+                        <uib-tab ng-if="votingStats.total_proxied > 0" index="11" class="text-small" select="loadProxyFor()"><uib-tab-heading><span data-translate="Proxy for"></span></uib-tab-heading>
+                            <br>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"> <span data-translate="Receiving voting power from proxy followers"></span></div>
+                                <div class="panel-body table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th><span data-translate="Account"></span></th>
+                                            <th><span data-translate="Proxied Voting Power"></span></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr data-ng-repeat="item in votingStats.proxy_for">
+                                            <td><a href="#/accounts/{{item.account_id}}/">{{item.account_name}}</a></td>
+                                            <td>{{item.voting_power | number}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </uib-tab>
 
                     </uib-tabset>
