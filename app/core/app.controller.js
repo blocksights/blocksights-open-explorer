@@ -5,7 +5,7 @@
         .controller('AppCtrl', [ '$scope', '$rootScope', '$route', '$document', 'appConfig', AppCtrl]);
 
     function AppCtrl($scope, $rootScope, $route, $document, appConfig) {
-
+        appConfig.update()
         $scope.pageTransitionOpts = appConfig.pageTransitionOpts;
         $scope.main = appConfig.main;
         $scope.color = appConfig.color;
@@ -14,4 +14,4 @@
         });
     }
 
-})(); 
+})();

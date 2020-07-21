@@ -1,4 +1,4 @@
-import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getConfig} from "../branding";
+import {getGATag, getAvailableEndpoints, getAvailableBlockchains} from "../branding";
 
 (function() {
     'use strict';
@@ -53,15 +53,18 @@ import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getConfig} fro
         ];
         var date = new Date();
         var year = date.getFullYear();
-        var branding = getConfig();
-        var main = {
-            brand: branding.name + " Open Explorer",
-            name: branding.name,
-            api_link: "https://eu.elasticsearch.bitshares.ws/",
-            source_code_link: null,
-            fork_of: "https://github.com/bitshares/open-explorer",
-            year: year,
-            pageTransition: pageTransitionOpts[0]
+        var getConfig = () => Api.getActiveBlockchain().config;
+        var main = () => {
+            let config = getConfig();
+            return {
+                brand: config.name + " Open Explorer",
+                name: config.name,
+                api_link: "https://eu.elasticsearch.bitshares.ws/",
+                source_code_link: null,
+                fork_of: "https://github.com/bitshares/open-explorer",
+                year: year,
+                pageTransition: pageTransitionOpts[0]
+            }
         };
         var color = {
             primary:    '#4E7FE1',
@@ -77,13 +80,18 @@ import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getConfig} fro
             elasticsearch_wrapper: Api.getApiUrl,
             udf_wrapper: () => Api.getApiUrl() + "/udf"
         };
-        return {
+        const _appConfig = {
             pageTransitionOpts: pageTransitionOpts,
-            main: main,
+            getMain: main,
             color: color,
             urls: urls,
-            branding: branding
+            getConfig: getConfig
         };
+        _appConfig.update = () => {
+            _appConfig.main = _appConfig.getMain();
+            _appConfig.branding = _appConfig.getConfig();
+        };
+        return _appConfig;
     }
 
 
