@@ -40,11 +40,16 @@ import {getAvailableEndpoints} from "../branding";
          * Set active endpoint for api url
          * @param {Endpoint} endpoint
          */
-        function _setActiveEndpoint(endpoint){
-            if(!endpoint.translate || !endpoint.url)
-                throw new Error('endpoint should have a translate and url');
-
-            activeEndpoint = endpoint;
+        function _setActiveEndpoint(key){
+            if (key.key) {
+                key = key.key;
+            }
+            const endpoint = endpointsList.find((endpoint) => endpoint.key === key);
+            if (endpoint) {
+                activeEndpoint = endpoint;
+            } else {
+                activeEndpoint = endpointsList[0];
+            }
         }
 
         /**
@@ -72,10 +77,7 @@ import {getAvailableEndpoints} from "../branding";
                 if(!endpoint.url || !endpoint.translate)
                     throw new Error('The provided api endpoint is missed the required translate and url parameters');
 
-                endpointsList.push({
-                    translate: endpoint.translate,
-                    url: endpoint.url,
-                });
+                endpointsList.push(endpoint);
 
                 if(endpoint.isDefault)
                     _setActiveEndpoint(endpoint);
@@ -86,7 +88,9 @@ import {getAvailableEndpoints} from "../branding";
                 _setActiveEndpoint(list[0]);
         }
 
-        /** Accepts the list of available chains
+
+
+            /** Accepts the list of available chains
          * @param {Blockchain[]} list - list of chains
          */
         function setKnownBlockchains (list) {
@@ -108,41 +112,16 @@ import {getAvailableEndpoints} from "../branding";
                 function _saveEndpointToLocalStorage(endpoint) {
                     $localStorage.api = {
                         ...$localStorage.api,
-                        endpoint: endpoint,
+                        key: endpoint.key,
                     };
                 }
 
                 function getApiUrl() {
-
-                    /** if sync with localStorage turned on  */
-                    if(localStorageSync && !localStorageSyncSuccess) {
-                        localStorageSyncSuccess = true;
-
-                        /** if sync is on and user has endpoint in localStorage */
-                        if($localStorage.api && $localStorage.api.endpoint && $localStorage.api.endpoint.url) {
-
-                            const isStoredEndpointAvailable = getAvailableEndpoints().some((endpoint) => endpoint.url === $localStorage.api.endpoint);
-
-                            /** if endpoint saved to localStorage no longer exists - save default active endpoint to localStorage */
-                            if(isStoredEndpointAvailable) {
-                                _setActiveEndpoint($localStorage.api.endpoint);
-                            } else {
-                                _saveEndpointToLocalStorage(activeEndpoint);
-                            }
-
-                        } else {
-                            /** if sync is on and user has not endpoint in localStorage */
-                            _saveEndpointToLocalStorage(activeEndpoint);
-                        }
-
-                    }
-
                     return activeEndpoint && activeEndpoint.url;
                 }
 
                 /** this method is public and store the choice in localStorage */
                 function setActiveEndpoint(endpoint) {
-
                     _setActiveEndpoint(endpoint);
 
                     if(localStorageSync) {
@@ -150,6 +129,26 @@ import {getAvailableEndpoints} from "../branding";
                     }
 
                 }
+
+                function restoreActiveEndpoint() {
+                    endpointsList.forEach((endpoint) => {
+                        if (endpoint.isDefault)
+                            _setActiveEndpoint(endpoint);
+                    });
+                    // if default endpoint is not specified we use first element of array
+                    if (!activeEndpoint)
+                        _setActiveEndpoint(endpointsList[0]);
+
+                    /** if sync with localStorage turned on  */
+                    if (localStorageSync) {
+                        /** if sync is on and user has endpoint in localStorage */
+                        if($localStorage.api && $localStorage.api.key) {
+                            _setActiveEndpoint($localStorage.api.key)
+                        }
+                    }
+                }
+
+                restoreActiveEndpoint();
 
                 return {
                     setActiveBlockchain: setActiveBlockchain,
