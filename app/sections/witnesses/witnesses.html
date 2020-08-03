@@ -28,7 +28,7 @@
                     <tr>
                         <th ng-click='sortColumn("counter")' ng-class='sortClass("counter")'><span data-translate="Position"></span></th>
                         <th ng-click='sortColumn("id")' ng-class='sortClass("id")'>ID</th>
-                        <th ng-click='sortColumn("witness_account")' ng-class='sortClass("witness_account")'><span data-translate="Account"></span></th>
+                        <th ng-click='sortColumn("witness_account")' ng-class='sortClass("witness_account")'><span data-translate="Name"></span></th>
                         <th>
                             <span data-translate="Url"></span>
                         </th>
@@ -55,8 +55,8 @@
                 </tr>
                 <tr ng-if="active_witnesses !== 'error' && active_witnesses.length > 0" data-ng-repeat="w in active_witnesses | orderBy:column:reverse | filter:search">
                     <td>{{w.counter}}</td>
-                    <td><a href="#/witness/{{w.id}}/">{{w.id}}</a></td>
-                    <td><a href="#/accounts/{{w.witness_account}}/">{{w.witness_account_name}}</a></td>
+                    <td><a href="#/objects/{{w.id}}/">{{w.id}}</a></td>
+                    <td><a href="#/witness/{{w.id}}/">{{w.witness_account_name}}</a></td>
                     <td>
                         <a href="{{w.url}}" target="_blank">
                             <span data-translate="Link"></span>
@@ -114,8 +114,8 @@
                 </tr>
                 <tr ng-if="standby_witnesses !== 'error' && standby_witnesses.length > 0" data-ng-repeat="w in standby_witnesses | orderBy:column2:reverse2 | filter:search2">
                     <td>{{w.counter}}</td>
-                    <td><a href="#/witness/{{w.id}}/">{{w.id}}</a></td>
-                    <td><a href="#/accounts/{{w.witness_account}}/">{{w.witness_account_name}}</a></td>
+                    <td><a href="#/objects/{{w.id}}/">{{w.id}}</a></td>
+                    <td><a href="#/witness/{{w.id}}/">{{w.witness_account_name}}</a></td>
                     <td>
                         <a href="{{w.url}}" target="_blank">
                             <span data-translate="Link"></span>
