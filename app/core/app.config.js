@@ -59,7 +59,7 @@ import {getGATag, getAvailableEndpoints, getAvailableBlockchains} from "../brand
             return {
                 brand: config.name + " Open Explorer",
                 name: config.name,
-                api_link: "https://eu.elasticsearch.bitshares.ws/",
+                api_link: "https://api.bitshares.ws/",
                 source_code_link: null,
                 fork_of: "https://github.com/bitshares/open-explorer",
                 year: year,
