@@ -38,7 +38,6 @@
     "postinstall": "npm run install-charting-library",
     "install-charting-library": "node ./app/charting_library/install-charting-library.js",
     "package-charting-library": "node ./app/charting_library/package-charting-library.js",
-    "prestart": "npm install",
     "start": "webpack-dev-server",
     "build": "webpack --mode=production"
   },
