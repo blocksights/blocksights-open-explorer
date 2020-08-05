@@ -79,7 +79,7 @@
                     </td>
                 </tr>
                 <tr ng-if="workers !== 'error' && workers.length > 0" data-ng-repeat="w in workers">
-                    <td><a href="#/objects/{{w.id}}/">{{w.id}} - {{w.worker_account_name}}</a><br><font size="-1">{{w.worker_name}}</font></td>
+                    <td><a href="#/objects/{{w.id}}/">{{w.id}} - {{w.worker_name}}</a><br><font size="-1">{{w.worker_account_name}}</font></td>
                     <td class="{{w.tclass1}}">{{w.proxy1}}</td>
                     <td class="{{w.tclass2}}">{{w.proxy2}}</td>
                     <td class="{{w.tclass3}}">{{w.proxy3}}</td>

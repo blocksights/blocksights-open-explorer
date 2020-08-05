@@ -13,9 +13,9 @@
                         const active_committee = [];
                         const standby_committee = [];
                         const committee = [];
-                        
+
                         const committee_count = returnData.committee_count;
-        
+
                         $http.get(appConfig.urls.python_backend() + "/committee_members").then(function(response) {
                             let counter = 1;
                             angular.forEach(response.data, function(value, key) {
@@ -27,7 +27,7 @@
                                     committee_member_account_name: value[0].committee_member_account_name,
                                     counter: counter
                                 };
-                
+
                                 if(counter <= committee_count) {
                                     active_committee.push(parsed);
                                 }
@@ -36,16 +36,16 @@
                                 }
                                 counter++;
                             });
-    
+
                             committee[0] = active_committee;
                             committee[1] = standby_committee;
                             callback(committee);
                             resolve(committee);
-                            
+
                         }).catch((err) => {
                             reject(err);
                         });
-                    
+
                     }).catch((err) => {
                         reject(err);
                     });
@@ -53,13 +53,13 @@
             },
             getWitnesses: function(callback) {
                 return new Promise((resolve, reject) => {
-    
+
                     networkService.getHeader(function (returnData) {
                         const active_witnesses = [];
                         const standby_witnesses = [];
                         const witnesses = [];
                         const witness_count = returnData.witness_count;
-    
+
                         $http.get(appConfig.urls.python_backend() + "/witnesses").then(function(response) {
                             let counter = 1;
                             angular.forEach(response.data, function(value, key) {
@@ -75,7 +75,7 @@
                                     witness_account_name: value.witness_account_name,
                                     counter: counter
                                 };
-    
+
                                 if(counter <= witness_count) {
                                     active_witnesses.push(parsed);
                                 }
@@ -84,7 +84,7 @@
                                 }
                                 counter++;
                             });
-            
+
                             witnesses[0] = active_witnesses;
                             witnesses[1] = standby_witnesses;
                             callback(witnesses);
@@ -95,7 +95,7 @@
                     }).catch((err) => {
                         reject(err);
                     });
-                    
+
                 });
             },
             getWorkers: function(callback) {
@@ -186,9 +186,9 @@
                             position: counter,
                             account: value.id,
                             account_name: value.name,
-                            power: value.bts_weight,
+                            power: value.voting_power,
                             followers: value.followers,
-                            perc: value.bts_weight_percentage
+                            perc: value.voting_power_percentage
                         };
                         if(counter <= 10) {
                             proxies.push(parsed);
@@ -222,7 +222,8 @@
                     angular.forEach(response2.data, function (value, key) {
                         var parsed = {
                             id: value.worker_id,
-                            worker_account_name: value.worker_account_name
+                            worker_account_name: value.worker_account_name,
+                            worker_name: value.worker_name
                         };
                         let i;
                         for (i = 0; i < value.top_proxy_votes.length; i++) {

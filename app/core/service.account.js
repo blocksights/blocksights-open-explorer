@@ -95,7 +95,7 @@
                         var proxy_account = response.data[i].id;
                         if (proxy_account === account_id) {
                             is_proxy = true;
-                            proxy_votes = utilities.formatBalance(response.data[i].bts_weight, 5);
+                            proxy_votes = utilities.formatBalance(response.data[i].voting_power, 5);
                             results[0] = is_proxy;
                             results[1] = proxy_votes;
                             callback(results);

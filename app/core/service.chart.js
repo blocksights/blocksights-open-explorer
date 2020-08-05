@@ -322,7 +322,7 @@
                         for (i in response.data) {
 
                             data.push({
-                                y: response.data[i].bts_weight,
+                                y:  response.data[i].voting_power,
                                 name: response.data[i].name
                             });
 

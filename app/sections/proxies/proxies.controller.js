@@ -15,9 +15,9 @@
                         position: counter,
                         account: value.id,
                         account_name: value.name,
-                        power: utilities.formatBalance(value.bts_weight, 5),
+                        power: utilities.formatBalance(value.voting_weight, 5),
                         followers: value.followers,
-                        perc: value.bts_weight_percentage
+                        perc: value.voting_weight_percentage
                     };
                     if(counter <= 100)
                         proxies.push(parsed);
