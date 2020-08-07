@@ -18,34 +18,43 @@
 
                 $scope.blocksProducedChartData = chartService.loadingChart();
 
-                $scope.loadWitnessDetails = loadWitnessDetails;
+                $scope.loadWitnessDetails = loadWitness;
 
-                loadWitnessDetails(1);
+                loadWitness();
+                loadWitnessVoters(1);
                 loadWitnessBlocksProducedChartData();
 
                 function loadWitnessBlocksProducedChartData() {
                     chartService.blocksProducedChart().then((returnData) => {
                         $scope.blocksProducedChartData = returnData;
-                    }).catch(() => {
+                    }).catch((error) => {
                         $scope.blocksProducedChartData = chartService.noDataChart();
-                        showLoadingErrorNotification();
+                        showLoadingErrorNotification(error);
                     });
                 }
 
-                function loadWitnessDetails(page) {
+                function loadWitness() {
+                    witnessService.getWitnessById(name).then((response) => {
+                        $scope.witness = response.witness;
+                        $scope.nextTally = response.nextTally;
+                    }).catch((err) => {
+                        showLoadingErrorNotification(err);
+                    });
+                }
+
+                function loadWitnessVoters(page) {
                     const limit = 20;
                     const offset =  (page - 1) * limit;
 
                     $scope.votersLoading = true;
-                    witnessService.getWitnessById(name, offset, limit).then((response) => {
+                    witnessService.getWitnessVoters(name, offset, limit).then((response) => {
                         $scope.votersLoading = false;
-                        $scope.witness = response.witness;
-                        $scope.next_tally = response.next_tally;
                         $scope.voters = response.voters;
+                        $scope.tally = response.tally;
                         $scope.votersTotalCount = response.voters.length;
-                    }).catch(() => {
+                    }).catch((err) => {
                         $scope.votersLoadingError = true;
-                        showLoadingErrorNotification();
+                        showLoadingErrorNotification(err);
                     });
                 }
             }
@@ -65,10 +74,17 @@
             }
         }
 
-        function showLoadingErrorNotification() {
+        function showLoadingErrorNotification(error) {
+            console.error('Notification', 'Request to the server failed', error);
+            let message = "";
+            if (error) {
+                if (error.status) {
+                    message = error.status + " - " + error.data.detail
+                }
+            }
             Notify.error({
                 key: 'witnessError',
-                message: 'Request to the server failed',
+                message: 'Request to the server failed' + (message ? ': ' + message : ''),
                 allowMultiple: false,
             });
         }

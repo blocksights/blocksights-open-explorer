@@ -1,11 +1,3 @@
-<script type="text/ng-template" id="popover.html">
-    <div style="width: 230px">
-        Block Time: {{ dynamic.time }}
-        <br/>
-        Number of Ops last 24Hr: {{dynamic.statistics_per_x.op_count}}
-    </div>
-</script>
-
 <div class="page page-dashboard" data-ng-controller="witnessesCtrl">
     <div class="row">
         <div class="col-lg-6">
@@ -14,9 +6,6 @@
                     <div class="well">
                         <div
                             class="box-info"
-                            uib-popover-template="'popover.html'"
-                            popover-trigger="'mouseover'"
-                            popover-placement="bottom-left"
                         >
                             <p class="size-h4"> <account-name data-account-id="witness.id"></account-name> <span class="size-h4"></span></p>
                             <p class="text-muted text-small"><span data-translate="WITNESS"></span></p>
@@ -27,7 +16,7 @@
                     <div class="well">
                         <div class="box-info">
                             <p class="size-h4">{{witness.rank}}</p>
-                            <h6>Next tally: {{next_tally.rank}}</h6>
+                            <h6 ng-if="nextTally">Next tally: {{next_tally.rank}}</h6>
                             <p class="text-muted text-small"><span data-translate="RANK"></span></p>
                         </div>
                     </div>
@@ -35,8 +24,8 @@
                 <div class="col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
-                            <p class="size-h4">{{witness.total_votes}}</p>
-                            <h6>Next tally: {{next_tally.total_votes}}</h6>
+                            <p class="size-h4">{{witness.total_votes | number}}</p>
+                            <h6 ng-if="nextTally">Next tally: {{next_tally.total_votes}}</h6>
                             <p class="text-muted text-small"><span data-translate="TOTAL VOTES"></span></p>
                         </div>
                     </div>
@@ -63,12 +52,17 @@
         </div>
     </div>
     <div class="panel panel-default">
+        <div class="panel-heading" >
+            <span data-translate="Voters Overview"></span>
+            <span style="float:right;"><span data-translate="Tallied on block"></span>&nbsp;{{tally.block}} ({{tally.block_time}})</span>
+        </div>
         <div class="panel-body table-responsive">
             <table class="table">
                 <thead>
                 <tr>
                     <th><span data-translate="Voter"></span></th>
                     <th><span data-translate="Voting since"></span></th>
+                    <th><span data-translate="Voting Power"></span></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -78,6 +72,7 @@
                 <tr ng-if="voters !== 'error' && voters.length > 0" data-ng-repeat="voter in voters track by $index">
                     <td>{{voter.name}}</td>
                     <td>{{voter.voting_since | date}}</td>
+                    <td>{{voter.voting_power | number}}</td>
                 </tr>
                 </tbody>
             </table>
