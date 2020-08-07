@@ -1,0 +1,34 @@
+# This workflow will do a clean install of node dependencies, build the source code and push the binaries to the deployment branch.
+name: Continuous Delivery
+
+on:
+    push:
+        branches: [bitshares-insight]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                node-version: [10.x]
+
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  persist-credentials: false
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - run:
+                  git config --global url."https://${{ secrets.AUTOMATION_ACCESS_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+            - run: npm ci
+            - run: npm run build
+            - name: Deploy
+              uses: s0/git-publish-subdir-action@master
+              env:
+                  REPO: self
+                  BRANCH: bitshares-insight-dist
+                  FOLDER: build/dist
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
