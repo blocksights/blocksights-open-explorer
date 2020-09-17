@@ -97,7 +97,7 @@ import {sha256} from "js-sha256";
                         },
                         {
                             title: $filter('translate')('Type'),
-                            index: 'op_type',
+                            index: 'type',
                             hidden: ['xs', 'sm', 'md']
                         }
                     ];

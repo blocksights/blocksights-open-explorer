@@ -202,14 +202,15 @@
                     $scope.mobileColumnClass = {};
                     $scope.mobileSectionClass = {};
 
-                    $scope.columns.forEach((column) => {
-                        $scope.columnClass[column.title] = getClass(column);
+                    if(Array.isArray($scope.columns) && $scope.columns.length) {
+                        $scope.columns.forEach((column) => {
+                            $scope.columnClass[column.title] = getClass(column);
 
-                        $scope.mobileColumnClass[column.title] = getClassForMobile(column);
+                            $scope.mobileColumnClass[column.title] = getClassForMobile(column);
 
-                    });
-
-                    $scope.mobileSectionClass = getMobileRowClass($scope.columns);
+                        });
+                        $scope.mobileSectionClass = getMobileRowClass($scope.columns);
+                    }
                 }
 
                 function getClass(column) {
