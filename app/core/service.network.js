@@ -59,7 +59,7 @@
                 return $http.get(appConfig.urls.elasticsearch_wrapper() + "/es/account_history"
                     + "?size=" + limit
                     + "&from_=" + from
-                    + "&from_date=now-180d"
+                    + "&from_date=now-90d"
                 ).then(response => {
                     let last_ops = [];
 
@@ -72,6 +72,8 @@
                         operation.operation_id = value.account_history.operation_id;
                         operation.operation_id_num = value.operation_id_num;
                         operation.time = value.block_data.block_time;
+                        operation.witness = value.witness;
+                        operation.sequence = value.account_history.sequence;
 
                         let parsed_op = value.operation_history.op_object;
                         if (parsed_op == undefined)

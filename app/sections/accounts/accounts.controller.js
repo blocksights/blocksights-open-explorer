@@ -4,10 +4,10 @@ import {sha256} from "js-sha256";
     'use strict';
 
     angular.module('app.accounts')
-        .controller('accountsCtrl', ['$scope', '$filter', '$routeParams', '$location', '$http', '$websocket',
+        .controller('accountsCtrl', ['$scope', 'Notify', '$filter', '$routeParams', '$location', '$http', '$websocket',
             'appConfig', 'utilities', 'accountService', 'assetService', accountsCtrl]);
 
-    function accountsCtrl($scope, $filter, $routeParams, $location, $http, $websocket, appConfig, utilities,
+    function accountsCtrl($scope, Notify, $filter, $routeParams, $location, $http, $websocket, appConfig, utilities,
                           accountService, assetService) {
 
 		const path = $location.path();
@@ -76,8 +76,6 @@ import {sha256} from "js-sha256";
                         $scope.account = new_account;
                     }
 
-                    let pageLimitHistory = 20;
-
                     $scope.operationsColumns = [
                         {
                             title: $filter('translate')('Operation'),
@@ -103,49 +101,45 @@ import {sha256} from "js-sha256";
                             hidden: ['xs', 'sm', 'md']
                         }
                     ];
+                    $scope.select = function(page_operations) {
+                        const page = page_operations -1;
+                        const limit = 20;
+                        const from = page * limit;
 
-                    $scope.operationsLoading = true;
-                    accountService.getAccountHistory(fullAccount.account.id, null, pageLimitHistory,
-                    function (returnData) {
-                        $scope.operationsLoading = false;
-                        $scope.operations = returnData;
-                        $scope.currentPage = 0;
-
-                        let totalNumberOfTransactions = 0;
-                        if (returnData.length > 0) {
-                            totalNumberOfTransactions = returnData[0].sequence;
-                            // use the sequence number to get the total number of ops
-                            $scope.select = function(page_operations) {
-                                const page = page_operations - 1;
-                                const start = totalNumberOfTransactions - (page * pageLimitHistory) + 1;
-                                const limit = pageLimitHistory;
-                                $scope.operationsLoading = true;
-                                accountService.getAccountHistory(fullAccount.account.id, start, limit,
-                                function (returnData) {
-                                    $scope.operationsLoading = false;
-                                    $scope.operations = returnData;
-                                    $scope.currentPage = page_operations;
-                                });
+                        $scope.operationsLoading = true;
+                        $scope.operationsLoadingError = false;
+                        accountService.getAccountHistory(fullAccount.account.id, limit, from, function (returnData) {
+                            $scope.operationsLoading = false;
+                            $scope.operations = returnData;
+                            $scope.currentPage = page_operations;
+                            if (page_operations == 1) {
+                                let new_account = {
+                                    total_ops: 0
+                                };
+                                if (returnData.length > 0) {
+                                    new_account.total_ops = returnData[0].sequence;
+                                }
+                                if ($scope.account) {
+                                    $scope.account = Object.assign(new_account, $scope.account);
+                                } else {
+                                    $scope.account = new_account;
+                                }
+                            }
+                        }).catch(err => {
+                            $scope.operationsLoadingError = true;
+                            showLoadingErrorNotification(err);
+                            let new_account = {
+                                total_ops: -1,
                             };
-                        }
-                        let new_account = {
-                            total_ops: totalNumberOfTransactions,
-                        };
-                        if ($scope.account) {
-                            $scope.account = Object.assign(new_account, $scope.account);
-                        } else {
-                            $scope.account = new_account;
-                        }
-                    }).catch(err => {
-                        let new_account = {
-                            total_ops: -1,
-                        };
-                        if ($scope.account) {
-                            $scope.account = Object.assign(new_account, $scope.account);
-                        } else {
-                            $scope.account = new_account;
-                        }
-                    });
+                            if ($scope.account) {
+                                $scope.account = Object.assign(new_account, $scope.account);
+                            } else {
+                                $scope.account = new_account;
+                            }
+                        });
+                    };
+                    $scope.select(1)
+
                     $scope.select_balances = function(page_balances) {
                         const page = page_balances -1;
                         let balances = [];
@@ -295,6 +289,22 @@ import {sha256} from "js-sha256";
                 utilities.columnsort($scope, "amount", "sortColumn", "sortClass", "reverse", "reverseclass", "column");
 			}
 		}
+
+        function showLoadingErrorNotification(error) {
+            console.error('Notification', 'Request to the server failed', error);
+            let message = "";
+            if (error) {
+                if (error.status) {
+                    message = error.status + " - " + error.data.detail
+                }
+            }
+
+            Notify.error({
+                key: 'dashboardError',
+                message: 'Request to the server failed' + (message ? ': ' + message : ''),
+                allowMultiple: false,
+            });
+        }
     }
 
 })();
