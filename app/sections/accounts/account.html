@@ -1,3 +1,23 @@
+<script type="text/ng-template" id="account-operations-table.html">
+
+    <div ng-if="index === 'operation_text'" ng-bind-html="row.operation_text | to_trusted"></div>
+
+    <div ng-if="index === 'operation_id'">
+        <a href='#/operations/{{cell}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'time'"> {{ cell | dateFilter }} </div>
+
+    <div ng-if="index === 'block_num'">
+        <a href="#/blocks/{{ cell }}">{{ cell | number }}</a>
+    </div>
+
+    <div ng-if="index === 'op_type'">
+        <span class="badge badge-primary" style="background-color: #{{row.op_color}};">{{row.op_type}}</span>
+    </div>
+
+</script>
+
 <div class="page page-table" data-ng-controller="accountsCtrl">
     <div class="row">
         <div class="col-md-4 align-baseline">
@@ -500,33 +520,12 @@
             <div class="col-md-6">
             </div>
 
-            <table class="table">
-                <thead>
-                <tr>
-                    <th><span data-translate="Operation"></span></th>
-                    <th>ID</th>
-                    <th><span data-translate="Date and Time"></span></th>
-                    <th><span data-translate="Block"></span></th>
-                    <th><span data-translate="Type"></span></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td><span ng-if="!account.total_ops || account.total_ops <= 0"  data-translate="Loading"></span></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr data-ng-repeat="operation in operations track by $index">
-                    <td><div ng-bind-html="operation.operation_text | to_trusted" layout-align="center"></div></td>
-                    <td><a href='#/operations/{{operation.operation_id}}/'>{{operation.operation_id}}</a></td>
-                    <td>{{operation.time}}</td>
-                    <td><a href='#/blocks/{{operation.block_num}}/'>{{operation.block_num | number}} </a></td>
-                    <td><span class="badge badge-primary" style="background-color: #{{operation.op_color}};">{{operation.op_type}}</span></td>
-                </tr>
-                </tbody>
-            </table>
+            <responsive-table data-data="operations"
+                              data-columns="operationsColumns"
+                              data-loading="operationsLoading"
+                              data-template="account-operations-table.html"
+            ></responsive-table>
+
             <footer class="table-footer">
                 <div class="row">
                     <div class="col-md-6 page-num-info">

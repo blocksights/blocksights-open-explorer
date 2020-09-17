@@ -29,6 +29,7 @@ const HTML = [
     "sections/workers/workers.html",
 
     "ui/responsive-table.html",
+    "ui/long-hash.html",
 ];
 
 const CSS = [

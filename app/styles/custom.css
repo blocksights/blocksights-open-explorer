@@ -163,3 +163,128 @@ img.inlineLoading {
 .witness-blocks-produced-chart .highcharts-container {
     height: 250px;
 }
+
+.responsive-table-sort-enabled {
+    cursor: pointer;
+    outline: none;
+}
+.responsive-table-sort-disabled {
+    cursor: default;
+    outline: none;
+}
+.responsive-table-sort-button {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.responsive-table-sort-button-asc {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 5.5px 6px 5.5px;
+    border-color: transparent transparent #000000 transparent;
+}
+
+.responsive-table-sort-button-desc {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 5.5px 0 5.5px;
+    border-color: #000000 transparent transparent transparent;
+}
+
+.asset-active-markets-list-table thead th:nth-child(3),
+.asset-active-markets-list-table thead th:nth-child(4){
+    text-align: right;
+}
+
+.asset-active-markets-list-table tbody td:nth-child(3),
+.asset-active-markets-list-table tbody td:nth-child(4){
+    text-align: right;
+}
+
+.asset-top-holders-list-table thead th:nth-child(3) {
+    text-align: right;
+}
+
+.asset-top-holders-list-table tbody td:nth-child(3) {
+    text-align: right;
+}
+
+.fees-list-table thead th:nth-child(4),
+.fees-list-table thead th:nth-child(5),
+.fees-list-table thead th:nth-child(6) {
+    text-align: right;
+}
+
+.fees-list-table tbody td:nth-child(4),
+.fees-list-table tbody td:nth-child(5),
+.fees-list-table tbody td:nth-child(6) {
+    text-align: right;
+}
+
+.witnesses-list-table thead th:nth-child(6),
+.witnesses-list-table thead th:nth-child(7),
+.witnesses-list-table thead th:nth-child(8) {
+    text-align: right;
+}
+
+.witnesses-list-table tbody td:nth-child(6),
+.witnesses-list-table tbody td:nth-child(7),
+.witnesses-list-table tbody td:nth-child(8) {
+    text-align: right;
+}
+
+.committee-members-list-table thead th:nth-child(6) {
+    text-align: right;
+}
+
+.committee-members-list-table tbody td:nth-child(6) {
+    text-align: right;
+}
+
+.workers-list-table thead th:nth-child(6),
+.workers-expired-list-table thead th:nth-child(6) {
+    text-align: right;
+}
+
+.workers-list-table tbody td:nth-child(6),
+.workers-expired-list-table tbody td:nth-child(6) {
+    text-align: right;
+}
+
+.proxies-list-table thead th:nth-child(4),
+.proxies-list-table thead th:nth-child(5),
+.proxies-list-table thead th:nth-child(6) {
+    text-align: right;
+}
+
+.proxies-list-table tbody td:nth-child(4),
+.proxies-list-table tbody td:nth-child(5),
+.proxies-list-table tbody td:nth-child(6) {
+    text-align: right;
+}
+
+.assets-list-table thead th:nth-child(4),
+.assets-list-table thead th:nth-child(5),
+.assets-list-table thead th:nth-child(7),
+.assets-list-table thead th:nth-child(8),
+.assets-list-table thead th:nth-child(9) {
+    text-align: right;
+}
+
+.assets-list-table tbody td:nth-child(4),
+.assets-list-table tbody td:nth-child(5),
+.assets-list-table tbody td:nth-child(7),
+.assets-list-table tbody td:nth-child(8),
+.assets-list-table tbody td:nth-child(9) {
+    text-align: right;
+}
+
+@media(max-width: 400px) {
+    .blocks--ops-in-trx {
+        width: 100px;
+        display: inline;
+        white-space: pre-wrap;
+    }
+}

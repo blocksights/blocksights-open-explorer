@@ -1,3 +1,31 @@
+<script type="text/ng-template" id="asset-active-markets-list-table.html">
+
+    <div ng-if="index === 'pair'">
+        <a href='#/markets/{{cell}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'price'">
+        {{ cell | number }}
+    </div>
+
+    <div ng-if="index === 'volume'">
+        {{ cell | number }}
+    </div>
+
+</script>
+
+<script type="text/ng-template" id="asset-top-holders-list-table.html">
+
+    <div ng-if="index === 'name'">
+        <a href='#/accounts/{{row.id}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'amount'">
+        {{cell | number}}
+    </div>
+
+</script>
+
 <div class="page page-table" data-ng-controller="assetsCtrl">
     <div class="row">
         <div class="col-md-6">
@@ -108,36 +136,16 @@
                         </div>
                     </div>
                 </form>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th ng-click='sortColumn("pair")' ng-class='sortClass("pair")'><span data-translate="Name"></span></th>
-                        <th class="align-right" ng-click='sortColumn("price")' ng-class='sortClass("price")'><span data-translate="Price"></span></th>
-                        <th class="align-right" ng-click='sortColumn("volume")' ng-class='sortClass("volume")'><span data-translate="Volume"></span></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-if="markets === undefined">
-                        <td>
-                            <loading></loading>
-                        </td>
-                    </tr>
-                    <tr ng-if="markets === 'error'">
-                        <td>
-                            <loading-error></loading-error>
-                        </td>
-                    </tr>
-                    <tr ng-if="markets.length === 0">
-                        <td>
-                            <loading-no-data text="'No markets found' | translate"></loading-no-data>
-                        </td>
-                    </tr>
-                    <tr ng-if="markets !== 'error' && markets.length > 0" data-ng-repeat="market in markets | orderBy:column:reverse | filter:search">
-                        <td><a href='#/markets/{{market.pair}}/'>{{market.pair}}</a></td>
-                        <td class="align-right">{{market.price | number}}</td>
-                        <td class="align-right">{{market.volume | number}}</td>
-                    </tbody>
-                </table>
+
+                <responsive-table data-filter="search"
+                                  class="asset-active-markets-list-table"
+                                  data-data="markets"
+                                  data-template="asset-active-markets-list-table.html"
+                                  data-columns="activeMarketsColumns"
+                                  data-loading="marketsLoading"
+                                  data-loading-error="marketsLoadingError">
+                </responsive-table>
+
             </div>
 
         </div>
@@ -161,34 +169,16 @@
                         </div>
                     </div>
                 </form>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th ng-click='sortColumn2("account")' ng-class='sortClass2("account")'><span data-translate="Account"></span></th>
-                        <th class="align-right" ng-click='sortColumn2("amount")' ng-class='sortClass2("amount")'><span data-translate="Amount"></span></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-if="accounts === undefined">
-                        <td>
-                            <loading></loading>
-                        </td>
-                    </tr>
-                    <tr ng-if="accounts === 'error'">
-                        <td>
-                            <loading-error></loading-error>
-                        </td>
-                    </tr>
-                    <tr ng-if="accounts.length === 0">
-                        <td>
-                            <loading-no-data text="'No accounts found' | translate"></loading-no-data>
-                        </td>
-                    </tr>
-                    <tr ng-if="accounts !== 'error' && accounts.length > 0" data-ng-repeat="account in accounts | orderBy:column2:reverse2 | filter:search2">
-                        <td><a href='#/accounts/{{account.id}}/'>{{account.name}}</a></td>
-                        <td class="align-right">{{account.amount | number}}</td>
-                    </tbody>
-                </table>
+
+                <responsive-table data-filter="search2"
+                                  class="asset-top-holders-list-table"
+                                  data-data="accounts"
+                                  data-template="asset-top-holders-list-table.html"
+                                  data-columns="topHoldersColumns"
+                                  data-loading="accountsLoading"
+                                  data-loading-error="accountsLoadingError">
+                </responsive-table>
+
             </div>
 
 

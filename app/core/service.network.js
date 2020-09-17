@@ -29,25 +29,30 @@
                 });
             },
 
-            getBigBlocks: function(callback) {
-                $http.get(appConfig.urls.elasticsearch_wrapper() +
-                    "/es/account_history?from_date=now-1w&to_date=now&type=aggs&agg_field=block_data.block_num&size=20")
-                    .then(function (response) {
+            getBigBlocks: function() {
+                return new Promise((resolve, reject) => {
 
-                    let blocks = [];
-                    angular.forEach(response.data, function (value) {
-                        $http.get(appConfig.urls.python_backend() + "/block?block_num=" + value.key).then(function (response) {
+                    $http.get(appConfig.urls.elasticsearch_wrapper() + "/es/account_history?from_date=now-1w&to_date=now&type=aggs&agg_field=block_data.block_num&size=20")
+                         .then(function (response) {
+                             let blocks = [];
 
-                            const parsed = {
-                                block_num: value.key,
-                                operations: value.doc_count,
-                                transactions: response.data.transactions.length,
-                                timestamp: response.data.timestamp
-                            };
-                            blocks.push(parsed);
-                        });
-                    });
-                    callback(blocks);
+                             angular.forEach(response.data, function (value) {
+                                 $http.get(appConfig.urls.python_backend() + "/block?block_num=" + value.key).then(function (response) {
+
+                                     const parsed = {
+                                         block_num: value.key,
+                                         operations: value.doc_count,
+                                         transactions: response.data.transactions.length,
+                                         timestamp: response.data.timestamp
+                                     };
+                                     blocks.push(parsed);
+
+                                     resolve(blocks);
+                                 }).catch((err) => reject(err));
+                             });
+                         })
+                         .catch((err) => reject(err));
+
                 });
             },
             getLastOperations: function(limit, from, callback) {

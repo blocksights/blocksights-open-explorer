@@ -9,7 +9,7 @@ const Html = require('./html'); // html.js
 
 module.exports = {
     entry: {
-        vendor: ['jquery', 'angular', 'bootstrap', 'angular-route', 'angular-animate', 'angular-aria',
+        vendor: ['jquery', 'angular', 'clipboard', 'bootstrap', 'angular-route', 'angular-animate', 'angular-aria',
             'angular-ui-bootstrap', 'angular-loading-bar', 'angular-websocket', 'angular-google-analytics',
             'angular-translate', 'angular-translate-loader-static-files', 'echarts', 'angular-echarts-lite',
             'js-sha256', 'ngstorage'],
@@ -43,7 +43,8 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",
-            Highcharts: "highcharts"
+            Highcharts: "highcharts",
+            ClipboardJS: "clipboard"
         }),
 
         new CopyWebpackPlugin([{

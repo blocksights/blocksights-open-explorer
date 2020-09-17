@@ -1,3 +1,16 @@
+<script type="text/ng-template" id="tx-operation-list-table.html">
+
+    <div ng-if="index === 'operation_text'" ng-bind-html="row.operation_text | to_trusted"></div>
+
+    <div ng-if="index === 'operation_id'">
+        <a href='#/operations/{{cell}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'op_type'">
+        <span class="badge badge-primary" style="background-color: #{{row.op_color}};">{{row.op_type}}</span>
+    </div>
+</script>
+
 <div class="page page-table" data-ng-controller="txsCtrl">
     <div class="row">
         <div class="col-md-6">
@@ -15,36 +28,12 @@
             <div class="panel panel-default" >
                 <div class="panel-heading" ><span data-translate="Operations in transaction"></span></div>
                 <div class="panel-body table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th><span data-translate="Operation"></span></th>
-                            <th><span data-translate="ID"></span></th>
-                            <th><span data-translate="Type"></span></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-if="operations === undefined">
-                            <td>
-                                <loading></loading>
-                            </td>
-                        </tr>
-                        <tr ng-if="operations === 'error'">
-                            <td>
-                                <loading-error></loading-error>
-                            </td>
-                        </tr>
-                        <tr ng-if="operations.length === 0">
-                            <td>
-                                <loading-no-data text="'No operations found' | translate"></loading-no-data>
-                            </td>
-                        </tr>
-                        <tr ng-if="operations !== 'error' && operations.length !== 0" data-ng-repeat="op in operations track by $index">
-                            <td><div ng-bind-html="op.operation_text | to_trusted" layout-align="center"></div></td>
-                            <td><a href='#/operations/{{op.operation_id}}/'>{{op.operation_id}}</a></td>
-                            <td><span class="badge badge-primary" style="background-color: #{{op.op_color}};">{{op.op_type}}</span></td>
-                        </tbody>
-                    </table>
+                    <responsive-table data-data="operations"
+                                      data-template="tx-operation-list-table.html"
+                                      data-loading="transactionLoading"
+                                      data-loading-error="transactionLoadingError"
+                                      data-columns="transactionOperationsColumns"
+                    ></responsive-table>
                 </div>
             </div>
         </div>
@@ -55,7 +44,7 @@
                     <table class="table">
                         <tr>
                             <td><span data-translate="Hash"></span>:</td>
-                            <td>{{data.hash}}</td>
+                            <td><long-hash hash="data.hash"></td>
                         </tr>
                         <tr>
                             <td><span data-translate="Block"></span>:</td>

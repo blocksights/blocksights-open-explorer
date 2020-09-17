@@ -108,7 +108,6 @@ import {getAvailableEndpoints} from "../branding";
             enableLocalStorageSync: () => localStorageSync = true,
             disableLocalStorageSync: () => localStorageSync = false,
             $get: ['$localStorage', ($localStorage) => {
-
                 function _saveEndpointToLocalStorage(endpoint) {
                     $localStorage.api = {
                         ...$localStorage.api,

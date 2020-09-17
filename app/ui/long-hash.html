@@ -1,0 +1,18 @@
+<span ng-class="class" ng-style="style">
+    <span class="visible-lg" ng-if="href && href.length">
+        <a href="{{href}}">{{hash}}</a>
+    </span>
+
+    <span class="visible-lg" ng-if="!href || !href.length">
+        {{hash}}
+    </span>
+
+
+    <span class="visible-sm visible-xs visible-md">
+        <span ng-if="!href || !href.length">
+            {{shortHash}}
+        </span>
+        <a href="{{href}}" ng-if="href && href.length">{{shortHash}}</a>
+        <button class="btn btn-default btn-sm" style="padding: 2px 10px;margin-top: -5px;" data-clipboard-text="{{hash}}" uib-tooltip="{{ 'Copied' | translate }}" tooltip-trigger="'click'" tooltip-popup-close-delay="0.1">copy</button>
+    </span>
+</span>

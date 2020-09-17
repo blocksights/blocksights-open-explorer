@@ -25,29 +25,24 @@
             {
                 title: $filter('translate')('Operation'),
                 index: 'operation_text',
-                html: (text) => text
             },
             {
                 title: $filter('translate')('ID'),
                 index: 'operation_id',
-                html: (text) => `<a href='#/operations/${text}/'>${text}</a>`,
             },
             {
                 title: $filter('translate')('Date and time'),
                 index: 'time',
-                // html: (text) => text
                 hidden: ['xs']
             },
             {
                 title: $filter('translate')('Block'),
                 index: 'block_num',
-                html: (text) => `<a href='#/blocks/${text}/'>${$filter('number')(text)}</a>`,
                 hidden: ['xs', 'sm']
             },
             {
                 title: $filter('translate')('Type'),
                 index: 'type',
-                html: (text, operation) => `<span class="badge badge-primary" style="background-color: #${operation.color};">${operation.type}</span>`,
                 hidden: ['xs', 'sm', 'md']
             }
         ];

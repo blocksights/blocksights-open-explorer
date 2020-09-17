@@ -1,3 +1,27 @@
+<script type="text/ng-template" id="proxies-list-table.html">
+
+    <div ng-if="index === 'position'">
+        {{ cell }}
+    </div>
+
+    <div ng-if="index === 'account_name'">
+        <a href="#/accounts/{{row.account}}/">{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'power'">
+        {{cell | number: 0}}
+    </div>
+
+    <div ng-if="index === 'followers'">
+        {{cell | number }}
+    </div>
+
+    <div ng-if="index === 'perc'">
+        {{ cell | number: 3 }}
+    </div>
+
+</script>
+
 <div class="page page-table" data-ng-controller="proxiesCtrl">
     <div class="row">
         <div class="col-md-6">
@@ -12,43 +36,15 @@
     <div class="panel panel-default">
 		<div class="panel-heading"><span data-translate="Top proxies"></span></div>
         <div class="panel-body table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th ng-click='sortColumn("position")' ng-class='sortClass("position")'><span data-translate="Position"></span></th>
-                        <th ng-click='sortColumn("account")' ng-class='sortClass("account")'><span data-translate="Account"></span></th>
-                        <th class="align-right" ng-click='sortColumn("power")' ng-class='sortClass("power")'><span data-translate="Voting Power"></span></th>
-						<th class="align-right" ng-click='sortColumn("followers")' ng-class='sortClass("followers")'><span data-translate="Followers"></span></th>
-                        <th ng-click='sortColumn("perc")' ng-class='sortClass("perc")'>
-                            <span data-translate="Percent of all active Voting Power"></span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr ng-if="proxies === undefined">
-                    <td>
-                        <loading></loading>
-                    </td>
-                </tr>
-                <tr ng-if="proxies === 'error'">
-                    <td>
-                        <loading-error></loading-error>
-                    </td>
-                </tr>
-                <tr ng-if="proxies.length === 0">
-                    <td>
-                        <loading-no-data text="'No proxies found' | translate"></loading-no-data>
-                    </td>
-                </tr>
-                <tr ng-if="proxies !== 'error' && proxies.length > 0" data-ng-repeat="p in proxies | orderBy:column:reverse">
-                    <td>{{p.position}}</td>
-                    <td><a href="#/accounts/{{p.account}}/">{{p.account_name}}</a></td>
-                    <td class="align-right">{{p.power | number: 0}}</td>
-					<td class="align-right">{{p.followers | number}}</td>
-                    <td>{{p.perc | number: 3}}</td>
-                </tr>
-                </tbody>
-            </table>
+
+            <responsive-table class="proxies-list-table"
+                              data-data="proxies"
+                              data-columns="proxiesColumns"
+                              data-loading="proxiesLoading"
+                              data-loading-error="proxiesLoadingError"
+                              data-template="proxies-list-table.html"
+            ></responsive-table>
+
         </div>
     </div>
 </div>

@@ -80,11 +80,15 @@ import {getGATag, getAvailableEndpoints, getAvailableBlockchains} from "../brand
             elasticsearch_wrapper: Api.getApiUrl,
             udf_wrapper: () => Api.getApiUrl() + "/udf"
         };
+
+        var dateFormat = 'dd MMM yyyy hh:mm:ss';
+
         const _appConfig = {
             pageTransitionOpts: pageTransitionOpts,
             getMain: main,
             color: color,
             urls: urls,
+            dateFormat,
             getConfig: getConfig
         };
         _appConfig.update = () => {

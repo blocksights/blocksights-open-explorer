@@ -9,8 +9,11 @@ require("./app/ui/loading.directive.js");
 require("./app/ui/loading-error.directive.js");
 require("./app/ui/loading-no-data.directive.js");
 require("./app/ui/responsive-table.directive.js");
+require("./app/ui/long-hash.directive.js");
 require("./app/ui/account-name.directive.js");
 require("./app/ui/notify.service.js");
+require("./app/ui/date.filter.js");
+require("./app/ui/translate-with-links.filter.js");
 require("./app/highcharts/highcharts.module.js");
 require("./app/highcharts/highcharts-chart.directive.js");
 

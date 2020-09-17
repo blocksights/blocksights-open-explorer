@@ -1,3 +1,18 @@
+<script type="text/ng-template" id="blocks-list-table.html">
+    <div ng-if="index === 'block_num'">
+        <a href='#/blocks/{{cell}}/'>{{cell}}</a>
+    </div>
+    <div ng-if="index === 'timestamp'">
+        {{ cell | dateFilter }}
+    </div>
+    <div ng-if="index === 'transactions'">
+        {{ cell }}
+    </div>
+    <div ng-if="index === 'operations'">
+        {{ cell }}
+    </div>
+</script>
+
 <div class="page page-table" data-ng-controller="blocksCtrl">
     <div class="row">
         <div class="col-md-6">
@@ -13,23 +28,14 @@
     <div class="panel panel-default" >
 		<div class="panel-heading" ><span data-translate="Biggest network blocks"></span></div>
         <div class="panel-body table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th ng-click='sortColumn("block_num")' ng-class='sortClass("block_num")'><span data-translate="Block number"></span></th>
-                        <th ng-click='sortColumn("timestamp")' ng-class='sortClass("timestamp")'><span data-translate="Date"></span></th>
-                        <th ng-click='sortColumn("transactions")' ng-class='sortClass("transactions")'><span data-translate="Transactions"></span></th>
-                        <th ng-click='sortColumn("operations")' ng-class='sortClass("operations")'><span data-translate="Operations"></span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="block in blocks | orderBy:column:reverse">
-                    <td><a href='#/blocks/{{block.block_num}}/'>{{block.block_num}}</a></td>
-                    <td>{{block.timestamp}}</td>
-                    <td>{{block.transactions}}</td>
-                    <td>{{block.operations}}</td>
-                </tbody>
-            </table>
+
+            <responsive-table   data-data="blocks"
+                                data-loading="blocksLoading"
+                                data-loading-error="blocksLoadingError"
+                                data-columns="blocksColumns"
+                                data-template="blocks-list-table.html">
+            </responsive-table>
+
         </div>
     </div>
 </div>

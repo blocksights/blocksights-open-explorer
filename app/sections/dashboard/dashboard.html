@@ -1,9 +1,29 @@
 <script type="text/ng-template" id="popover.html">
     <div style="width: 230px">
-        Block Time: {{ dynamic !== 'error' ? dynamic.time : ('No Data' | translate) }}
+        Block Time: {{ dynamic !== 'error' ? (dynamic.time | dateFilter) : ('No Data' | translate) }}
         <br/>
         Number of Ops last 24Hr: {{ dynamic !== 'error' ? dynamic.statistics_per_x.op_count : ('No Data' | translate) }}
     </div>
+</script>
+
+<script type="text/ng-template" id="dashboard-operations-table.html">
+
+    <div ng-if="index === 'operation_text'" ng-bind-html="row.operation_text | to_trusted"></div>
+
+    <div ng-if="index === 'operation_id'">
+        <a href='#/operations/{{cell}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'time'"> {{ cell | dateFilter }} </div>
+
+    <div ng-if="index === 'block_num'">
+        <a href="#/blocks/{{ cell }}">{{ cell | number }}</a>
+    </div>
+
+    <div ng-if="index === 'type'">
+        <span class="badge badge-primary" style="background-color: #{{row.color}};">{{row.type}}</span>
+    </div>
+
 </script>
 
 <div class="page page-dashboard" data-ng-controller="DashboardCtrl">
@@ -120,6 +140,7 @@
 
             <responsive-table data-data="operations"
                               data-columns="operationsColumns"
+                              data-template="dashboard-operations-table.html"
                               data-loading="operationsLoading"
                               data-loading-error="operationsLoadingError">
             </responsive-table>

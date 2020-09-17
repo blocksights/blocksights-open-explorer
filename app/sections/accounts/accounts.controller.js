@@ -78,8 +78,36 @@ import {sha256} from "js-sha256";
 
                     let pageLimitHistory = 20;
 
+                    $scope.operationsColumns = [
+                        {
+                            title: $filter('translate')('Operation'),
+                            index: 'operation_text',
+                        },
+                        {
+                            title: $filter('translate')('ID'),
+                            index: 'operation_id',
+                        },
+                        {
+                            title: $filter('translate')('Date and time'),
+                            index: 'time',
+                            hidden: ['xs']
+                        },
+                        {
+                            title: $filter('translate')('Block'),
+                            index: 'block_num',
+                            hidden: ['xs', 'sm']
+                        },
+                        {
+                            title: $filter('translate')('Type'),
+                            index: 'op_type',
+                            hidden: ['xs', 'sm', 'md']
+                        }
+                    ];
+
+                    $scope.operationsLoading = true;
                     accountService.getAccountHistory(fullAccount.account.id, null, pageLimitHistory,
                     function (returnData) {
+                        $scope.operationsLoading = false;
                         $scope.operations = returnData;
                         $scope.currentPage = 0;
 
@@ -91,8 +119,10 @@ import {sha256} from "js-sha256";
                                 const page = page_operations - 1;
                                 const start = totalNumberOfTransactions - (page * pageLimitHistory) + 1;
                                 const limit = pageLimitHistory;
+                                $scope.operationsLoading = true;
                                 accountService.getAccountHistory(fullAccount.account.id, start, limit,
                                 function (returnData) {
+                                    $scope.operationsLoading = false;
                                     $scope.operations = returnData;
                                     $scope.currentPage = page_operations;
                                 });
