@@ -20,7 +20,7 @@
                 else { return parts.join("."); }
             }
             catch(err) {
-                return x;
+                return x.toString();
             }
         }
 
