@@ -295,7 +295,7 @@ import {sha256} from "js-sha256";
             let message = "";
             if (error) {
                 if (error.status) {
-                    message = error.status + " - " + error.data.detail
+                    message = error.status + (error.data ? " - " + error.data.detail : "")
                 }
             }
 
