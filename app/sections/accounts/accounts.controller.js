@@ -127,7 +127,6 @@ import {sha256} from "js-sha256";
                             }
                         }).catch(err => {
                             $scope.operationsLoadingError = true;
-                            showLoadingErrorNotification(err);
                             let new_account = {
                                 total_ops: -1,
                             };
