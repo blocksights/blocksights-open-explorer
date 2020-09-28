@@ -57,7 +57,7 @@ import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getGlobalConfi
         var main = () => {
             let config = getConfig();
             return {
-                brand: config.name + " Open Explorer",
+                brand: config.name + " Blocksights",
                 name: config.name,
                 api_link: "https://api.bitshares.ws/",
                 source_code_link: null,

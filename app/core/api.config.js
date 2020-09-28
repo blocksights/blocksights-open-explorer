@@ -76,7 +76,7 @@
         let notificationWarningScope;
         let notificationErrorScope;
 
-        $httpProvider.interceptors.push(['apiCache', '$injector', '$q', '$timeout', '$filter', '$rootScope', (apiCache, $injector, $q, $timeout, $filter, $rootScope) => {
+        $httpProvider.interceptors.push(['apiCache', '$injector', '$q', '$timeout', '$filter', '$location', '$rootScope', (apiCache, $injector, $q, $timeout, $filter, $location, $rootScope) => {
             return {
                 request: apiCache.cacheRequest,
                 responseError: function (response) {
@@ -127,10 +127,20 @@
                         });
 
                         if(modal.closed && modal.closed.then) {
-                            modal.closed.then(() => {
+                            modal.closed.then((e) => {
+                                let _modal = modal;
+                                console.log("3", e)
                                 visibleModalsIds[modalId] = false;
+
                             });
                         }
+
+                        modal.result.then((e) => {
+                            if (e && e.route) {
+                                // change route after clicking OK button
+                                $location.path(e.route)
+                            }
+                        });
                     }
 
                     function displayNotificationWarning() {
