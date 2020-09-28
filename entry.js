@@ -11,6 +11,7 @@ require("./app/ui/loading-no-data.directive.js");
 require("./app/ui/responsive-table.directive.js");
 require("./app/ui/long-hash.directive.js");
 require("./app/ui/account-name.directive.js");
+require("./app/ui/http-error-handler-modal.controller.js");
 require("./app/ui/notify.service.js");
 require("./app/ui/date.filter.js");
 require("./app/ui/translate-with-links.filter.js");
@@ -35,6 +36,7 @@ require("./app/sections/witnesses/witnesses.module.js");
 require("./app/sections/workers/workers.module.js");
 require("./app/sections/operations/operations.module.js");
 require("./app/sections/blocks/blocks.module.js");
+require("./app/sections/welcome/welcome.module.js");
 require("./app/chart/chart.module.js");
 require("./app/core/app.config.js");
 require("./app/core/app.utilities.js");
@@ -69,6 +71,7 @@ require("./app/sections/witnesses/witnesses.controller.js");
 require("./app/sections/workers/workers.controller.js");
 require("./app/sections/operations/operations.controller.js");
 require("./app/sections/blocks/blocks.controller.js");
+require("./app/sections/welcome/welcome.controller.js");
 require("./app/chart/echarts.controller.js");
 
 

@@ -15,7 +15,6 @@
         networkService.getHeader(function (returnData) {
             $scope.dynamic = returnData;
         }).catch(() => {
-            showLoadingErrorNotification();
             $scope.dynamic = 'error'
         });
 
@@ -67,7 +66,6 @@
                 }
             }).catch(err => {
                 $scope.operationsLoadingError = true;
-                showLoadingErrorNotification(err);
             });
         };
         $scope.select(1);
@@ -98,7 +96,6 @@
                         $scope.chartsData.operations_chart = returnData;
                     }).catch((error) => {
                         $scope.chartsData.operations_chart = chartService.noDataChart($filter('translate')('No data about operations'));
-                        showLoadingErrorNotification(error);
                     });
 
                 }
@@ -110,7 +107,6 @@
                         $scope.chartsData.proxies_chart = returnData;
                     }).catch((error) => {
                         $scope.chartsData.proxies_chart = chartService.noDataChart($filter('translate')('No data about proxies'));
-                        showLoadingErrorNotification(error);
                     });
                 }
 
@@ -121,7 +117,6 @@
                         $scope.chartsData.markets_chart = returnData;
                     }).catch((error) => {
                         $scope.chartsData.markets_chart = chartService.noDataChart($filter('translate')('No data about markets'));
-                        showLoadingErrorNotification(error);
                     });
                 }
 
@@ -131,7 +126,6 @@
                         $scope.chartsData.smartcoins_chart = returnData;
                     }).catch((error) => {
                         $scope.chartsData.smartcoins_chart = chartService.noDataChart($filter('translate')('No data about smartcoins'));
-                        showLoadingErrorNotification(error);
                     });
                 }
 
@@ -141,7 +135,6 @@
                         $scope.chartsData.uias_chart = returnData;
                     }).catch((error) => {
                         $scope.chartsData.uias_chart = chartService.noDataChart($filter('translate')('No data about UIAs'));
-                        showLoadingErrorNotification(error);
                     });
                 }
 
@@ -151,7 +144,6 @@
                         $scope.chartsData.holders_chart = returnData;
                     }).catch((error) => {
                         $scope.chartsData.holders_chart = chartService.noDataChart($filter('translate')('No data about holders'));
-                        showLoadingErrorNotification(error);
                     });
                 }
             }
@@ -161,20 +153,5 @@
         $scope.currentTabIndex = 0;
         $scope.loadTabsCharts("operations");
 
-        function showLoadingErrorNotification(error) {
-            console.error('Notification', 'Request to the server failed', error);
-            let message = "";
-            if (error) {
-                if (error.status) {
-                    message = error.status + (error.data ? " - " + error.data.detail : "")
-                }
-            }
-
-            Notify.error({
-                key: 'dashboardError',
-                message: 'Request to the server failed' + (message ? ': ' + message : ''),
-                allowMultiple: false,
-            });
-        }
     }
 })();

@@ -1,4 +1,4 @@
-import {getGATag, getAvailableEndpoints, getAvailableBlockchains} from "../branding";
+import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getGlobalConfig} from "../branding";
 
 (function() {
     'use strict';
@@ -89,7 +89,8 @@ import {getGATag, getAvailableEndpoints, getAvailableBlockchains} from "../brand
             color: color,
             urls: urls,
             dateFormat,
-            getConfig: getConfig
+            getConfig: getConfig,
+            globalConfig: getGlobalConfig()
         };
         _appConfig.update = () => {
             _appConfig.main = _appConfig.getMain();

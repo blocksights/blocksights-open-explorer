@@ -104,21 +104,12 @@
                     $scope.blocks = returnData;
                 }).catch(() => {
                     $scope.blocksLoadingError = true;
-                    showLoadingErrorNotification();
                 });
 
                 utilities.columnsort($scope, "operations", "sortColumn", "sortClass", "reverse", "reverseclass",
                     "column");
 
             }
-        }
-
-        function showLoadingErrorNotification() {
-            Notify.error({
-                key: 'blocksError',
-                message: 'Request to the server failed',
-                allowMultiple: false,
-            });
         }
     }
 })();

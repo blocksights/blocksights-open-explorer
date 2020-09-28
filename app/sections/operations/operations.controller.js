@@ -58,19 +58,10 @@
                         $scope.total_ops = 10000;
                     }).catch(err => {
                         $scope.operationsLoadingError = true;
-                        showLoadingErrorNotification();
                     });
                 };
                 $scope.select(1);
             }
-        }
-
-        function showLoadingErrorNotification() {
-            Notify.error({
-                key: 'dashboardError',
-                message: 'Request to the server failed',
-                allowMultiple: false,
-            });
         }
     }
 })();

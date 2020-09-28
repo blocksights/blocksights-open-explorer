@@ -61,7 +61,6 @@
                         $scope.accounts = returnDataHolders;
                     }).catch(() => {
                         $scope.accountsLoadingError = true;
-                        showLoadingErrorNotification();
                     });
                 });
 
@@ -71,7 +70,6 @@
                     $scope.markets = returnData;
                 }).catch(() => {
                     $scope.marketsLoadingError = true;
-                    showLoadingErrorNotification();
                 });
             }
             utilities.columnsort($scope, "volume", "sortColumn", "sortClass", "reverse", "reverseclass", "column");
@@ -139,7 +137,6 @@
                     $scope.dex_volume_chart = returnData;
                 }).catch(() => {
                     $scope.dex_volume_chart = chartService.noDataChart($filter('translate')('No data about volume'));
-                    showLoadingErrorNotification();
                 });
 
                 $scope.assetsListLoading = true;
@@ -148,21 +145,11 @@
                     $scope.assets = returnData;
                 }).catch(() => {
                     $scope.assetsListLoadingError = true;
-                    showLoadingErrorNotification();
                 });
 
                 utilities.columnsort($scope, "volume", "sortColumn", "sortClass", "reverse", "reverseclass", "column");
             }
 		}
-
-        function showLoadingErrorNotification() {
-            Notify.error({
-                key: 'assetsError',
-                message: 'Request to the server failed',
-                allowMultiple: false,
-            });
-        }
-
     }
 
 })();

@@ -49,8 +49,15 @@
             }
             
             const notificationId = (new Date()).toString() + (Math.random()).toString();
+            
+            const notification = {
+                key: params.key,
+                id: notificationId
+            };
+            
+            activeNotifications.push(notification);
     
-            notificationFn.call(Notification, {
+            return notificationFn.call(Notification, {
                 ...params,
                 onClose: () => {
                     // call the original callback first
@@ -66,15 +73,6 @@
                 }
             });
             
-            const notification = {
-                key: params.key,
-                id: notificationId
-            };
-            
-            activeNotifications.push(notification);
-            
-            console.debug('debug : activeNotifications : create new one', notification, activeNotifications)
-            
         }
         
         function ClearAll(notificationFn) {
@@ -84,27 +82,27 @@
         return {
             /** @param {NotifyConfig} params */
             primary: function (params) {
-                notify(Notification.primary, params)
+                return notify(Notification.primary, params)
             },
             
             /** @param {NotifyConfig} params */
             info: function (params) {
-                notify(Notification.info, params)
+                return notify(Notification.info, params)
             },
             
             /** @param {NotifyConfig} params */
             success: function (params) {
-                notify(Notification.success, params)
+                return notify(Notification.success, params)
             },
             
             /** @param {NotifyConfig} params */
             warning: function (params) {
-                notify(Notification.warning, params)
+                return notify(Notification.warning, params)
             },
             
             /** @param {NotifyConfig} params */
             error: function (params) {
-                notify(Notification.error, params)
+                return notify(Notification.error, params)
             },
             
             /** @param {NotifyConfig} params */

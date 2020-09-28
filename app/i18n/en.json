@@ -61,6 +61,9 @@
   "Operation": "Operation",
   "Date and Time": "Date and Time",
   "Block": "Block",
+  "Close": "Close",
+  "Premium Feature": "Premium Feature",
+  "Premium Feature Description": "The message regarding the premium  is there",
 
   "Show in fullscreen": "Show in fullscreen",
 
@@ -84,6 +87,10 @@
   "Price": "Price",
   "Top holders": "Top holders",
   "Full description": "Full description",
+  "Server Error": "Server Error",
+  "Request to the server failed": "HTTP request to the server failed for {{maxAttempts}} times. Application could not fetch the necessary data to render the app correctly. ",
+  "Request failed": "HTTP request to the server failed. Application could not fetch the necessary data to render the app correctly. ",
+  "Request to fetch data failed": "HTTP request to the server failed. Try to make the request again...",
 
   "Operation Transfer Description": "{{senderLink}} sent {{amount}} {{assetLink}} to {{receiverLink}}",
   "Operation Limit Order Create Description": "{{accountLink}} wants {{receiveAmount}} {{buyAssetLink}} for {{sellAmount}} {{sellAssetLink}}",

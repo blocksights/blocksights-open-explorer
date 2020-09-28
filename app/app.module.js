@@ -35,7 +35,8 @@
         'app.witnesses',
         'app.workers',
         'app.blocks',
-        'app.header'
+        'app.header',
+        'app.welcome',
     ]);
 })();
 

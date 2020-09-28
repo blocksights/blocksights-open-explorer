@@ -29,7 +29,6 @@
                         $scope.blocksProducedChartData = returnData;
                     }).catch((error) => {
                         $scope.blocksProducedChartData = chartService.noDataChart();
-                        showLoadingErrorNotification(error);
                     });
                 }
 
@@ -37,8 +36,6 @@
                     witnessService.getWitnessById(name).then((response) => {
                         $scope.witness = response.witness;
                         $scope.nextTally = response.nextTally;
-                    }).catch((err) => {
-                        showLoadingErrorNotification(err);
                     });
                 }
 
@@ -54,7 +51,6 @@
                         $scope.votersTotalCount = response.voters.length;
                     }).catch((err) => {
                         $scope.votersLoadingError = true;
-                        showLoadingErrorNotification(err);
                     });
                 }
             }
@@ -121,22 +117,6 @@
                 utilities.columnsort($scope, "total_votes", "sortColumn2", "sortClass2", "reverse2", "reverseclass2", "column2");
             }
         }
-
-        function showLoadingErrorNotification(error) {
-            console.error('Notification', 'Request to the server failed', error);
-            let message = "";
-            if (error) {
-                if (error.status) {
-                    message = error.status + " - " + error.data.detail
-                }
-            }
-            Notify.error({
-                key: 'witnessError',
-                message: 'Request to the server failed' + (message ? ': ' + message : ''),
-                allowMultiple: false,
-            });
-        }
-
     }
 
 })();

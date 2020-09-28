@@ -58,3 +58,16 @@ export function getAvailableBlockchains() {
         }
     ];
 }
+
+export function getGlobalConfig() {
+    return {
+        supportedBy: {
+            donations: [
+                ["BitShares", "blocksights"]
+            ],
+            blockproducers: [
+                ["BitShares", "blocksights"]
+            ]
+        }
+    }
+}

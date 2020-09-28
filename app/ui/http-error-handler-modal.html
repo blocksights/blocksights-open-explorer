@@ -1,0 +1,36 @@
+<div ng-if="modalId === 'PREMIUM'">
+    <div class="modal-header">
+        <h3 class="modal-title" data-translate="Premium Feature"></h3>
+    </div>
+    <div class="modal-body">
+        <span data-translate="Premium Feature Description"></span>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="$close()" data-translate="Close"></button>
+    </div>
+</div>
+
+<!--
+
+To do after copy-paste:
+1) Replace TYPE_MODAL_ID_THERE with modalId from api.config.js
+2) Replace TYPE_MODAL_TITLE_THERE_OR_REMOVE with a desired modal's title
+3) Replace TYPE_MODAL_BODY_THERE_OR_REMOVE with a desired modal's content
+4) Replace TYPE_MODAL_FOOTER_THERE_OR_REMOVE with a desired modal's footer (OK or CLOSE buttons etc)
+
+<div ng-if="modalId === '# # #  TYPE_MODAL_ID_THERE # # #'">
+    <div class="modal-header">
+        <h3 class="modal-title">
+            # # # # # TYPE_MODAL_TITLE_THERE_OR_REMOVE # # # #
+        </h3>
+    </div>
+    <div class="modal-body">
+        # # # # # TYPE_MODAL_BODY_THERE_OR_REMOVE # # # #
+    </div>
+    <div class="modal-footer">
+        # # # # # TYPE_MODAL_FOOTER_THERE_OR_REMOVE # # # #
+        <button class="btn btn-primary" type="button" ng-click="$close()" data-translate="Close"></button>
+    </div>
+</div>
+
+-->

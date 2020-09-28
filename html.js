@@ -25,9 +25,10 @@ const HTML = [
     "sections/voting/voting.html",
     "sections/witnesses/witnesses.html",
     "sections/witnesses/witness.html",
-
     "sections/workers/workers.html",
+    "sections/welcome/welcome.html",
 
+    "ui/http-error-handler-modal.html",
     "ui/responsive-table.html",
     "ui/long-hash.html",
 ];

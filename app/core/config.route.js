@@ -60,6 +60,8 @@
                 .when('/txs', {templateUrl: 'html/txs.html'})
                 .when('/txs/:name', {templateUrl: 'html/tx.html'})
 
+                .when('/welcome', {templateUrl: 'html/welcome.html'})
+
                 .otherwise({ redirectTo: '/404'});
 
         }]
