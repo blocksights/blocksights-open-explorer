@@ -129,7 +129,6 @@
                         if(modal.closed && modal.closed.then) {
                             modal.closed.then((e) => {
                                 let _modal = modal;
-                                console.log("3", e)
                                 visibleModalsIds[modalId] = false;
 
                             });
@@ -169,10 +168,6 @@
                             notificationWarningScope = null;
                         }
 
-                        if(notificationErrorScope && notificationErrorScope.kill) {
-                            notificationErrorScope.kill();
-                            notificationErrorScope = null;
-                        }
                         let promise = Notify.error({
                             delay        : NOTIFICATION_AUTO_DISAPPEAR_DELAY,
                             key          : 'httpInterceptorErrorMessage',
@@ -182,15 +177,9 @@
                                     maxAttempts: maxAttempts
                                 }) :
                                 $filter('translate')('Request failed'),
-                            allowMultiple: true,
+                            allowMultiple: false,
                             priority     : 100,
                         });
-
-                        if (promise && promise.then) {
-                            promise.then((notificationScope) => {
-                                notificationErrorScope = notificationScope;
-                            });
-                        }
 
                     }
 
