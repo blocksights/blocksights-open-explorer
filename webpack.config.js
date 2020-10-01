@@ -3,39 +3,40 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const git = require("git-rev-sync");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const Html = require('./html'); // html.js
 
-module.exports = {
+module.exports = (env, args) => ({
     entry: {
         vendor: ['jquery', 'angular', 'clipboard', 'bootstrap', 'angular-route', 'angular-animate', 'angular-aria',
             'angular-ui-bootstrap', 'angular-loading-bar', 'angular-websocket', 'angular-google-analytics',
             'angular-translate', 'angular-translate-loader-static-files', 'echarts', 'angular-echarts-lite',
             'js-sha256', 'ngstorage'],
-        app: "./entry.js"
+            app: "./entry.js"
     },
     output: {
         path: __dirname + "/dist",
-        filename: "[name].bundle.js"
+            filename: "[name].bundle.js"
     },
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
-        compress: true,
-        port: 9000
+            compress: true,
+            port: 9000
     },
-
+    
     optimization:{
         splitChunks: {
             name: 'vendor'
         }
     },
-
+    
     node: {
         fs: 'empty',
-        tls: 'empty'
+            tls: 'empty'
     },
-
+    
     plugins: [
         new webpack.ProvidePlugin({
             jdenticon: "jdenticon",
@@ -46,7 +47,7 @@ module.exports = {
             Highcharts: "highcharts",
             ClipboardJS: "clipboard"
         }),
-
+        
         new CopyWebpackPlugin([{
                 from: path.resolve(__dirname, `./node_modules/components-font-awesome/webfonts`),
                 to: path.resolve(__dirname, './dist/webfonts')
@@ -57,7 +58,7 @@ module.exports = {
                 to: path.resolve(__dirname, './dist/images')
             }]
         ),
-
+        
         new CopyWebpackPlugin([{
                 from: path.resolve(__dirname, `./app/charting_library`),
                 to: path.resolve(__dirname, './dist/charting_library')
@@ -84,7 +85,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             hash: true,
             template: __dirname + '/app/index.html',
-            filename: __dirname + '/dist/index.html'
+            filename: __dirname + '/dist/index.html',
+            version: args.mode === 'development' ? git.short() : args.mode === 'production' ? require("./package.json").version : 'unknown version'
         })
     ]
-};
+});

@@ -26,6 +26,7 @@
     "components-font-awesome": "5.9.0",
     "copy-webpack-plugin": "^5.1.1",
     "echarts": "4.2.1",
+    "git-rev-sync": "^3.0.1",
     "html-webpack-plugin": "3.2.0",
     "jdenticon": "2.2.0",
     "jquery": "^3.5.1",
@@ -38,7 +39,7 @@
     "postinstall": "npm run install-charting-library",
     "install-charting-library": "node ./app/charting_library/install-charting-library.js",
     "package-charting-library": "node ./app/charting_library/package-charting-library.js",
-    "start": "webpack-dev-server",
+    "start": "webpack-dev-server --mode=development",
     "build": "webpack --mode=production"
   },
   "dependencies": {

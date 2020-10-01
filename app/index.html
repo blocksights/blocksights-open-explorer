@@ -36,7 +36,7 @@
             <div id="content" class="content-container">
                 <section data-ng-view class="view-container {{main.pageTransition.class}}"></section>
             </div>
-            <footer data-ng-include="'html/footer.html'" id="footer" class="app-footer"></footer>
+            <footer data-ng-include="'html/footer.html'" id="footer" class="app-footer" ng-init="version = '<%= htmlWebpackPlugin.options.version %>'"></footer>
         </div>
 
         <script src="charting_library/jquery.min.js"></script>
