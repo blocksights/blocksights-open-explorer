@@ -130,8 +130,8 @@
   "Operation HTLC Refund Description": "{{accountLink}} refund HTLC",
   "Operation Vesting Balance Create For Personal Description": "{{accountLink}} locked away {{amount}} {{assetLink}}",
   "Operation Vesting Balance Create For Somebody Description": "{{accountLink}} locked away {{amount}} {{assetLink}} for {{ownerLink}} ",
-  "Operation Witness Create Description with link": "{{accountLink}} become a witness candidate ({{link}}) and offers {{coef}}% contribution coefficient",
-  "Operation Witness Create Description without link": "{{accountLink}} become a witness candidate and offers {{coef}}% contribution coefficient",
+  "Operation Witness Create Description with link": "{{accountLink}} become a witness candidate ({{link}})",
+  "Operation Witness Create Description without link": "{{accountLink}} become a witness candidate",
   "Operation Beautifier Missing Description": "Type {{operationType}} (beautifier missing): {{operationShortDesc}} ...",
 
   "24H VOLUME IN BTS": "24H VOLUME IN BTS",

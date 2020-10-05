@@ -833,8 +833,7 @@
                                         rel   : 'noopener noreferrer',
                                         text  : 'link'
                                     }
-                                } : {},
-                                coef       : formatNumber(operation.block_producer_reward_pct / 100)
+                                } : {}
                             });
 
                             callback(operation_text);
