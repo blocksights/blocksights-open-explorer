@@ -81,8 +81,6 @@
                     quote + "&group=10&limit=10")
                     .then(function(response) {
 
-                        console.log(response);
-
                     angular.forEach(response.data, function(value) {
                         let total_for_sale = value.total_for_sale;
                         const max_base_amount = parseInt(value.max_price.base.amount);

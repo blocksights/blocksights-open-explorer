@@ -1,0 +1,70 @@
+<div>
+    <div uib-dropdown is-open="isOpen" auto-close="disabled" on-toggle="onToggle(open)" generic-search-click-out="onClickOut()">
+
+        <input type="text"
+               ng-model="searchString"
+               ng-model-options="modelOptions"
+               ng-focus="onFocus()"
+               ng-change="search(searchString)"
+               placeholder="{{ 'Type to search' | translate }}"
+               class="form-control"
+               style="width: 100%"
+        />
+
+        <ul class="dropdown-menu" uib-dropdown-menu style="width: 100%; min-width: 300px;">
+
+            <!-- Show in case if loading results -->
+            <li ng-if="status === STATUSES.LOADING">
+                <loading></loading>
+            </li>
+
+            <!-- Show in case if server returned empty search result -->
+            <li ng-if="status === STATUSES.EMPTY">
+                <div class="explorer-search-result-text" data-translate="No search result"></div>
+            </li>
+
+            <!-- Show in case if error happened during loading results -->
+            <li ng-if="status === STATUSES.ERROR">
+                <div class="explorer-search-result-text" data-translate="No search result"></div>
+            </li>
+
+            <!-- Show in case if user use invalid expression -->
+            <li ng-if="status === STATUSES.INVALID_TAG">
+                <i style="display:block;margin-bottom:8px;" class="explorer-search-result-text" data-translate="Invalid Search Tags"></i>
+                <div class="explorer-search-result-text">
+                    <strong>from:{account}</strong> - <i data-translate="lookup for operations"></i>
+                </div>
+                <div class="explorer-search-result-text">
+                    <strong>to:{account}</strong> - <i data-translate="lookup for operations"></i>
+                </div>
+                <div class="explorer-search-result-text">
+                    <strong>ops-asset:{asset}</strong> - <i data-translate="lookup for assets"></i>
+                </div>
+                <div class="explorer-search-result-text">
+                    <strong>account:{account}</strong> - <i data-translate="lookup for account"></i>
+                </div>
+                <div class="explorer-search-result-text">
+                    <strong>block:{block_num}</strong> - <i data-translate="lookup for block"></i>
+                </div>
+                <div class="explorer-search-result-text">
+                    <strong>trx:{transaction hash}</strong> - <i data-translate="lookup for transaction"></i>
+                </div>
+                <div class="explorer-search-result-text">
+                    <strong>asset:{asset}</strong> - <i data-translate="lookup for asset"></i>
+                </div>
+            </li>
+
+            <!-- Display the group name for results -->
+            <li ng-if="status === STATUSES.OK && match.isGroup" ng-repeat-start="match in matches track by $index" class="dropdown-header">
+                {{ match.type }}
+            </li>
+
+            <!-- Display the items related to the group -->
+            <li ng-if="status === STATUSES.OK && !match.isGroup" ng-repeat-end>
+                <generic-search-result-item item-type="match.type" item-model="match" on-select="select"/>
+            </li>
+
+        </ul>
+    </div>
+
+</div>

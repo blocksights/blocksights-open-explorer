@@ -25,6 +25,9 @@ const HTML = [
     "sections/voting/voting.html",
     "sections/witnesses/witnesses.html",
     "sections/witnesses/witness.html",
+    "sections/generic-search/generic-search-result-item.html",
+    "sections/generic-search/generic-search.html",
+
     "sections/workers/workers.html",
     "sections/welcome/welcome.html",
 

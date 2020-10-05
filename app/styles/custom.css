@@ -304,3 +304,29 @@ img.inlineLoading {
     font-weight: 700;
 }
 
+
+.explorer-search-result-text {
+    padding: 2px 20px;
+    margin: 4px 0;
+}
+.explorer-search-result-item {
+    padding: 2px 20px;
+}
+.explorer-search-result-item div {
+    outline: none !important;
+}
+
+.explorer-search-result-item:hover {
+    background: #337ab7;
+    color: #fff;
+}
+@media(max-width: 1170px) {
+    .header-left-navbar-search {
+        display: none !important;
+    }
+    .header-one-line-search {
+        display: block !important;
+        margin-bottom: 12px;
+        padding: 0 15px;
+    }
+}

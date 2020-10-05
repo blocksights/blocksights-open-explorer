@@ -199,8 +199,6 @@
                     const raw_obj = response.data.op;
                     const op_type =  utilities.operationType(response.data.op_type);
 
-                    console.log(response)
-
                     utilities.opText(appConfig, $http, response.data.op_type, raw_obj, function(returnData) {
                         op = {
                             name: operation,

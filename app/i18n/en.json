@@ -69,6 +69,16 @@
 
   "Show in fullscreen": "Show in fullscreen",
 
+  "No search result": "Your search did not match any entry.",
+  "Error during search": "An error occurred during the search",
+  "Invalid Search Tags": "For smart search please use one of the following tags:",
+  "lookup for operations": "lookup for operations associated with this account",
+  "lookup for assets": "lookup for assets",
+  "lookup for account": "lookup for account",
+  "lookup for block": "lookup for block",
+  "lookup for transaction": "lookup for transaction",
+  "Type to search": "Type to search",
+
   "Rich list": "Rich list",
   "Amount": "Amount",
 

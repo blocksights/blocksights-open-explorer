@@ -41,6 +41,11 @@ require("./app/chart/chart.module.js");
 require("./app/core/app.config.js");
 require("./app/core/app.utilities.js");
 
+require("./app/sections/generic-search/generic-search.module.js");
+require("./app/sections/generic-search/generic-search.service.js");
+require("./app/sections/generic-search/generic-search.directive.js");
+require("./app/sections/generic-search/generic-search-result-item.directive.js");
+
 require("./app/core/api.provider.js");
 require("./app/core/api.config.js");
 require("./app/core/service.witness.js");

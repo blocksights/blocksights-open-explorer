@@ -13,12 +13,12 @@
             <a class="navbar-brand" href="#/">{{ blockchain }} <span data-translate="Open Explorer"></span></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav header-left-navbar">
                 <li><a href="#/dashboard"><span data-translate="Dashboard"></span></a></li>
-                <li><a href="#/search"><span data-translate="Search"></span></a></li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Explore"></span> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
+                        <li><a href="#/search"><span data-translate="Search"></span></a></li>
                         <li><a href="#/txs"><span data-translate="Transactions"></span></a></li>
                         <li><a href="#/assets"><span data-translate="Assets"></span></a></li>
                         <li><a href="#/markets"><span data-translate="Markets"></span></a></li>
@@ -36,9 +36,12 @@
                         <li><a href="#/proxies"><span data-translate="Proxies"></span></a></li>
                     </ul>
                 </li>
+                <li class="header-left-navbar-search">
+                    <generic-search style="margin: 8px 10px;width: 300px;"></generic-search>
+                </li>
 
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav header-right-navbar navbar-right">
                 <network-dropdown></network-dropdown>
                 <li class="dropdown langs text-normal" uib-dropdown is-open="status.isopenLang" data-ng-controller="LangCtrl">
                     <a href="javascript:;" class="active-flag" uib-dropdown-toggle ng-disabled="disabled">
@@ -69,6 +72,9 @@
             </ul>
         </div><!--/.nav-collapse -->
     </div><!--/.container-fluid -->
+    <div class="header-one-line-search" style="display: none">
+        <generic-search style="width: 100%;"></generic-search>
+    </div>
 </nav>
 
 <!-- </header> -->
