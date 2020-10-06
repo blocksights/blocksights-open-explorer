@@ -464,7 +464,7 @@
                                             href: `/#/accounts/${operation_account}`
                                         },
                                         assetLink: {
-                                            text: asset_id,
+                                            text: response_asset.data.symbol,
                                             href: `/#/assets/${response_asset.data.symbol}`
                                         },
                                     });
