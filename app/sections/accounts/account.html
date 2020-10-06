@@ -40,7 +40,7 @@
             <div class="panel panel-default">
                 <div class="panel-body">
 
-                    <uib-tabset class="ui-tab">
+                    <uib-tabset type="pills" class="ui-tab">
                         <uib-tab index="0" class="text-small"><uib-tab-heading><span data-translate="General"></span></uib-tab-heading>
                             <br>
 
@@ -80,12 +80,13 @@
                                                         <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href='#/objects/{{account.voting_account_id}}/'>{{account.voting_account_name}}</a></span>
                                                         <span data-translate="Voting as"></span>
                                                     </li>
-                                                    <li ng-if="account.voting_account_id == '1.2.5' && votingStats.has_voted" class="list-group-item">
-                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{votingStats.total_power | number}}</span>
+                                                    <li ng-if="account.voting_account_id == '1.2.5' && votingStats.has_voted && votingStats.voting_power.attenuated" class="list-group-item">
+                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{votingStats.voting_power.attenuated | number}}</span>
                                                         <span data-translate="Voting Power"></span>
+                                                        <img uib-tooltip="{{ 'Includes vote decay, excludes witness, committee and worker attenuation' | translate }}" src="images/question-circle.svg" />
                                                     </li>
-                                                    <li ng-if="account.voting_account_id == '1.2.5' && votingStats.has_voted" class="list-group-item">
-                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{votingStats.total_proxied | number}}</span>
+                                                    <li ng-if="account.voting_account_id == '1.2.5' && votingStats.has_voted && votingStats.details.total_proxied" class="list-group-item">
+                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{votingStats.details.total_proxied | number}}</span>
                                                         <span data-translate="Voting Proxy Followers"></span>
                                                     </li>
                                                     <li ng-if="account.voting_account_id == '1.2.5' && votingStats && !votingStats.has_voted" class="list-group-item">
@@ -477,7 +478,7 @@
                             <span data-translate="Votes"></span> {{worker_votes | number:0}}
                         </uib-tab>
 
-                        <uib-tab ng-if="votingStats.total_proxied > 0" index="11" class="text-small" select="loadProxyFor()"><uib-tab-heading><span data-translate="Proxy for"></span></uib-tab-heading>
+                        <uib-tab ng-if="votingStats.details.total_proxied > 0" index="11" class="text-small" select="loadProxyFor()"><uib-tab-heading><span data-translate="Proxy for"></span></uib-tab-heading>
                             <br>
                             <div class="panel panel-default">
                                 <div class="panel-heading"> <span data-translate="Receiving voting power from proxy followers"></span></div>
@@ -486,11 +487,11 @@
                                         <thead>
                                         <tr>
                                             <th><span data-translate="Account"></span></th>
-                                            <th><span data-translate="Proxied Voting Power"></span></th>
+                                            <th><span data-translate="Proxied Voting Power"></span> <img uib-tooltip="{{ 'Includes vote decay, excludes witness, committee and worker attenuation' | translate }}" src="images/question-circle.svg" /></th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr data-ng-repeat="item in votingStats.proxy_for">
+                                        <tr data-ng-repeat="item in votingStats.details.proxy_for">
                                             <td><a href="#/accounts/{{item.account_id}}/">{{item.account_name}}</a></td>
                                             <td>{{item.voting_power | number}}</td>
                                         </tr>

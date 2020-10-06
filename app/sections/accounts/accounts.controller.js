@@ -265,7 +265,7 @@ import {sha256} from "js-sha256";
                         "column");
 
                     $scope.loadProxyFor = () => {
-                        $scope.votingStats.proxy_for.forEach(item => {
+                        $scope.votingStats.details.proxy_for.forEach(item => {
                             if (!item.account_name) {
                                 accountService.getAccountName(item.account_id,
                                     function (returnData) {
