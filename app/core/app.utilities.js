@@ -1173,6 +1173,10 @@
 
                 // called on header click
                 $scope[sortColumn] = function(col){
+                    if ($scope[columnToSort] !== col) {
+                      $scope[reverse] = false
+                    }
+
                     $scope[columnToSort] = col;
                     if($scope[reverse]){
                         $scope[reverse] = false;

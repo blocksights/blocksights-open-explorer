@@ -102,10 +102,10 @@ import {sha256} from "js-sha256";
                         }
                     ];
                     $scope.select = function(page_operations) {
-                        const page = page_operations -1;
+                        const page = page_operations - 1;
                         const limit = 20;
                         const from = page * limit;
-
+    
                         $scope.operationsLoading = true;
                         $scope.operationsLoadingError = false;
                         accountService.getAccountHistory(fullAccount.account.id, limit, from, function (returnData) {
@@ -136,38 +136,30 @@ import {sha256} from "js-sha256";
                                 $scope.account = new_account;
                             }
                         });
-                    };
-                    $scope.select(1)
+                    }
+                    // initial sort of fullAccount.balances by balance
+                    fullAccount.balances = $filter("orderBy")(fullAccount.balances, 'float_balance', true);
 
                     $scope.select_balances = function(page_balances) {
                         const page = page_balances -1;
-                        let balances = [];
-                        let total_counter = 0;
-                        let limit_counter = 0;
                         const limit = 10;
                         const start = page * limit;
-                        angular.forEach(fullAccount.balances, function (value, key) {
 
-                            if(total_counter >= start && limit_counter <= limit) {
-                                assetService.getAssetNameAndPrecision(value.asset_type, function (returnData) {
-                                    accountService.parseBalance(fullAccount.limit_orders,
-                                        fullAccount.call_orders,
-                                        value,
-                                        returnData.precision,
-                                        returnData.symbol, function (returnData2) {
-                                            balances.push(returnData2);
+                        $scope.balances = fullAccount.balances.slice(start, start + limit);
 
-                                        });
-                                });
-                                ++limit_counter;
-                            }
-                            ++total_counter;
-                        });
-                        $scope.balances = balances;
+                        $scope.balancesLimitPerPage = limit;
                         $scope.currentPageBalance = page_balances;
-                        $scope.balance_count = total_counter;
-
+                        $scope.balance_count = fullAccount.balances.length;
                     };
+
+                    $scope.sortBalanceByProperty = function(property) {
+                        $scope.sortColumn(property);
+
+                        fullAccount.balances = $filter("orderBy")(fullAccount.balances, $scope.column, $scope.reverse);
+
+                        $scope.select_balances($scope.currentPageBalance);
+                    };
+
                     $scope.select_balances(1);
 
                     accountService.parseUIAs(fullAccount.assets, function (returnData) {
@@ -261,7 +253,7 @@ import {sha256} from "js-sha256";
                     };
                     $scope.select_referers(1);
 
-                    utilities.columnsort($scope, "balance", "sortColumn", "sortClass", "reverse", "reverseclass",
+                    utilities.columnsort($scope, "float_balance", "sortColumn", "sortClass", "reverse", "reverseclass",
                         "column");
 
                     $scope.loadProxyFor = () => {

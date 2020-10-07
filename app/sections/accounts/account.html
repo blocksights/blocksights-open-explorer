@@ -145,16 +145,16 @@
                                             <table class="table">
                                                 <thead>
                                                 <tr>
-                                                    <th ng-click='sortColumn("id")' ng-class='sortClass("id")'>ID</th>
-                                                    <th ng-click='sortColumn("asset_name")' ng-class='sortClass("asset_name")'><span data-translate="Asset"></span></th>
-                                                    <th class="align-right" ng-click='sortColumn("balance")' ng-class='sortClass("balance")'><span data-translate="Balance"></span></th>
+                                                    <th ng-click='sortBalanceByProperty("id")' ng-class='sortClass("id")'>ID</th>
+                                                    <th ng-click='sortBalanceByProperty("asset_symbol")' ng-class='sortClass("asset_symbol")'><span data-translate="Asset"></span></th>
+                                                    <th class="align-right" ng-click='sortBalanceByProperty("float_balance")' ng-class='sortClass("float_balance")'><span data-translate="Balance"></span></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr data-ng-repeat="balance in balances | orderBy:column:reverse | filter:search">
+                                                <tr data-ng-repeat="balance in balances | filter:search">
                                                     <td><a href="#/objects/{{balance.id}}/">{{balance.id}}</a></td>
-                                                    <td><a href="#/assets/{{balance.asset}}/">{{balance.asset_name}}</a></td>
-                                                    <td class="align-right">{{balance.balance | number}}</td>
+                                                    <td><a href="#/assets/{{balance.asset_type}}/">{{balance.asset_symbol}}</a></td>
+                                                    <td class="align-right">{{balance.float_balance | number}}</td>
                                                 </tbody>
                                             </table>
                                             <footer class="table-footer">
@@ -165,7 +165,7 @@
                                                             total-items="balance_count"
                                                             max-size="4"
                                                             ng-change="currentPageBalance===undefined || select_balances(currentPageBalance)"
-                                                            items-per-page="10"
+                                                            items-per-page="balancesLimitPerPage"
                                                             rotate="false"
                                                             previous-text="&lsaquo;" next-text="&rsaquo;"
                                                             boundary-links="true"></ul>
