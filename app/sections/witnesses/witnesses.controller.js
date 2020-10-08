@@ -63,6 +63,7 @@
                         title: $filter('translate')('Position'),
                         index: 'counter',
                         sort: true,
+                        sortByDefault: true
                     },
                     {
                         title: $filter('translate')('ID'),
@@ -84,8 +85,6 @@
                         title: $filter('translate')('Total votes'),
                         index: 'total_votes',
                         sort: true,
-                        sortByDefault: true,
-                        sortReverse: true,
                         hidden: ['xs']
                     },
                     {
@@ -102,19 +101,25 @@
                     },
                 ]
 
-                $scope.witnessLoading = true;
-                governanceService.getWitnesses(function (returnData) {
-                    $scope.witnessLoading = false;
-                    $scope.active_witnesses = returnData[0];
-                    $scope.standby_witnesses = returnData[1];
+                $scope.activeWitnessesLoading = true;
+                $scope.activeWitnessesLoadingError = false;
+                governanceService.getWitnesses("active").then((witnesses) => {
+                    $scope.activeWitnessesLoading = false;
+                    $scope.activeWitnesses = witnesses;
                 }).catch(() => {
-                    $scope.witnessLoadingError = true;
-                    $scope.active_witnesses = 'error';
-                    $scope.standby_witnesses = 'error';
+                    $scope.activeWitnessesLoadingError = true;
+                    $scope.activeWitnesses = 'error';
                 });
 
-                utilities.columnsort($scope, "total_votes", "sortColumn", "sortClass", "reverse", "reverseclass", "column");
-                utilities.columnsort($scope, "total_votes", "sortColumn2", "sortClass2", "reverse2", "reverseclass2", "column2");
+                $scope.standbyWitnessesLoading = true;
+                $scope.standbyWitnessesLoadingError = false;
+                governanceService.getWitnesses("standby").then((witnesses) => {
+                    $scope.standbyWitnessesLoading = false;
+                    $scope.standbyWitnesses = witnesses;
+                }).catch(() => {
+                    $scope.standbyWitnessesLoadingError = true;
+                    $scope.standbyWitnesses = 'error';
+                });
             }
         }
     }

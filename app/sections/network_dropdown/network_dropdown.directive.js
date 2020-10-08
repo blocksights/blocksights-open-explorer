@@ -29,7 +29,7 @@
         selectActiveChain();
 
         function selectActiveChain() {
-            networkService.getHeader((response) => {
+            networkService.getBlockchain((response) => {
                 if(response && response.chain_id && response.chain_id) {
                     Api.setActiveBlockchain(response.chain_id);
                     $scope.activeChainTitle = Api.getActiveChainTranslation();

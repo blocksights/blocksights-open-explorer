@@ -51,50 +51,31 @@
                     });
                 });
             },
-            getWitnesses: function(callback) {
+            getWitnesses: function(status) {
                 return new Promise((resolve, reject) => {
-
-                    networkService.getHeader(function (returnData) {
-                        const active_witnesses = [];
-                        const standby_witnesses = [];
-                        const witnesses = [];
-                        const witness_count = returnData.witness_count;
-
-                        $http.get(appConfig.urls.python_backend() + "/witnesses").then(function(response) {
-                            let counter = 1;
-                            angular.forEach(response.data, function(value, key) {
-                                const parsed = {
-                                    id: value.id,
-                                    last_aslot: value.last_aslot,
-                                    last_confirmed_block_num: value.last_confirmed_block_num,
-                                    pay_vb: value.pay_vb,
-                                    total_missed: value.total_missed,
-                                    total_votes: utilities.formatBalance(value.total_votes, 5),
-                                    url: value.url,
-                                    witness_account: value.witness_account,
-                                    witness_account_name: value.witness_account_name,
-                                    counter: counter
-                                };
-
-                                if(counter <= witness_count) {
-                                    active_witnesses.push(parsed);
-                                }
-                                else {
-                                    standby_witnesses.push(parsed);
-                                }
-                                counter++;
-                            });
-
-                            witnesses[0] = active_witnesses;
-                            witnesses[1] = standby_witnesses;
-                            callback(witnesses);
-                            resolve(witnesses);
-                        }).catch((err) => {
-                            reject(err);
-                        }) ;
+                    const witnesses = [];
+                    $http.get(appConfig.urls.python_backend() + "/witnesses?status=" + status).then(function(response) {
+                        let counter = 1;
+                        angular.forEach(response.data, function(value, key) {
+                            const parsed = {
+                                id: value.id,
+                                last_aslot: value.last_aslot,
+                                last_confirmed_block_num: value.last_confirmed_block_num,
+                                pay_vb: value.pay_vb,
+                                total_missed: value.total_missed,
+                                total_votes: utilities.formatBalance(value.total_votes, 5),
+                                url: value.url,
+                                witness_account: value.witness_account,
+                                witness_account_name: value.witness_account_name,
+                                counter: counter
+                            };
+                            witnesses.push(parsed);
+                            counter++;
+                        });
+                        resolve(witnesses);
                     }).catch((err) => {
                         reject(err);
-                    });
+                    }) ;
 
                 });
             },

@@ -28,7 +28,15 @@
                     });
                 });
             },
-
+            getBlockchain: function(callback) {
+                let header;
+                return $http.get(appConfig.urls.python_backend() + "/blockchain").then(function(response) {
+                    header = {
+                        chain_id: response.data.chain_id,
+                    };
+                    callback(header);
+                });
+            },
             getBigBlocks: function() {
                 return new Promise((resolve, reject) => {
 
