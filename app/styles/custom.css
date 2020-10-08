@@ -330,3 +330,33 @@ img.inlineLoading {
         padding: 0 15px;
     }
 }
+
+ul.scrollable-tabs {
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    position: relative;
+}
+ul.scrollable-tabs li {
+    white-space: nowrap;
+}
+ul.scrollable-tabs-shadow-left:before {
+    content: "";
+    position: sticky;
+    width: 1px;
+    height: 42px;
+    left: -1px;
+    pointer-events: none;
+    box-shadow: 0px 0px 13px 5px rgba(0,0,0,0.25);
+    z-index: 1000;
+}
+ul.scrollable-tabs-shadow-right:after {
+    content: "";
+    position: sticky;
+    width: 1px;
+    height: 42px;
+    right: -1px;
+    pointer-events: none;
+    box-shadow: 0px 0px 13px 5px rgba(0,0,0,0.25);
+    z-index: 1000;
+}
