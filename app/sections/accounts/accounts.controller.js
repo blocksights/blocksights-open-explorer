@@ -105,7 +105,7 @@ import {sha256} from "js-sha256";
                         const page = page_operations - 1;
                         const limit = 20;
                         const from = page * limit;
-    
+
                         $scope.operationsLoading = true;
                         $scope.operationsLoadingError = false;
                         accountService.getAccountHistory(fullAccount.account.id, limit, from, function (returnData) {
@@ -137,6 +137,7 @@ import {sha256} from "js-sha256";
                             }
                         });
                     }
+                    $scope.select(1);
                     // initial sort of fullAccount.balances by balance
                     fullAccount.balances = $filter("orderBy")(fullAccount.balances, 'float_balance', true);
 
