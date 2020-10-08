@@ -8,6 +8,7 @@
  * columns               {array}   (required)       - see the Columns API
  * data                  {array}   (required)       - see the Data API
  * filter                {string|object|function}   - this value applies as expression for angular default filter - https://docs.angularjs.org/api/ng/filter/filter
+ * items-per-page        {number}                   - to apply a pagination to the table provide the count of entries on each page
  *
  * loading               {boolean} (optional) - if true the responsive-table will show loading indicator
  * loading-error         {boolean} (optional) - if true the responsive-table will show loading error message
@@ -98,10 +99,11 @@
                 'columns': '=',
                 'data': '=',
                 'filter': '=',
-                'class': '@'
+                'class': '@',
+                'itemsPerPage': '=',
             },
             templateUrl: `html/responsive-table.html`,
-            controller: ['$scope', ($scope) => {
+            controller: ['$scope', '$filter', ($scope, $filter) => {
 
                 // prefixes for bootstrap's breakpoints
                 const VISIBLE_BOOTSTRAP_CLASSNAME_PREFIX = 'visible-';
@@ -117,12 +119,43 @@
                     // if columns updated during the runtime we should update classes
                    updateClasses();
                    updateSorting();
+                   $scope.select();
                 });
 
+                $scope.select = () => {
+                    if(!$scope.data || !Array.isArray($scope.data))
+                        return false;
+                    
+                    if(!$scope.itemsPerPage) {
+                        $scope.items = $scope.data;
+                        return;
+                    }
+                    
+                    const page = $scope.currentPage || 1;
+                    
+                    let data = $scope.data;
+                    
+                    if($scope.sortingParameter) {
+                        data = $filter('orderBy')($scope.data, $scope.sortingParameter, $scope.sortingOrder, $scope.sortingCompareFunc);
+                    }
+                    
+                    data = $filter('filter')(data, $scope.filter);
+    
+                    const from = page * $scope.itemsPerPage - $scope.itemsPerPage;
+                    const limit = $scope.itemsPerPage;
+    
+                    $scope.items = data.slice(from, from+limit);
+                };
+    
+                $scope.$watch('filter', () => {
+                    $scope.select();
+                });
+                
                 $scope.$watch('data', () => {
                     // when user selects the next page of a table - a new data comes.
                     // to display a new page correctly we should remove the states of previous page
                     $scope.rowsState = {};
+                    $scope.select();
                 });
 
                 $scope.toggleRow = (index) => {
@@ -179,6 +212,8 @@
                         $scope.sortingOrder = false;
                         $scope.sortingCompareFunc = false;
                     }
+                    
+                    $scope.select();
 
                 };
 

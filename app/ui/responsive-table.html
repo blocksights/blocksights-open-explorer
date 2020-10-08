@@ -1,5 +1,6 @@
-<table class="table" ng-class="class">
-    <thead>
+<div>
+    <table class="table" ng-class="class">
+        <thead>
         <tr>
             <!-- the column with collapse buttons to toggle the state for all rows. Visible only when at least one column is hidden -->
             <th class="{{ mobileSectionClass }}" ng-hide="loadingError">
@@ -12,8 +13,8 @@
                 <span ng-if="column.index === sortingParameter" class="responsive-table-sort-button" ng-class="sortingOrder ? 'responsive-table-sort-button-desc' : 'responsive-table-sort-button-asc'"></span>
             </th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         <!-- the row with a loading -->
         <tr ng-if="loading && !loadingError">
             <td colspan={{columns.length+1}}>
@@ -27,13 +28,13 @@
             </td>
         </tr>
         <!-- the row with a "No data" message -->
-        <tr ng-if="!loading && !loadingError && data.length === 0">
+        <tr ng-if="!loading && !loadingError && items.length === 0">
             <td colspan={{columns.length+1}}>
                 <loading-no-data data-text="noDataText"></loading-no-data>
             </td>
         </tr>
         <!-- rows to display on a desktop  -->
-        <tr ng-if="!loading && !loadingError && data.length > 0" ng-class="item.tclass || null" ng-repeat-start="item in data | orderBy:sortingParameter:sortingOrder:sortingCompareFunc | filter:filter">
+        <tr ng-if="!loading && !loadingError && items.length > 0" ng-class="item.tclass || null" ng-repeat-start="item in items">
             <td class="{{ mobileSectionClass }}">
                 <img src="images/plus.svg" class="collapse-table" ng-show="!rowsState[$index]" ng-click="toggleRow($index)"/>
                 <img src="images/minus.svg" class="collapse-table" ng-show="rowsState[$index]" ng-click="toggleRow($index)"/>
@@ -60,5 +61,23 @@
                 </table>
             </td>
         </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+
+    <footer class="table-footer" ng-class="{'hidden': !itemsPerPage}">
+        <div class="row">
+            <div class="col-md-6 page-num-info">
+            </div>
+            <div class="col-md-6 text-right pagination-container">
+                <ul uib-pagination class="pagination-sm"
+                    ng-model="currentPage"
+                    total-items="(data | filter:filter).length"
+                    ng-change="currentPage===undefined || select(currentPage)"
+                    items-per-page="itemsPerPage"
+                    rotate="false"
+                    previous-text="&lsaquo;" next-text="&rsaquo;"
+                    boundary-links="true"></ul>
+            </div>
+        </div>
+    </footer>
+</div>
