@@ -206,6 +206,105 @@
             };
         }
 
+        /**
+         * @param {object}  params
+         * @param {array}   params.categories       -
+         * @param {array}   params.data             -
+         * @param {string}  [params.title]          -
+         * @param {object}  [params.series]         -
+         * @param {string}  [params.series.title]   -
+         * @param {object}  [params.xAxis.title]    - title for xAxis
+         * @param {object}  [params.yAxis.title]    - title for yAxis
+         */
+
+        function lineChart(params) {
+
+            return {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: params.title || '',
+                },
+                yAxis: {
+                    title: {
+                        text: params && params.yAxis && params.yAxis.title || ''
+                    },
+                },
+                plotOptions: {
+                    series: {
+                        connectNulls: true
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    title: {
+                        text: params && params.xAxis && params.xAxis.title || ''
+                    },
+                    categories: params.categories || [],
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                },
+                legend: params && params.legend ? params.legend : {
+                    enabled: false
+                },
+                series: params && params.series,
+                responsive: {
+                    rules: [{
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 20
+                                }
+                            }
+                        },
+                        condition: {
+                            maxWidth: 360,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 15
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 360,
+                            maxWidth: 550,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 10
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 550,
+                            maxWidth: 750,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 8
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 750,
+                        }
+                    }]
+                },
+            };
+        }
+
         return {
             noDataChart               : noDataChart,
             errorChart                : errorChart,
@@ -483,6 +582,34 @@
                                 title: $filter('translate')('Operations')
                             },
                             data: response.data.op_count
+                        }));
+
+                    }).catch((err) => {
+                        reject(err);
+                    })
+                });
+            },
+            priceFeedChart: function (publisher) {
+                return new Promise((resolve, reject) => {
+                    $http.get(appConfig.urls.python_backend() + "/pricefeed?publisher=" + publisher + "&from_date=now-7d").then((response) => {
+                        resolve(lineChart({
+                            categories: response.data.blocks,
+                            xAxis: {
+                                title: $filter('translate')('Block number')
+                            },
+                            yAxis: {
+                                title: $filter('translate')('Price (base BTS)')
+                            },
+                            series: Object.keys(response.data).map(asset => {
+                                let publisher_data = response.data[asset][Object.keys(response.data[asset])[0]]
+                                return {
+                                    name: asset,
+                                    data: publisher_data["feed"]
+                                }
+                            }),
+                            legend: {
+                                enabled: true
+                            },
                         }));
 
                     }).catch((err) => {

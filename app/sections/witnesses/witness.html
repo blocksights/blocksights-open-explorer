@@ -7,7 +7,7 @@
                         <div
                             class="box-info"
                         >
-                            <p class="size-h4"> <account-name data-account-id="witness.id"></account-name> <span class="size-h4"></span></p>
+                            <p class="size-h4"> <account-name data-account-id="witness.witness_account"></account-name> <span class="size-h4"></span></p>
                             <p class="text-muted text-small"><span data-translate="WITNESS"></span></p>
                         </div>
                     </div>
@@ -37,14 +37,20 @@
                 <div class="panel-body">
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active">
-                            <a data-target="#voting_activity" role="tab" data-toggle="tab" ng-click="loadTabsCharts('blocks_produced')"><span data-translate="Blocks produced"></span></a>
+                            <a data-target="#blocks_produced" role="tab" data-toggle="tab" ng-click="loadTabsCharts('blocks_produced')"><span data-translate="Blocks produced"></span></a>
+                        </li>
+                        <li role="presentation">
+                            <a data-target="#price_feed" role="tab" data-toggle="tab" ng-click="loadTabsCharts('price_feed')"><span data-translate="Price Feed"></span></a>
                         </li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="voting_activity">
-                            <highcharts-chart options="blocksProducedChartData" class="witness-blocks-produced-chart"></highcharts-chart>
+                        <div role="tabpanel" class="tab-pane active" id="blocks_produced">
+                            <highcharts-chart options="chartsData.blocks_produced" allow-fullscreen-for-mobile="true" class="witness-blocks-produced-chart"></highcharts-chart>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="price_feed">
+                            <highcharts-chart options="chartsData.price_feed" allow-fullscreen-for-mobile="true" class="witness-blocks-produced-chart"></highcharts-chart>
                         </div>
                     </div>
                 </div>

@@ -20,10 +20,11 @@
                 .then((response) => {
                     const witnessData = {
                         witness: {
-                            id: response.data.witness_object.witness_account,
+                            id: response.data.witness_object.id,
                             name: response.data.name,
                             rank: response.data.rank,
-                            total_votes: response.data.total_votes
+                            total_votes: response.data.total_votes,
+                            witness_account: response.data.witness_object.witness_account
                         }
                     };
                     if (response.data.next_tally) {
@@ -48,7 +49,7 @@
 
             return new Promise((resolve, reject) => {
                 // &voters_offset=${votersOffset}&voters_limit=${votersLimit}
-                $http.get(appConfig.urls.python_backend() + `/voteable_voters?voteable_id=${witnessId}`)
+                $http.get(appConfig.urls.python_backend() + `/voteable_votes?id=${witnessId}`)
                     .then((response) => {
                         const voters = {
                             voters: response.data.voted_by.map((voter) => {

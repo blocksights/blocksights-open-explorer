@@ -16,21 +16,10 @@
                 $scope.next_tally = {};
                 $scope.voters = [];
 
-                $scope.blocksProducedChartData = chartService.loadingChart();
-
                 $scope.loadWitnessDetails = loadWitness;
 
                 loadWitness();
                 loadWitnessVoters(1);
-                loadWitnessBlocksProducedChartData();
-
-                function loadWitnessBlocksProducedChartData() {
-                    chartService.blocksProducedChart().then((returnData) => {
-                        $scope.blocksProducedChartData = returnData;
-                    }).catch((error) => {
-                        $scope.blocksProducedChartData = chartService.noDataChart();
-                    });
-                }
 
                 function loadWitness() {
                     witnessService.getWitnessById(name).then((response) => {
@@ -53,6 +42,46 @@
                         $scope.votersLoadingError = true;
                     });
                 }
+
+                $scope.chartsData = {
+                    blocks_produced: chartService.loadingChart(),
+                    price_feed: chartService.loadingChart(),
+                };
+
+                // lazy load on tab change
+                $scope.loadTabsCharts = function(tabName) {
+
+                    const loadingText = $filter('translate')('Loading');
+
+                    const isChartLoading = (chartDataItem) => {
+                        return chartDataItem && !chartDataItem.series;
+                    };
+
+                    if (tabName == "blocks_produced") {
+                        if(isChartLoading($scope.chartsData.blocks_produced)) {
+                            chartService.blocksProducedChart().then((returnData) => {
+                                $scope.chartsData.blocks_produced = returnData;
+                            }).catch((error) => {
+                                $scope.chartsData.blocks_produced = chartService.noDataChart($filter('translate')('No block production data'));
+                            });
+                        }
+                    } else if (tabName == "price_feed") {
+                        if(isChartLoading($scope.chartsData.price_feed)) {
+                            chartService.priceFeedChart($scope.witness.witness_account).then((returnData) => {
+                                $scope.chartsData.price_feed = returnData;
+                            }).catch((error) => {
+                                $scope.chartsData.price_feed = chartService.noDataChart($filter('translate')('No price feed data'));
+                            });
+                        }
+
+                    }
+                };
+
+                // laod default tab
+                $scope.currentTabIndex = 0;
+                $scope.loadTabsCharts("blocks_produced");
+
+
             }
         }
         else {
