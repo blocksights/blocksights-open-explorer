@@ -326,6 +326,20 @@
                     callback(last_ops);
                 });
             },
+            exportAccountHistory: function(account_id, premium_code = null, document=null) {
+                let url = appConfig.urls.elasticsearch_wrapper() + "/export/account_history"
+                    + "?account_id=" + account_id
+                    + (premium_code != null ? "&premium=" + premium_code : "")
+                if (document != null && premium_code != null) {
+                    let a = document.createElement("a");
+                    a.href = url;
+                    a.target = "_blank";
+                    a.click();
+                } else {
+                    return $http.get(url);
+                }
+
+            },
             getVotingStats: function(account_id, callback) {
                 $http.get(
                     appConfig.urls.python_backend() + "/account_voting_power?account_id=" + account_id

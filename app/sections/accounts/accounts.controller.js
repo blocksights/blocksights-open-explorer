@@ -267,7 +267,17 @@ import {sha256} from "js-sha256";
                             }
                         })
                     }
-
+                    $scope.premiumCodeVisible = false;
+                    $scope.export_account_history = (premiumCode) => {
+                        accountService.exportAccountHistory(
+                            fullAccount.account.id,
+                            premiumCode,
+                            document
+                        )
+                    }
+                    $scope.toggle_premium_code = () => {
+                        $scope.premiumCodeVisible = !$scope.premiumCodeVisible;
+                    };
                 });
             }
 		}
