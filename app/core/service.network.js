@@ -176,19 +176,27 @@
             },
             getFees: function(callback) {
                 let fees = [];
+
+                let feesToHide = [
+                ];
+
                 return $http.get(appConfig.urls.python_backend() + "/fees").then(function(response) {
                     let basic_fee = 0;
                     for(var i = 0; i < response.data.parameters.current_fees.parameters.length; i++) {
+                        let identifier = response.data.parameters.current_fees.parameters[i][0];
+                        if (feesToHide.indexOf(identifier) != -1) {
+                            continue;
+                        }
                         if (response.data.parameters.current_fees.parameters[i][1].fee) {
                             basic_fee = response.data.parameters.current_fees.parameters[i][1].fee;
                         }
                         else {
                             basic_fee = response.data.parameters.current_fees.parameters[i][1].basic_fee;
                         }
-                        var op_type  = utilities.operationType(response.data.parameters.current_fees.parameters[i][0]);
+                        var op_type  = utilities.operationType(identifier);
 
                         const fee = {
-                            identifier: response.data.parameters.current_fees.parameters[i][0],
+                            identifier: identifier,
                             operation: op_type[0],
                             color: op_type[1],
                             basic_fee: utilities.formatBalance(basic_fee, 5),

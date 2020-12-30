@@ -1,7 +1,7 @@
 <script type="text/ng-template" id="assets-list-table.html">
 
     <div ng-if="index === 'image_url'">
-        <img src="{{ cell || 'images/asset-symbols/bts.png' }}" width="30"/>
+        <img src="{{ cell || 'images/asset-symbols/' + row.base.toLowerCase() + '.png' }}" width="30"/>
     </div>
 
     <div ng-if="index === 'name'">
@@ -11,14 +11,14 @@
     <div ng-if="index === 'price'">
         {{row.price | number}}
         <a href='#/assets/1.3.0/'>
-            <span data-translate="BTS"></span>
+            <span data-translate="{{row.base}}"></span>
         </a>
     </div>
 
     <div ng-if="index === 'volume'">
         {{row.volume | number}}
         <a href='#/assets/1.3.0/'>
-            <span data-translate="BTS"></span>
+            <span data-translate="{{row.base}}"></span>
         </a>
     </div>
 
@@ -39,7 +39,7 @@
         <div ng-if="row.market_cap != '-'">
             {{row.market_cap | number}}
             <a href='#/assets/1.3.0/'>
-                <span data-translate="BTS"></span>
+                <span data-translate="{{row.base}}"></span>
             </a>
         </div>
     </div>
@@ -51,7 +51,6 @@
         <div ng-if="row.supply != '-'">
             <span ng-if="row.name == 'CNY'"><i class="fas fa-cny"></i></span>
             <span ng-if="row.name == 'USD'"><i class="fas fa-usd"></i></span>
-            <span ng-if="row.name == 'OPEN.BTC'"><i class="fas fa-btc"></i></span>
             <span ng-if="row.name == 'BTC'"><i class="fas fa-btc"></i></span>
             <span ng-if="row.name == 'JPY'"><i class="fas fa-jpy"></i></span>
             <span ng-if="row.name == 'GBP'"><i class="fas fa-gbp"></i></span>
