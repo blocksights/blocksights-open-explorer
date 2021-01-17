@@ -223,7 +223,7 @@
   "Looking for an account? Start typing the first letters of it's name and let the auto complete feature help you find the exact account name string.": "Looking for an account? Start typing the first letters of it's name and let the auto complete feature help you find the exact account name string.",
   "Account name or ID": "Account name or ID",
   "Search object": "Search object",
-  "In order to search for an object you need to insert an ID with the correct Bitshares object format. More info and list can be found": "In order to search for an object you need to insert an ID with the correct Bitshares object format. More info and list can be found",
+  "In order to search for an object you need to insert an ID (assets are 1.3.X, accounts 1.2.X, etc.).": "In order to search for an object you need to insert an ID (assets are 1.3.X, accounts 1.2.X, etc.).",
   "HERE": "HERE",
   "Object ID": "Object ID",
   "Search asset": "Search asset",
