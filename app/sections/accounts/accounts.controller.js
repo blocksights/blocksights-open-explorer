@@ -52,7 +52,8 @@ import {sha256} from "js-sha256";
                     });
 
                     const lifetime_fees_paid = fullAccount.statistics.lifetime_fees_paid;
-                    const bts_balance = fullAccount.balances.length > 0 ? fullAccount.balances[0].balance : 0;
+                    let core_balance = fullAccount.balances.find((item) => item.asset_type === "1.3.0");
+                    core_balance = core_balance ? core_balance.balance : 0;
 
                     jdenticon.update("#identicon", sha256(fullAccount.account.name));
 
@@ -66,7 +67,7 @@ import {sha256} from "js-sha256";
                         cashback_balance: utilities.formatBalance(cashback_balance_balance, 5),
                         lifetime: lifetime,
                         lifetime_fees_paid: parseInt(utilities.formatBalance(lifetime_fees_paid, 5)),
-                        bts_balance: parseInt(utilities.formatBalance(bts_balance, 5)),
+                        bts_balance: parseInt(utilities.formatBalance(core_balance, 5)),
                         vesting: vesting_balances,
                         memo_key: fullAccount.account.options.memo_key
                     };

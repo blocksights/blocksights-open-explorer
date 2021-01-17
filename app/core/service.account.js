@@ -330,7 +330,7 @@
                 let url = appConfig.urls.elasticsearch_wrapper() + "/export/account_history"
                     + "?account_id=" + account_id
                     + (premium_code != null ? "&premium=" + premium_code : "")
-                if (document != null && premium_code != null) {
+                if (document != null) {
                     let a = document.createElement("a");
                     a.href = url;
                     a.target = "_blank";
