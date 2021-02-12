@@ -1,0 +1,104 @@
+<div class="page page-dashboard" data-ng-controller="witnessesCtrl">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="row text-center">
+                <div class="col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div
+                            class="box-info"
+                        >
+                            <p class="size-h4"> <account-name data-account-id="witness.witness_account"></account-name> <span class="size-h4"></span></p>
+                            <p class="text-muted text-small"><span data-translate="WITNESS"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{witness.rank}}</p>
+                            <h6 ng-if="nextTally">Next tally: {{next_tally.rank}}</h6>
+                            <p class="text-muted text-small"><span data-translate="RANK"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{witness.total_votes | number}}</p>
+                            <h6 ng-if="nextTally">Next tally: {{next_tally.total_votes}}</h6>
+                            <p class="text-muted text-small"><span data-translate="TOTAL VOTES"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a data-target="#blocks_produced" role="tab" data-toggle="tab" ng-click="loadTabsCharts('blocks_produced')"><span data-translate="Blocks produced"></span></a>
+                        </li>
+                        <li role="presentation">
+                            <a data-target="#price_feed" role="tab" data-toggle="tab" ng-click="loadTabsCharts('price_feed')"><span data-translate="Price Feed"></span></a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="blocks_produced">
+                            <highcharts-chart options="chartsData.blocks_produced" allow-fullscreen-for-mobile="true" class="witness-blocks-produced-chart"></highcharts-chart>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="price_feed">
+                            <highcharts-chart options="chartsData.price_feed" allow-fullscreen-for-mobile="true" class="witness-blocks-produced-chart"></highcharts-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading" >
+            <span data-translate="Voters Overview"></span>
+            <span style="float:right;"><span data-translate="Tallied on block"></span>&nbsp;{{tally.block}} ({{tally.block_time}})</span>
+        </div>
+        <div class="panel-body table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th><span data-translate="Voter"></span></th>
+                    <th><span data-translate="Voting since"></span></th>
+                    <th><span data-translate="Voting Power"></span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-if="voters === undefined"><td colspan="3"><span data-translate="Loading"></span></td></tr>
+                <tr ng-if="voters === 'error'"><td colspan="3"><span data-translate="An error occurred during loading"></span></td></tr>
+                <tr ng-if="voters.length == 0"><td colspan="3"><span data-translate="No operations found"></span></td></tr>
+                <tr ng-if="voters !== 'error' && voters.length > 0" data-ng-repeat="voter in voters track by $index">
+                    <td>{{voter.name}}</td>
+                    <td>{{voter.voting_since | date}}</td>
+                    <td>{{voter.voting_power | number}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <footer class="table-footer">
+                <div class="row">
+                    <div class="col-md-6 page-num-info">
+                    </div>
+                    <div class="col-md-6 text-right pagination-container">
+                        <ul uib-pagination class="pagination-sm"
+                            ng-model="currentPage"
+                            total-items="votersTotalCount"
+                            max-size="4"
+                            ng-change="currentPage===undefined || loadWitnessDetails(currentPage)"
+                            items-per-page="20"
+                            rotate="false"
+                            previous-text="&lsaquo;" next-text="&rsaquo;"
+                            boundary-links="true"></ul>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>

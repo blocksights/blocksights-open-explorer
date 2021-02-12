@@ -12,7 +12,9 @@
     </div>
 
     <div class="panel panel-default" >
-		<div class="panel-heading" ><span data-translate="Biggest transactions in the last 1 hour"></span></div>
+		<div class="panel-heading" >
+            <span data-translate="Biggest transactions"></span> ({{ ofLastHours }} <span data-translate="hour{{ofLastHours > 1 && 's'}}"></span>)
+        </div>
         <div class="panel-body table-responsive">
 
             <table class="table">
@@ -23,7 +25,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="trx in transactions">
+                <tr ng-if="transactions === undefined">
+                    <td>
+                        <loading></loading>
+                    </td>
+                </tr>
+                <tr ng-if="transactions === 'error'">
+                    <td>
+                        <loading-error></loading-error>
+                    </td>
+                </tr>
+                <tr ng-if="transactions.length === 0">
+                    <td>
+                        <loading-no-data text="'No transactions found' | translate"></loading-no-data>
+                    </td>
+                </tr>
+                <tr ng-if="transactions !== 'error' && transactions.length > 0" data-ng-repeat="trx in transactions track by $index">
                     <td><a href='#/txs/{{trx.trx_id}}/'>{{trx.trx_id}}</a></td>
                     <td>{{trx.count | number}}</td>
                 </tbody>

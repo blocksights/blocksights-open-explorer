@@ -3,6 +3,7 @@
 
     angular.module('app', [
         // Angular modules
+        'ngStorage',
         'ngRoute',
         'ngAnimate',
         'ngAria',
@@ -14,6 +15,9 @@
         'angular-google-analytics',
 
         // Custom modules
+        'app.highcharts',
+        'app.ui',
+        'app.network_dropdown',
         'app.nav',
         'app.i18n',
         'app.chart',
@@ -31,7 +35,9 @@
         'app.witnesses',
         'app.workers',
         'app.blocks',
-        'app.header'
+        'app.header',
+        'app.welcome',
+        'app.generic-search'
     ]);
 })();
 

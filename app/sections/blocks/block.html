@@ -1,3 +1,16 @@
+<script type="text/ng-template" id="blocks-block-operations-list-table.html">
+
+    <div ng-if="index === 'operation_text'" ng-bind-html="row.operation_text | to_trusted"></div>
+
+    <div ng-if="index === 'operation_id'">
+        <a href='#/operations/{{cell}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'op_type'">
+        <span class="badge badge-primary" style="background-color: #{{row.op_color}};">{{row.op_type}}</span>
+    </div>
+</script>
+
 <div class="page page-table" data-ng-controller="blocksCtrl">
     <div class="row">
         <div class="col-md-6">
@@ -11,10 +24,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <a href="#/blocks/{{data.prev}}/"><i class="fas fa-angle-double-left"></i> Block {{data.prev | number}}</a>
+        <div class="col-md-6 col-xs-6">
+            <a href="#/blocks/{{data.prev}}/">
+                <i class="fas fa-angle-double-left"></i>
+                <span data-translate="Block"></span>
+                {{data.prev | number}}
+            </a>
         </div>
-        <div class="col-md-6" align="right">
+        <div class="col-md-6 col-xs-6" align="right">
             <a href="#/blocks/{{data.next}}/"><span data-translate="Block"></span> {{data.next | number}} <i class="fas fa-angle-double-right"></i> </a>
         </div>
     </div>
@@ -24,23 +41,23 @@
         <div class="panel-heading"> <span data-translate="Block"></span>: <strong>{{data.block_num | number}}</strong></div>
         <ul class="list-group">
             <li class="list-group-item">
-                <span class="badge" style="background-color: #FFFFFF; color: #000000">{{data.previous}}</span>
+                <long-hash hash="data.previous" class="badge" style="background-color: #FFFFFF; color: #000000"></long-hash>
                 <span data-translate="Previous"></span>
             </li>
             <li class="list-group-item">
-                <span class="badge" style="background-color: #FFFFFF; color: #000000">{{data.timestamp}}</span>
+                <span class="badge" style="background-color: #FFFFFF; color: #000000">{{data.timestamp | dateFilter}}</span>
                 <span data-translate="Date and time"></span>
             </li>
             <li class="list-group-item">
-                <span class="badge" style="background-color: #FFFFFF; color: #000000">{{data.transaction_merkle_root}}</span>
-                Merkle Root
+                <long-hash hash="data.transaction_merkle_root" class="badge" style="background-color: #FFFFFF; color: #000000"></long-hash>
+                <span data-translate="Merkle Root"></span>
             </li>
             <li class="list-group-item">
-                <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href='#/objects/{{data.witness}}/'>{{data.witness}}</a></span>
+                <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href='#/witness/{{data.witness}}/'>{{data.witness}}</a></span>
                 <span data-translate="Witness"></span>
             </li>
             <li class="list-group-item">
-                <span class="badge" style="background-color: #FFFFFF; color: #000000">{{data.witness_signature}}</span>
+                <long-hash hash="data.witness_signature" class="badge" style="background-color: #FFFFFF; color: #000000"></long-hash>
                 <span data-translate="Witness signature"></span>
 
             </li>
@@ -55,7 +72,65 @@
         </ul>
     </div>
 
-    <div class="panel panel-default">
+    <div class="checkbox" style="margin-bottom: 20px;">
+        <label>
+            <input type="checkbox" id="blankCheckbox" ng-model="showRawData"> <span data-translate="Show transactions raw data"></span>
+        </label>
+    </div>
+
+    <div class="row" ng-repeat="(trxId, transaction) in transactions" ng-show="!showRawData">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong><span data-translate="Transaction"></span> {{$index + 1}}:</strong>
+                    <long-hash hash="trxId" length="18" href="#/txs/{{trxId}}"></long-hash>
+                </div>
+
+                <div class="panel-body table-responsive">
+
+                    <responsive-table data-data="transaction.operations"
+                                      data-template="blocks-block-operations-list-table.html"
+                                      data-columns="blocksOperationsColumns"
+                                      data-loading="blocksTransactionsLoading[trxId]"
+                                      data-loading-error="blocksTransactionsLoadingError[trxId]">
+                    </responsive-table>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading"> <strong data-translate="Transaction Details"></strong></div>
+
+                <div class="panel-body table-responsive">
+                    <table class="table">
+                        <tr>
+                            <td><span data-translate="Hash"></span>:</td>
+                            <td>
+                                <long-hash hash="transaction.data.hash" length="10"></long-hash>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span data-translate="Block"></span>:</td>
+                            <td><a href="#/blocks/{{transaction.data.block_num}}/">{{transaction.data.block_num | number}}</a></td>
+                        </tr>
+                        <tr>
+                            <td><span data-translate="Date"></span>:</td>
+                            <td>{{transaction.data.date | dateFilter}}</td>
+                        </tr>
+                        <tr>
+                            <td><span class="blocks--ops-in-trx" data-translate="Operations in transaction"></span>:</td>
+                            <td>{{(transaction.operations && transaction.operations.length || 0) | number}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default" ng-show="showRawData">
         <div class="panel-heading">
             <h3 class="panel-title"><span data-translate="Transactions raw data"></span></h3>
         </div>

@@ -1,9 +1,55 @@
+<script type="text/ng-template" id="workers-list-table.html">
+
+    <div ng-if="index === 'name'">
+        <a href='#/objects/{{cell}}/'>{{row.name}}</a> <span class='label label-info'>{{row.voting_now}}</span>
+    </div>
+
+    <div ng-if="index === 'worker_name'">
+        <a href='#/accounts/{{row.worker}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'start'">
+        {{cell | dateFilter}}
+    </div>
+
+    <div ng-if="index === 'end'">
+        {{cell | dateFilter}}
+    </div>
+
+    <div ng-if="index === 'daily_pay'">
+        {{cell | number}}
+    </div>
+
+    <div ng-if="index === 'url'">
+        <div ng-if="row.have_url == 1">
+            <a href="{{cell}}" target="_blank">
+                <span data-translate="Link"></span>
+            </a>
+        </div>
+        <div ng-if="row.have_url == 0">
+            <span data-translate="No Link"></span>
+        </div>
+    </div>
+
+    <div ng-if="index === 'votes_for'">
+        {{ cell | number: 0 }}
+    </div>
+
+    <div ng-if="index === 'perc'">
+        {{ row.perc | number:2 }}%
+    </div>
+
+</script>
+
 <div class="page page-table" data-ng-controller="workersCtrl">
     <div class="row">
         <div class="col-md-6">
             <ol class="breadcrumb">
                 <li><a href="#/"><span data-translate="Home"></span></a></li>
-                <li class="active">DAC <a href="#/workers/"><span data-translate="Workers"></span></a></li>
+                <li class="active">
+                    <span data-translate="DAC"></span>
+                    <a href="#/workers/"><span data-translate="Workers"></span></a>
+                </li>
             </ol>
         </div>
         <div class="col-md-6">
@@ -18,42 +64,20 @@
                 <div class="form-group col-md-4">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search for current workers" ng-model="search">
+                        <input type="text" class="form-control" placeholder="{{ 'Search for current workers' | translate }}" ng-model="search">
                     </div>
                 </div>
             </form>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th ng-click='sortColumn("name")' ng-class='sortClass("name")'><span data-translate="Name"></span></th>
-                        <th ng-click='sortColumn("worker_name")' ng-class='sortClass("worker_name")'><span data-translate="Worker"></span></th>
-                        <th ng-click='sortColumn("start")' ng-class='sortClass("start")'><span data-translate="Start"></span></th>
-                        <th ng-click='sortColumn("end")' ng-class='sortClass("end")'><span data-translate="End"></span></th>
-                        <th ng-click='sortColumn("daily_pay")' ng-class='sortClass("daily_pay")'><span data-translate="Daily pay"></span>(BTS)</th>
-						<th>Url</th>
-						<th class="align-right" ng-click='sortColumn("votes_for")' ng-class='sortClass("votes_for")'><span data-translate="Votes for"></span></th>
-                        <th ng-click='sortColumn("perc")' ng-class='sortClass("perc")'><span data-translate="Funded"></span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="w in workers_current | orderBy:column:reverse | filter:search" class="{{w.tclass}}">
-                    <td><a href='#/objects/{{w.id}}/'>{{w.name}}</a> <span class='label label-info'>{{w.voting_now}}</span></td>
-                    <td><a href='#/accounts/{{w.worker}}/'>{{w.worker_name}}</a></td>
-                    <td>{{w.start}}</td>
-                    <td>{{w.end}}</td>
-                    <td class="align-right">{{w.daily_pay | number}}</td>
-					<td>
-                        <div ng-if="w.have_url == 1">
-                            <a href="{{w.url}}" target="_blank">Link</a>
-                        </div>
-                        <div ng-if="w.have_url == 0">
-                            No Link
-                        </div>
-                    </td>
-					<td class="align-right">{{w.votes_for | number: 0}}</td>
-                    <td>{{w.perc}}%</td>
-                </tbody>
-            </table>
+
+            <responsive-table class="workers-list-table"
+                              data-data="workers_current"
+                              data-columns="workersColumns"
+                              data-filter="search"
+                              data-template="workers-list-table.html"
+                              data-loading="workersLoading"
+                              data-loading-error="workersLoadingError"
+            ></responsive-table>
+
         </div>
     </div>
     <div class="panel panel-default">
@@ -65,40 +89,20 @@
                 <div class="form-group col-md-4">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search for expired workers" ng-model="search2">
+                        <input type="text" class="form-control" placeholder="{{ 'Search for expired workers' | translate }}" ng-model="search2">
                     </div>
                 </div>
             </form>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th ng-click='sortColumn2("name")' ng-class='sortClass2("name")'><span data-translate="Name"></span></th>
-                    <th ng-click='sortColumn2("worker")' ng-class='sortClass2("worker_name")'><span data-translate="worker"></span></th>
-                    <th ng-click='sortColumn2("start")' ng-class='sortClass2("start")'><span data-translate="Start"></span></th>
-                    <th ng-click='sortColumn2("end")' ng-class='sortClass2("end")'><span data-translate="End"></span></th>
-                    <th class="align-right" ng-click='sortColumn2("daily_pay")' ng-class='sortClass2("daily_pay")'><span data-translate="Daily pay"></span>(BTS)</th>
-                    <th>Url</th>
-                    <th class="align-right" ng-click='sortColumn2("votes_for")' ng-class='sortClass2("votes_for")'><span data-translate="Votes for"></span></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="w in workers_expired | orderBy:column2:reverse2 | filter:search2" class="{{w.tclass}}">
-                    <td><a href='#/objects/{{w.id}}/'>{{w.name}}</a></td>
-                    <td><a href='#/accounts/{{w.worker}}/'>{{w.worker_name}}</a></td>
-                    <td>{{w.start}}</td>
-                    <td>{{w.end}}</td>
-                    <td class="align-right">{{w.daily_pay | number}}</td>
-                    <td>
-                        <div ng-if="w.have_url == 1">
-                            <a href="{{w.url}}" target="_blank">Link</a>
-                        </div>
-                        <div ng-if="w.have_url == 0">
-                            No Link
-                        </div>
-                    </td>
-                    <td class="align-right">{{w.votes_for | number: 0}}</td>
-                </tbody>
-            </table>
+
+            <responsive-table class="workers-expired-list-table"
+                              data-data="workers_expired"
+                              data-columns="workersExpiredColumns"
+                              data-filter="search2"
+                              data-template="workers-list-table.html"
+                              data-loading="workersLoading"
+                              data-loading-error="workersLoadingError"
+            ></responsive-table>
+
         </div>
     </div>
 </div>

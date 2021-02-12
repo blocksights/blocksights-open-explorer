@@ -1,3 +1,24 @@
+<script type="text/ng-template" id="operations-list-table.html">
+
+    <div ng-if="index === 'operation_text'" ng-bind-html="row.operation_text | to_trusted"></div>
+
+    <div ng-if="index === 'operation_id'">
+        <a href='#/operations/{{cell}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'time'"> {{ cell | dateFilter }} </div>
+
+    <div ng-if="index === 'block_num'">
+        <a href="#/blocks/{{ cell }}">{{ cell | number }}</a>
+    </div>
+
+    <div ng-if="index === 'type'">
+        <span class="badge badge-primary" style="background-color: #{{row.color}};">{{row.type}}</span>
+    </div>
+
+</script>
+
+
 <div class="page page-table" data-ng-controller="operationsCtrl">
     <div class="row">
         <div class="col-md-6">
@@ -18,30 +39,20 @@
                 <div class="form-group col-md-4">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search for an operation" ng-model="search">
+                        <input type="text" class="form-control" placeholder="{{ 'Search for an operation' | translate }}" ng-model="search">
                     </div>
                 </div>
             </form>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th><span data-translate="Operation"></span></th>
-                    <th>ID</th>
-                    <th><span data-translate="Date and time"></span></th>
-                    <th><span data-translate="Block"></span></th>
-                    <th><span data-translate="Type"></span></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="operation in operations | filter:search">
-                    <td><div ng-bind-html="operation.operation_text | to_trusted" layout-align="center"></div></td>
-                    <td><a href='#/operations/{{operation.operation_id}}/'>{{operation.operation_id}}</a></td>
-                    <td>{{operation.time}}</td>
-                    <td><a href='#/blocks/{{operation.block_num}}/'>{{operation.block_num | number}} </a></td>
-                    <td><span class="badge badge-primary" style="background-color: #{{operation.color}};">{{operation.type}}</span></td>
-                </tr>
-                </tbody>
-            </table>
+
+            <responsive-table data-data="operations"
+                              data-filter="search"
+                              data-columns="operationsColumns"
+                              data-template="operations-list-table.html"
+                              data-loading="operationsLoading"
+                              data-loading-error="operationsLoadingError">
+            </responsive-table>
+
+
             <footer class="table-footer">
                 <div class="row">
                     <div class="col-md-6 page-num-info">

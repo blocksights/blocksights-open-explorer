@@ -1,3 +1,23 @@
+<script type="text/ng-template" id="account-operations-table.html">
+
+    <div ng-if="index === 'operation_text'" ng-bind-html="row.operation_text | to_trusted"></div>
+
+    <div ng-if="index === 'operation_id'">
+        <a href='#/operations/{{cell}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'time'"> {{ cell | dateFilter }} </div>
+
+    <div ng-if="index === 'block_num'">
+        <a href="#/blocks/{{ cell }}">{{ cell | number }}</a>
+    </div>
+
+    <div ng-if="index === 'type'">
+        <span class="badge badge-primary" style="background-color: #{{row.color}};">{{row.type}}</span>
+    </div>
+
+</script>
+
 <div class="page page-table" data-ng-controller="accountsCtrl">
     <div class="row">
         <div class="col-md-4 align-baseline">
@@ -10,7 +30,7 @@
         <div class="col-md-4">
         </div>
         <div class="col-md-4 align-right align-baseline">
-            <span style="font-size: medium">{{account.name}}</span> <br><span style="font-size: smaller">{{account.lifetime}}</span>
+            <span style="font-size: medium">{{account.name}}</span> <br><span style="font-size: smaller">{{account.lifetime | translate}}</span>
         </div>
     </div>
 
@@ -20,7 +40,7 @@
             <div class="panel panel-default">
                 <div class="panel-body">
 
-                    <uib-tabset class="ui-tab">
+                    <uib-tabset class="ui-tab scrollable-tabs">
                         <uib-tab index="0" class="text-small"><uib-tab-heading><span data-translate="General"></span></uib-tab-heading>
                             <br>
 
@@ -52,9 +72,25 @@
                                                         <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href='#/accounts/{{account.registrar}}/'>{{account.registrar}}</a></span>
                                                         <span data-translate="Registrar"></span>
                                                     </li>
-                                                    <li class="list-group-item">
+                                                    <li ng-if="account && account.voting_account_id && !votingStats" class="list-group-item">
                                                         <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href='#/objects/{{account.voting_account_id}}/'>{{account.voting_account_name}}</a></span>
                                                         <span data-translate="Voting as"></span>
+                                                    </li>
+                                                    <li ng-if="account && account.voting_account_id && account.voting_account_id != '1.2.5' && votingStats" class="list-group-item">
+                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href='#/objects/{{account.voting_account_id}}/'>{{account.voting_account_name}}</a></span>
+                                                        <span data-translate="Voting as"></span>
+                                                    </li>
+                                                    <li ng-if="account.voting_account_id == '1.2.5' && votingStats.has_voted && votingStats.voting_power.attenuated" class="list-group-item">
+                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{votingStats.voting_power.attenuated | number}}</span>
+                                                        <span data-translate="Voting Power"></span>
+                                                        <img uib-tooltip="{{ 'Includes vote decay, excludes witness, committee and worker attenuation' | translate }}" src="images/question-circle.svg" />
+                                                    </li>
+                                                    <li ng-if="account.voting_account_id == '1.2.5' && votingStats.has_voted && votingStats.details.total_proxied" class="list-group-item">
+                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{votingStats.details.total_proxied | number}}</span>
+                                                        <span data-translate="Voting Proxy Followers"></span>
+                                                    </li>
+                                                    <li ng-if="account.voting_account_id == '1.2.5' && votingStats && !votingStats.has_voted" class="list-group-item">
+                                                        <span data-translate="No voting activity"></span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -67,7 +103,7 @@
                                                 <ul class="list-group">
                                                     <li class="list-group-item">
                                                         <span class="badge" style="background-color: #FFFFFF; color: #000000">{{account.bts_balance | number}}</span>
-                                                        BTS <span data-translate="Balance"></span>
+                                                        {{ coreSymbol }} <span data-translate="Balance"></span>
                                                     </li>
                                                     <li class="list-group-item">
                                                         <span class="badge" style="background-color: #FFFFFF; color: #000000">{{account.lifetime_fees_paid | number}}</span>
@@ -102,23 +138,23 @@
                                                 <div class="form-group col-md-6">
                                                     <div class="input-group">
                                                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                                                        <input type="text" class="form-control" placeholder="Search for a balance" ng-model="search">
+                                                        <input type="text" class="form-control" placeholder="{{ 'Search for a balance' | translate}}" ng-model="search">
                                                     </div>
                                                 </div>
                                             </form>
                                             <table class="table">
                                                 <thead>
                                                 <tr>
-                                                    <th ng-click='sortColumn("id")' ng-class='sortClass("id")'>ID</th>
-                                                    <th ng-click='sortColumn("asset_name")' ng-class='sortClass("asset_name")'><span data-translate="Asset"></span></th>
-                                                    <th class="align-right" ng-click='sortColumn("balance")' ng-class='sortClass("balance")'><span data-translate="Balance"></span></th>
+                                                    <th ng-click='sortBalanceByProperty("id")' ng-class='sortClass("id")'>ID</th>
+                                                    <th ng-click='sortBalanceByProperty("asset_symbol")' ng-class='sortClass("asset_symbol")'><span data-translate="Asset"></span></th>
+                                                    <th class="align-right" ng-click='sortBalanceByProperty("float_balance")' ng-class='sortClass("float_balance")'><span data-translate="Balance"></span></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr data-ng-repeat="balance in balances | orderBy:column:reverse | filter:search">
+                                                <tr data-ng-repeat="balance in balances | filter:search">
                                                     <td><a href="#/objects/{{balance.id}}/">{{balance.id}}</a></td>
-                                                    <td><a href="#/assets/{{balance.asset}}/">{{balance.asset_name}}</a></td>
-                                                    <td class="align-right">{{balance.balance | number}}</td>
+                                                    <td><a href="#/assets/{{balance.asset_type}}/">{{balance.asset_symbol}}</a></td>
+                                                    <td class="align-right">{{balance.float_balance | number}}</td>
                                                 </tbody>
                                             </table>
                                             <footer class="table-footer">
@@ -129,7 +165,7 @@
                                                             total-items="balance_count"
                                                             max-size="4"
                                                             ng-change="currentPageBalance===undefined || select_balances(currentPageBalance)"
-                                                            items-per-page="10"
+                                                            items-per-page="balancesLimitPerPage"
                                                             rotate="false"
                                                             previous-text="&lsaquo;" next-text="&rsaquo;"
                                                             boundary-links="true"></ul>
@@ -150,7 +186,7 @@
                                                 <div class="form-group col-md-6">
                                                     <div class="input-group">
                                                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                                                        <input type="text" class="form-control" placeholder="Search for a vesting balance" ng-model="search_vesting">
+                                                        <input type="text" class="form-control" placeholder="{{ 'Search for a vesting balance' | translate }}" ng-model="search_vesting">
                                                     </div>
                                                 </div>
                                             </form>
@@ -185,7 +221,9 @@
                                             <table class="table" ng-if="owner_keys.length">
                                                 <thead>
                                                 <tr>
-                                                    <th>Key</th>
+                                                    <th>
+                                                        <span data-translate="Key"></span>
+                                                    </th>
                                                     <th class="align-right"><span data-translate="Threshold"></span></th>
                                                 </tr>
                                                 </thead>
@@ -198,7 +236,9 @@
                                             <table class="table" ng-if="owner_accounts.length">
                                                 <thead>
                                                 <tr>
-                                                    <th>Account</th>
+                                                    <th>
+                                                        <span data-translate="Account"></span>
+                                                    </th>
                                                     <th class="align-right"><span data-translate="Threshold"></span></th>
                                                 </tr>
                                                 </thead>
@@ -221,7 +261,7 @@
                                             <table class="table" ng-if="active_keys.length">
                                                 <thead>
                                                 <tr>
-                                                    <th>Key</th>
+                                                    <th><span data-translate="Key"></span></th>
                                                     <th class="align-right"><span data-translate="Threshold"></span></th>
                                                 </tr>
                                                 </thead>
@@ -235,7 +275,9 @@
                                             <table class="table" ng-if="active_accounts.length">
                                                 <thead>
                                                 <tr>
-                                                    <th>Account</th>
+                                                    <th>
+                                                        <span data-translate="Account"></span>
+                                                    </th>
                                                     <th class="align-right"><span data-translate="Threshold"></span></th>
                                                 </tr>
                                                 </thead>
@@ -326,7 +368,7 @@
                                             <td><a href="#/objects/{{v.id}}/">{{v.id}}</a> <font size="-1"> - {{v.votable_object_name}}</font></td>
                                             <td>{{v.type}}</td>
                                             <td><a href="#/accounts/{{v.account}}/">{{v.account_name}}</a></td>
-                                            <td>{{v.votes_for | number}}</td>
+                                            <td>{{(v.votes_for / 100000) | number}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -337,7 +379,7 @@
                         <uib-tab ng-if="referrers.length" index="6" class="text-small"><uib-tab-heading><span data-translate="Referral"></span></uib-tab-heading>
                             <br>
                             <div class="panel panel-default">
-                                <div class="panel-heading"> <b>{{referral_count}}</b> <span data-translate="referred accounts"></span>.</div>
+                                <div class="panel-heading"> <b>{{referral_count.value}}</b> <span data-translate="referred accounts"></span>.</div>
                                 <div class="panel-body table-responsive">
 
                                     <table class="table">
@@ -370,7 +412,7 @@
                             </div>
                         </uib-tab>
 
-                        <uib-tab ng-if="is_proxy == true" index="7" class="text-small">uib-tab-heading><span data-translate="Proxy"></span></uib-tab-heading>
+                        <uib-tab ng-if="is_proxy == true" index="7" class="text-small"><uib-tab-heading><span data-translate="Proxy"></span></uib-tab-heading>
                             <br>
                             <span data-translate="Votes"></span> {{proxy_votes | number:0}}
                         </uib-tab>
@@ -394,8 +436,8 @@
                                             <span data-translate="Votes"></span>
                                         </li>
                                         <li class="list-group-item">
-                                            <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href="{{committee_url}}">Link</a></span>
-                                            Url
+                                            <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href="{{committee_url}}" data-translate="Link"></a></span>
+                                            <span data-translate="Url"></span>
                                         </li>
                                     </ul>
                                 </div>
@@ -414,7 +456,7 @@
                                             <span data-translate="Witness account"></span>
                                         </li>
                                         <li class="list-group-item">
-                                            <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href="#/objects/{{witness_id}}">{{witness_id}}</a></span>
+                                            <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href="#/witness/{{witness_id}}">{{witness_id}}</a></span>
                                             <span data-translate="Witness ID"></span>
                                         </li>
                                         <li class="list-group-item">
@@ -422,8 +464,8 @@
                                             <span data-translate="Votes"></span>
                                         </li>
                                         <li class="list-group-item">
-                                            <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href="{{witness_url}}">Link</a></span>
-                                            Url
+                                            <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href="{{witness_url}}" data-translate="Link"></a></span>
+                                            <span data-translate="Url"></span>
                                         </li>
                                     </ul>
                                 </div>
@@ -436,55 +478,79 @@
                             <span data-translate="Votes"></span> {{worker_votes | number:0}}
                         </uib-tab>
 
+                        <uib-tab ng-if="votingStats.details.total_proxied > 0" index="11" class="text-small" select="loadProxyFor()"><uib-tab-heading><span data-translate="Proxy for"></span></uib-tab-heading>
+                            <br>
+                            <div class="panel panel-default">
+                                <div class="panel-heading"> <span data-translate="Receiving voting power from proxy followers"></span></div>
+                                <div class="panel-body table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th><span data-translate="Account"></span></th>
+                                            <th><span data-translate="Proxied Voting Power"></span> <img uib-tooltip="{{ 'Includes vote decay, excludes witness, committee and worker attenuation' | translate }}" src="images/question-circle.svg" /></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr data-ng-repeat="item in votingStats.details.proxy_for">
+                                            <td><a href="#/accounts/{{item.account_id}}/">{{item.account_name}}</a></td>
+                                            <td>{{item.voting_power | number}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </uib-tab>
+
                     </uib-tabset>
                 </div></div>
 		</div>
 	</div>
 
     <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title"><span data-translate="Full account history"></span></h3>
+        <div class="panel-heading clearfix">
+            <h3 class="panel-title pull-left">
+                <span data-translate="Full account history"></span>
+            </h3>
+            <div class="pull-right">
+                <div class="input-group">
+                    <input type="text"
+                       ng-show="premiumCodeVisible"
+                       ng-model="premiumCode"
+                       placeholder="{{ 'Enter premium code' | translate }}"
+                       class="form-control"
+                       style="width: 30rem"
+                    />
+                    <i ng-if="!premiumCodeVisible" class="fas fa-angle-double-left" style="padding-left: 1rem; padding-right: 1rem;" ng-click="toggle_premium_code()"></i>
+                    <i ng-if="premiumCodeVisible" class="fas fa-angle-double-right" style="padding-left: 1rem; padding-right: 1rem;" ng-click="toggle_premium_code()"></i>
+                    <button class="btn btn-primary" data-toggle="tooltip" data-placement="top" ng-click="export_account_history(premiumCode)" data-translate="Export"></button>
+                </div>
+            </div>
         </div>
         <div class="panel-body table-responsive">
-            <div class="col-md-6">
-            </div>
-            <div class="col-md-6 text-right">
-                <a href="http://open-explorer.io/bitshares-account-exporter/" target="_blank"><span size="+1"><span data-translate="Click here for a CSV account exporter"></span></span></a>
-            </div>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th><span data-translate="Operation"></span></th>
-                    <th>ID</th>
-                    <th><span data-translate="Date and Time"></span></th>
-                    <th><span data-translate="Block"></span></th>
-                    <th><span data-translate="Type"></span></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="operation in operations track by $index">
-                    <td><div ng-bind-html="operation.operation_text | to_trusted" layout-align="center"></div></td>
-                    <td><a href='#/operations/{{operation.operation_id}}/'>{{operation.operation_id}}</a></td>
-                    <td>{{operation.time}}</td>
-                    <td><a href='#/blocks/{{operation.block_num}}/'>{{operation.block_num | number}} </a></td>
-                    <td><span class="badge badge-primary" style="background-color: #{{operation.op_color}};">{{operation.op_type}}</span></td>
-                </tr>
-                </tbody>
-            </table>
+
+            <responsive-table data-data="operations"
+                              data-columns="operationsColumns"
+                              data-loading="operationsLoading"
+                              data-template="account-operations-table.html"
+                              data-loading-error="operationsLoadingError"
+            ></responsive-table>
+
             <footer class="table-footer">
                 <div class="row">
                     <div class="col-md-6 page-num-info">
                     </div>
                     <div class="col-md-6 text-right pagination-container">
-                        <ul uib-pagination class="pagination-sm"
-                                            ng-model="currentPage"
-                                            total-items="account.total_ops"
-                                            max-size="4"
-                                            ng-change="currentPage===undefined || select(currentPage)"
-                                            items-per-page="20"
-                                            rotate="false"
-                                            previous-text="&lsaquo;" next-text="&rsaquo;"
-                                            boundary-links="true"></ul>
+                        <ul
+                            uib-pagination class="pagination-sm"
+                            ng-model="currentPage"
+                            total-items="account.total_ops"
+                            max-size="4"
+                            ng-change="currentPage===undefined || select(currentPage)"
+                            items-per-page="20"
+                            rotate="false"
+                            previous-text="&lsaquo;" next-text="&rsaquo;"
+                            boundary-links="true"
+                        ></ul>
                     </div>
                 </div>
             </footer>

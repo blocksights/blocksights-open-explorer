@@ -3,17 +3,18 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Bitshares Blockchain Explorer</title>
-        <meta name="description" content="bitshares blockchain explorer transaction, blocks, accounts.">
-        <meta name="keywords" content="bitshares, blockchain, crypto, exchange, dex, dac">
+        <title>Blocksights - Blockchain Explorer</title>
+        <meta name="description" content="blockchain explorer transaction blocks accounts">
+        <meta name="keywords" content="blockchain, crypto, exchange, dex, dac">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,600italic,400,600,300,700'
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,600italic,400,600,300,700'
               rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="html/fontawesome.min.css">
         <link rel="stylesheet" href="html/solid.min.css">
         <link rel="stylesheet" href="html/loading-bar.min.css">
         <link rel="stylesheet" href="html/bootstrap.min.css">
+        <link rel="stylesheet" href="html/angular-ui-notification.css">
         <link rel="stylesheet" href="html/custom.css">
     </head>
     <body data-ng-app="app"
@@ -35,7 +36,7 @@
             <div id="content" class="content-container">
                 <section data-ng-view class="view-container {{main.pageTransition.class}}"></section>
             </div>
-            <footer data-ng-include="'html/footer.html'" id="footer" class="app-footer"></footer>
+            <footer data-ng-include="'html/footer.html'" id="footer" class="app-footer" ng-init="version = '<%= htmlWebpackPlugin.options.version %>'"></footer>
         </div>
 
         <script src="charting_library/jquery.min.js"></script>

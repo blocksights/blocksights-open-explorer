@@ -1,0 +1,25 @@
+<div class="explorer-search-result-item">
+
+    <div ng-if="itemType === TYPES.OPERATION" ng-click="onSelect(itemModel)">
+        <span class="badge badge-primary" style="background-color: #{{data.color}};">{{data.type}}</span>
+        <span style="font-size: smaller"> ({{itemModel.identifier}})</span>
+        <div style="font-size: smaller" ng-bind-html="data.operation_text | to_trusted"></div>
+    </div>
+
+    <div ng-if="itemType === TYPES.ACCOUNT" ng-click="onSelect(itemModel)">
+        {{ itemModel.name }}<span style="font-size: smaller"> ({{itemModel.identifier}})</span>
+    </div>
+
+    <div ng-if="itemType === TYPES.BLOCK" ng-click="onSelect(itemModel)">
+        {{itemModel.identifier}}
+    </div>
+
+    <div ng-if="itemType === TYPES.ASSET" ng-click="onSelect(itemModel)">
+        {{itemModel.symbol}}<span style="font-size: smaller"> ({{itemModel.identifier}})</span>
+    </div>
+
+    <div ng-if="itemType === TYPES.TRANSACTION" ng-click="onSelect(itemModel)">
+        {{itemModel.identifier}}
+    </div>
+
+</div>

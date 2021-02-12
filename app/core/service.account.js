@@ -8,7 +8,7 @@
 
         return {
             getRichList: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/accounts").then(function(response) {
+                return $http.get(appConfig.urls.python_backend() + "/accounts").then(function(response) {
                     var richs = [];
                     for(var i = 0; i < response.data.length; i++) {
                         var amount = utilities.formatBalance(response.data[i].amount, 5);
@@ -27,7 +27,7 @@
                 var results = [];
                 var is_worker = false;
                 var worker_votes = 0;
-                $http.get(appConfig.urls.python_backend + "/workers").then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/workers").then(function (response) {
                     for (var i = 0; i < response.data.length; i++) {
                         var worker_account = response.data[i][0].worker_account;
                         if (worker_account === account_id) {
@@ -45,7 +45,7 @@
                 var results = [];
                 var is_witness = false;
                 var witness_votes = 0;
-                $http.get(appConfig.urls.python_backend + "/witnesses").then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/witnesses").then(function (response) {
                     for (var i = 0; i < response.data.length; i++) {
                         var witness_account = response.data[i].witness_account;
                         if (witness_account === account_id) {
@@ -67,7 +67,7 @@
                 var results = [];
                 var is_committee_member = false;
                 var committee_votes = 0;
-                $http.get(appConfig.urls.python_backend + "/committee_members").then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/committee_members").then(function (response) {
                     for (var i = 0; i < response.data.length; i++) {
                         var committee_member_account = response.data[i][0].committee_member_account;
                         if (committee_member_account === account_id) {
@@ -90,12 +90,12 @@
                 var results = [];
                 var is_proxy = false;
                 var proxy_votes = 0;
-                $http.get(appConfig.urls.python_backend + "/top_proxies").then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/top_proxies").then(function (response) {
                     for (var i = 0; i < response.data.length; i++) {
                         var proxy_account = response.data[i].id;
                         if (proxy_account === account_id) {
                             is_proxy = true;
-                            proxy_votes = utilities.formatBalance(response.data[i].bts_weight, 5);
+                            proxy_votes = utilities.formatBalance(response.data[i].voting_power, 5);
                             results[0] = is_proxy;
                             results[1] = proxy_votes;
                             callback(results);
@@ -106,7 +106,7 @@
             },
             getReferrers: function(account_id, page, callback) {
                 var results = [];
-                $http.get(appConfig.urls.python_backend + "/all_referrers?account_id=" + account_id + "&page=" + page)
+                $http.get(appConfig.urls.python_backend() + "/all_referrers?account_id=" + account_id + "&page=" + page)
                     .then(function (response) {
 
                     for (var i = 0; i < response.data.length; i++) {
@@ -121,7 +121,7 @@
             },
             getReferrerCount: function(account, callback) {
                 var count = 0;
-                $http.get(appConfig.urls.python_backend + "/referrer_count?account_id=" + account)
+                $http.get(appConfig.urls.python_backend() + "/referrer_count?account_id=" + account)
                     .then(function (response) {
                     count = response.data;
                     callback(count);
@@ -129,14 +129,15 @@
             },
             getFullAccount: function(account, callback) {
                 var full_account = {};
-                $http.get(appConfig.urls.python_backend + "/full_account?account_id=" + account)
+                $http.get(appConfig.urls.python_backend() + "/full_account?account_id=" + account)
                     .then(function (response) {
                     full_account  = response.data;
                     callback(full_account);
                 });
             },
             getTotalAccountOps: function(account_id, callback) {
-                $http.get(appConfig.urls.elasticsearch_wrapper + "/es/account_history?account_id="+account_id+
+                // @deprecated creates massive load, remove
+                $http.get(appConfig.urls.elasticsearch_wrapper() + "/es/account_history?account_id="+account_id+
                     "&from_date=2015-10-10&to_date=now&type=count").then(function(response) {
                         var count = 0;
                         angular.forEach(response.data, function (value, key) {
@@ -147,7 +148,7 @@
             },
             getAccountName: function(account_id, callback) {
                 var account_name = "";
-                $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + account_id)
+                $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + account_id)
                     .then(function (response) {
                     account_name = response.data;
                     callback(account_name);
@@ -165,7 +166,7 @@
                         results.push(authline);
                     }
                     else if(type === "account") {
-                        $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + value[0])
+                        $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + value[0])
                             .then(function (response) {
                             authline = {
                                 account: value[0],
@@ -229,7 +230,7 @@
                         type = "Other";
                         account = "No name";
                     }
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + account)
                         .then(function (response) {
                         var parsed = {
                             id: value.id,
@@ -286,41 +287,68 @@
                     callback(results);
                 }
             },
-            getAccountHistory: function(account_id, start, limit, callback) {
-                $http.get(appConfig.urls.elasticsearch_wrapper + "es/account_history?account_id=" +
-                    account_id + "&search_after=" + start + "&size=" + limit + "&sort_by=-account_history.sequence")
-                    .then(function (response) {
+            getAccountHistory: function(account_id, limit, from, callback) {
+                return $http.get(appConfig.urls.elasticsearch_wrapper() + "/es/account_history"
+                    + "?account_id=" + account_id
+                    + "&from_=" + from
+                    + "&size=" + limit
+                ).then(response => {
+                    let last_ops = [];
 
-                    var results = [];
-                    var c = 0;
-                    angular.forEach(response.data, function (value, key) {
-                        var timestamp;
-                        var witness;
-                        var op = utilities.operationType(value.operation_type);
-                        var op_type = op[0];
-                        var op_color = op[1];
-                        var time = new Date(value.block_data.block_time);
-                        timestamp = time.toLocaleString();
-                        witness = value.witness;
-                        var parsed_op = value.operation_history.op_object;
-                        var operation = {
-                            operation_id: value.account_history.operation_id,
-                            block_num: value.block_data.block_num,
-                            time: timestamp,
-                            witness: witness,
-                            op_type: op_type,
-                            op_color: op_color
-                        };
-                        var operation_text = "";
-                        operation_text = utilities.opText(appConfig, $http, value.operation_type, parsed_op,
-                            function(returnData) {
+                    // only add if the op id is not already added (transfer appears in both accounts!)
+                    const unique_data = response.data.filter((v,i,a)=>a.findIndex(t=>(t.operation_id_num === v.operation_id_num))===i);
+
+                    angular.forEach(unique_data, function (value) {
+                        let operation = {};
+                        operation.block_num = value.block_data.block_num;
+                        operation.operation_id = value.account_history.operation_id;
+                        operation.operation_id_num = value.operation_id_num;
+                        operation.time = value.block_data.block_time;
+                        operation.witness = value.witness;
+                        operation.sequence = value.account_history.sequence;
+
+                        let parsed_op = value.operation_history.op_object;
+                        if (parsed_op == undefined)
+                            parsed_op = JSON.parse(value.operation_history.op)[1];
+                        if (parsed_op.amount)
+                            parsed_op.amount_ = parsed_op.amount;
+
+                        utilities.opText(appConfig, $http, value.operation_type, parsed_op, function(returnData) {
                             operation.operation_text = returnData;
                         });
-                        results.push(operation);
+
+                        const type_res =  utilities.operationType(value.operation_type);
+                        operation.type = type_res[0];
+                        operation.color = type_res[1];
+
+                        last_ops.push(operation);
                     });
-                    callback(results);
+                    callback(last_ops);
                 });
-            }
+            },
+            exportAccountHistory: function(account_id, premium_code = null, document=null) {
+                let url = appConfig.urls.elasticsearch_wrapper() + "/export/account_history"
+                    + "?account_id=" + account_id
+                    + (premium_code != null ? "&premium=" + premium_code : "")
+                if (document != null) {
+                    let a = document.createElement("a");
+                    a.href = url;
+                    a.target = "_blank";
+                    a.click();
+                } else {
+                    return $http.get(url);
+                }
+
+            },
+            getVotingStats: function(account_id, callback) {
+                $http.get(
+                    appConfig.urls.python_backend() + "/account_voting_power?account_id=" + account_id
+                ).then(
+                    function (response) {
+                        callback(response.data);
+                    }
+                );
+            },
         };
     }
 })();

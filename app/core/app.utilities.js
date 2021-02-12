@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app')
-        .factory('utilities', [utilities]);
+        .factory('utilities', ['$filter', utilities]);
 
-    function utilities() {
+    function utilities($filter) {
 
         function formatNumber(x) {
             try {
@@ -20,7 +20,7 @@
                 else { return parts.join("."); }
             }
             catch(err) {
-                return x;
+                return x.toString();
             }
         }
 
@@ -39,15 +39,15 @@
 
                     operation_account = from;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
                             // get me the to name:
-                            $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + to)
+                            $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + to)
                                 .then(function (response_name_to) {
                                     var to_name = response_name_to.data;
 
-                                    $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + amount_asset_id)
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_asset_id)
                                         .then(function (response_asset) {
 
                                             var asset_name = response_asset.data.symbol;
@@ -56,11 +56,21 @@
                                             var divideby = Math.pow(10, asset_precision);
                                             var amount = Number(amount_amount / divideby);
 
-                                            operation_text =  "<a href='/#/accounts/" + from + "'>"
-                                                + response_name.data + "</a>";
-                                            operation_text = operation_text + " sent " + formatNumber(amount) +
-                                                " <a href='/#/assets/" + amount_asset_id + "'>" + asset_name +
-                                                "</a> to <a href='/#/accounts/" + to + "'>" + to_name + "</a>";
+                                            operation_text = $filter('translateWithLinks')('Operation Transfer Description', {
+                                                senderLink: {
+                                                    text: response_name.data,
+                                                    href: `/#/accounts/${from}`
+                                                },
+                                                assetLink: {
+                                                    text: asset_name,
+                                                    href: `/#/assets/${amount_asset_id}`
+                                                },
+                                                receiverLink: {
+                                                    text: to_name,
+                                                    href: `/#/assets/${to}`
+                                                },
+                                                amount: formatNumber(amount),
+                                            })
 
                                             callback(operation_text);
                                     });
@@ -77,10 +87,10 @@
                     var min_to_receive_asset_id = operation.min_to_receive.asset_id;
                     var min_to_receive_amount = operation.min_to_receive.amount;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + amount_to_sell_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_to_sell_asset_id)
                                 .then(function (response_asset1) {
 
                                     var sell_asset_name = response_asset1.data.symbol;
@@ -89,7 +99,7 @@
                                     var divideby = Math.pow(10, sell_asset_precision);
                                     var sell_amount = Number(amount_to_sell_amount / divideby);
 
-                                    $http.get(appConfig.urls.python_backend + "/asset?asset_id=" +
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" +
                                         min_to_receive_asset_id)
                                         .then(function (response_asset2) {
 
@@ -99,14 +109,24 @@
                                             var divideby = Math.pow(10, receive_asset_precision);
                                             var receive_amount = Number(min_to_receive_amount / divideby);
 
-                                            operation_text =  "<a href='/#/accounts/" + operation_account + "'>" +
-                                                response_name.data + "</a>";
-                                            operation_text = operation_text + " wants " + formatNumber(receive_amount) +
-                                                " <a href='/#/assets/" + min_to_receive_asset_id + "'>" +
-                                                receive_asset_name + "</a> for ";
-                                            operation_text = operation_text + formatNumber(sell_amount) +
-                                                " <a href='/#/assets/" + amount_to_sell_asset_id + "'>" +
-                                                sell_asset_name + "</a>";
+                                            operation_text = $filter('translateWithLinks')('Operation Limit Order Create Description', {
+                                                receiveAmount: formatNumber(receive_amount),
+                                                sellAmount: formatNumber(sell_amount),
+                                                accountLink: {
+                                                    text: response_name.data,
+                                                    href: `/#/accounts/${operation_account}`
+                                                },
+                                                buyAssetLink: {
+                                                    text: receive_asset_name,
+                                                    href: `/#/assets/${min_to_receive_asset_id}`
+                                                },
+                                                sellAssetLink: {
+                                                    text: sell_asset_name,
+                                                    href: `/#/assets/${amount_to_sell_asset_id}`
+                                                },
+
+                                            });
+
                                             callback(operation_text);
                                     });
                             });
@@ -116,11 +136,16 @@
                     fee_paying_account = operation.fee_paying_account;
                     operation_account = fee_paying_account;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
-                                "</a> cancel order";
+                            operation_text = $filter('translateWithLinks')('Operation Limit Order Cancel Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`
+                                }
+                            });
+
                             callback(operation_text);
                     });
                 }
@@ -129,23 +154,30 @@
                     var delta_collateral_asset_id = operation.delta_collateral.asset_id;
                     var delta_debt_asset_id = operation.delta_debt.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + funding_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + funding_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + delta_collateral_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + delta_collateral_asset_id)
                                 .then(function (response_asset1) {
 
                                     var asset1 = response_asset1.data.symbol;
 
-                                    $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + delta_debt_asset_id)
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + delta_debt_asset_id)
                                         .then(function (response_asset2) {
 
                                             var asset2 = response_asset2.data.symbol;
 
-                                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
-                                                response_name.data + "</a> update debt/collateral for ";
-                                            operation_text = operation_text + "<a href='#/markets/" + asset1 + "/" +
-                                                asset2 + "'>" + asset1 + "/" + asset2 + "</a>";
+                                            operation_text = $filter('translateWithLinks')('Operation Call Order Update Description', {
+                                                accountLink: {
+                                                    text: response_name.data,
+                                                    href: `/#/accounts/${funding_account}`,
+                                                },
+                                                marketLink: {
+                                                    text: `${asset1}/${asset2}`,
+                                                    href: `#/markets/${asset1}/${asset2}`
+                                                }
+                                            });
+
                                             callback(operation_text);
                                     });
                             });
@@ -161,11 +193,11 @@
                     var receives_asset_id = operation.receives.asset_id;
                     var receives_amount = operation.receives.amount;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + pays_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + pays_asset_id)
                                 .then(function (response_asset1) {
 
                                     var pays_asset_name = response_asset1.data.symbol;
@@ -175,7 +207,7 @@
 
                                     var p_amount = parseFloat(pays_amount / divideby);
 
-                                    $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + receives_asset_id)
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + receives_asset_id)
                                         .then(function (response_asset2) {
 
                                             var receive_asset_name = response_asset2.data.symbol;
@@ -184,14 +216,23 @@
                                             var divideby = Math.pow(10, receive_asset_precision);
                                             var receive_amount = Number(receives_amount / divideby);
 
-                                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
-                                                response_name.data + "</a>";
-                                            operation_text = operation_text + " paid " + formatNumber(p_amount) +
-                                                " <a href='/#/assets/" + pays_asset_id + "'>" + pays_asset_name +
-                                                "</a> for ";
-                                            operation_text = operation_text + formatNumber(receive_amount) +
-                                                " <a href='/#/assets/" + receives_asset_id + "'>" +
-                                                receive_asset_name + "</a>";
+                                            operation_text = $filter('translateWithLinks')('Operation Fill Order Description', {
+                                                amount: formatNumber(p_amount),
+                                                receiveAmount: formatNumber(receive_amount),
+                                                accountLink: {
+                                                    text: response_name.data,
+                                                    href: `/#/accounts/${operation_account}`
+                                                },
+                                                payAssetLink: {
+                                                    text: pays_asset_name,
+                                                    href: `/#/assets/${pays_asset_id}`
+                                                },
+                                                receiveAssetLink: {
+                                                    text: receive_asset_name,
+                                                    href: `/#/assets/${receives_asset_id}`
+                                                }
+                                            });
+
                                             callback(operation_text);
                                     });
                             });
@@ -203,21 +244,42 @@
                     var name =  operation.name;
                     operation_account = registrar;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
-                                response_name.data + "</a>  register <a href='/#/accounts/" + name + "'>" + name +
-                                "</a>";
+                            operation_text = $filter('translateWithLinks')('Operation Account Create without ref Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`
+                                },
+                                registerLink: {
+                                    text: name,
+                                    href: `/#/accounts/${name}`
+                                },
+                            });
 
                             if(registrar !== referrer) {
 
-                                $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + referrer)
+                                $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + referrer)
                                     .then(function (response_name2) {
 
-                                        operation_text = operation_text + " thanks to " + "<a href='/#/accounts/" +
-                                            referrer + "'>" + response_name2.data + "</a>";
+                                        operation_text = $filter('translateWithLinks')('Operation Account Create with ref Description', {
+                                            accountLink: {
+                                                text: response_name.data,
+                                                href: `/#/accounts/${operation_account}`
+                                            },
+                                            registerLink: {
+                                                text: name,
+                                                href: `/#/accounts/${name}`
+                                            },
+                                            referralLink: {
+                                                text: response_name2.data,
+                                                href: `/#/accounts/${referrer}`
+                                            },
+                                        });
+
                                         callback(operation_text);
+
                                     });
                             }
                             else {
@@ -228,11 +290,16 @@
                 else if (operation_type === 6) {
                     operation_account = operation.account;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
-                                "</a> updated account data";
+                            operation_text = $filter('translateWithLinks')('Operation Account Update Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`,
+                                }
+                            });
+
                             callback(operation_text);
                     });
                 }
@@ -243,19 +310,65 @@
                     var type = "whitelisted";
                     if(new_listing == 2) type = "blacklisted";
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                        $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + account_to_list)
+                        $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + account_to_list)
                             .then(function (response_name2) {
 
-                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
-                                "</a> " +
-                                type + " the account " + "<a href='/#/accounts/" + account_to_list + "'>" +
-                                response_name2.data + "</a>";
-                            callback(operation_text);
+                                operation_text = $filter('translateWithLinks')('Operation Account Whitelist Description', {
+                                    accountLink: {
+                                        text: response_name.data,
+                                        href: `/#/accounts/${operation_account}`
+                                    },
+
+                                    whitelistAccountLink: {
+                                        text: response_name2.data,
+                                        href: `/#/accounts/${account_to_list}`
+                                    },
+
+                                    actionType: type,
+                                });
+
+                                callback(operation_text);
                         });
                     });
+                }
+                else if (operation_type === 8) {
+                    operation_account = operation.account_to_upgrade;
+
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
+                        .then(function (response_name) {
+
+                            operation_text = $filter('translateWithLinks')('Operation Account Upgrade Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`
+                                }
+                            });
+
+                            callback(operation_text);
+                        });
+                }
+                else if (operation_type === 10) {
+                    operation_account = operation.issuer;
+
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
+                        .then(function (response_name) {
+
+                            operation_text = $filter('translateWithLinks')('Operation Asset Create Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`
+                                },
+                                assetLink: {
+                                    text: operation.symbol,
+                                    href: `/#/assets/${operation.symbol}`
+                                }
+                            });
+
+                            callback(operation_text);
+                        });
                 }
                 else if (operation_type === 14) {
                     var issuer = operation.issuer;
@@ -263,10 +376,10 @@
                     var asset_to_issue_amount = operation.asset_to_issue.amount;
                     var asset_to_issue_asset_id = operation.asset_to_issue.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + issuer)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + issuer)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + asset_to_issue_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_to_issue_asset_id)
                                 .then(function (response_asset) {
 
                                     var asset_name = response_asset.data.symbol;
@@ -275,31 +388,41 @@
                                     var divideby = Math.pow(10, asset_precision);
                                     var amount = Number(asset_to_issue_amount / divideby);
 
-                                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + issue_to_account)
+                                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + issue_to_account)
                                         .then(function (response_name2) {
 
-                                        operation_text = "<a href='/#/accounts/" + issuer + "'>" + response_name.data +
-                                            "</a>  issued " + amount;
-                                        operation_text = operation_text + " <a href='/#/assets/" +
-                                            asset_to_issue_asset_id + "'>" + response_asset.data.symbol + "</a>";
-                                        operation_text = operation_text + " to <a href='/#/accounts/" +
-                                            issue_to_account + "'>" + response_name2.data + "</a>";
-                                        callback(operation_text);
+                                            operation_text = $filter('translateWithLinks')('Operation Asset Issue Description', {
+                                                amount: amount,
+
+                                                receiverAccountLink: {
+                                                    text: response_name2.data,
+                                                    href: `/#/accounts/${issue_to_account}`
+                                                },
+                                                assetLink: {
+                                                    text: response_asset.data.symbol,
+                                                    href: `/#/assets/${asset_to_issue_asset_id}`
+                                                },
+                                                accountLink: {
+                                                    text: response_name.data,
+                                                    href: `/#/accounts/${operation_account}`
+                                                },
+                                            });
+
+                                            callback(operation_text);
                                     });
                             });
                     });
                 }
-
                 else if (operation_type === 15) {
                     operation_account = operation.payer;
 
                     var amount_to_reserve_amount = operation.amount_to_reserve.amount;
                     var amount_to_reserve_asset_id = operation.amount_to_reserve.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + amount_to_reserve_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_to_reserve_asset_id)
                                 .then(function (response_asset) {
 
                                     var asset_name = response_asset.data.symbol;
@@ -307,11 +430,18 @@
                                     var divideby = Math.pow(10, asset_precision);
                                     var amount = Number(amount_to_reserve_amount / divideby);
 
-                                    operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
-                                        response_name.data +
-                                        "</a> burned(reserved) " + formatNumber(amount) + " <a href='/#/assets/" +
-                                        amount_to_reserve_asset_id + "'>" +
-                                        asset_name + "</a>";
+                                    operation_text = $filter('translateWithLinks')('Operation Asset Reserve Description', {
+                                        accountLink: {
+                                            text: response_name.data,
+                                            href: `/#/accounts/${operation_account}`
+                                        },
+                                        assetLink: {
+                                            text: asset_name,
+                                            href: `/#/assets/${amount_to_reserve_asset_id}`
+                                        },
+                                        amount: formatNumber(amount),
+                                    });
+
                                     callback(operation_text);
                             });
                     });
@@ -322,16 +452,23 @@
                     var asset_id =  operation.asset_id;
                     operation_account = publisher;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_id)
                                 .then(function (response_asset) {
 
-                                    operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
-                                        response_name.data + "</a>  published feed for ";
-                                    operation_text = operation_text + "<a href='/#/assets/" + asset_id + "'>" +
-                                        response_asset.data.symbol + "</a>";
+                                    operation_text = $filter('translateWithLinks')('Operation Asset Publish Feed Description', {
+                                        accountLink: {
+                                            text: response_name.data,
+                                            href: `/#/accounts/${operation_account}`
+                                        },
+                                        assetLink: {
+                                            text: response_asset.data.symbol,
+                                            href: `/#/assets/${response_asset.data.symbol}`
+                                        },
+                                    });
+
                                     callback(operation_text);
                             });
                     });
@@ -340,10 +477,16 @@
                     fee_paying_account = operation.fee_paying_account;
                     operation_account = fee_paying_account;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
-                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
-                                "</a>  created a proposal";
+
+                            operation_text = $filter('translateWithLinks')('Operation Proposal Create Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`
+                                },
+                            });
+
                             callback(operation_text);
                     });
                 }
@@ -352,26 +495,33 @@
                     var proposal = operation.proposal;
                     operation_account = fee_paying_account;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
-                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
-                                "</a>  updated ";
-                            operation_text = operation_text + " proposal <a href='/#objects/"+proposal+"'>"+proposal+
-                                "</a>";
+
+                            operation_text = $filter('translateWithLinks')('Operation Proposal Update Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`
+                                },
+                                proposalLink: {
+                                    text: proposal,
+                                    href: `/#/objects/${proposal}`
+                                },
+                            });
+
                             callback(operation_text);
                     });
                 }
-
                 else if (operation_type === 33) {
                     operation_account = operation.owner_;
 
                     var amount_amount = operation.amount_.amount;
                     var amount_asset_id = operation.amount_.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + amount_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_asset_id)
                                 .then(function (response_asset) {
 
                                     var asset_name = response_asset.data.symbol;
@@ -379,26 +529,32 @@
                                     var divideby = Math.pow(10, asset_precision);
                                     var amount = Number(amount_amount / divideby);
 
-                                    operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
-                                        response_name.data +
-                                        "</a> withdrew vesting balance of " + formatNumber(amount) +
-                                        " <a href='/#/assets/" + amount_asset_id + "'>" +
-                                        asset_name + "</a>";
+                                    operation_text = $filter('translateWithLinks')('Operation Vesting Balance Withdraw Description', {
+                                        amount: formatNumber(amount),
+                                        accountLink: {
+                                            text: response_name.data,
+                                            href: `/#/accounts/${operation_account}`
+                                        },
+                                        assetLink: {
+                                            text: amount_asset_id,
+                                            href: `/#/assets/${asset_name}`
+                                        },
+                                    });
+
                                     callback(operation_text);
                                 });
                         });
                 }
-
                 else if (operation_type === 37) { // BALANCE_CLAIM
                     operation_account = operation.deposit_to_account;
 
                     var total_claimed_amount = operation.total_claimed.amount;
                     var total_claimed_asset_id = operation.total_claimed.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + total_claimed_asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + total_claimed_asset_id)
                                 .then(function (response_asset) {
 
                                     var asset_name = response_asset.data.symbol;
@@ -406,11 +562,18 @@
                                     var divideby = Math.pow(10, asset_precision);
                                     var amount = Number(total_claimed_amount / divideby);
 
-                                    operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
-                                        response_name.data +
-                                        "</a> claimed a balance of " + formatNumber(amount) + " <a href='/#/assets/" +
-                                        amount_to_reserve_asset_id + "'>" +
-                                        asset_name + "</a>";
+                                    operation_text = $filter('translateWithLinks')('Operation Balance Claim Description', {
+                                        accountLink: {
+                                            text: response_name.data,
+                                            href: `/#/accounts/${operation_account}`
+                                        },
+                                        assetLink: {
+                                            text: total_claimed_asset_id,
+                                            href: `/#/assets/${asset_name}`
+                                        },
+                                        amount: formatNumber(amount),
+                                    });
+
                                     callback(operation_text);
                                 });
                         });
@@ -424,10 +587,10 @@
                     var debt_covered_amount = operation.debt_covered.amount;
                     var debt_covered_asset_id = operation.debt_covered.asset_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" +
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" +
                                 additional_collateral_asset_id)
                                 .then(function (additional_collateral_asset) {
 
@@ -436,7 +599,7 @@
                                     var divideby1 = Math.pow(10, asset_precision1);
                                     var amount1 = Number(additional_collateral_amount / divideby1);
 
-                                    $http.get(appConfig.urls.python_backend + "/asset?asset_id=" +
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" +
                                         debt_covered_asset_id)
                                         .then(function (debt_covered_asset) {
 
@@ -446,13 +609,23 @@
                                             var divideby2 = Math.pow(10, asset_precision2);
                                             var amount2 = Number(debt_covered_amount / divideby2);
 
-                                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
-                                                response_name.data +
-                                                "</a> bid " + formatNumber(amount1) + " <a href='/#/assets/" +
-                                                additional_collateral_asset_id + "'>" +
-                                                asset_name1 + "</a> for " + formatNumber(amount2) +
-                                                " <a href='/#/assets/" + debt_covered_asset_id + "'>" +
-                                                asset_name2 + "</a>";
+                                            operation_text = $filter('translateWithLinks')('Operation Bid Collateral Description', {
+                                                amount1: formatNumber(amount1),
+                                                amount2: formatNumber(amount2),
+                                                accountLink: {
+                                                    text: response_name.data,
+                                                    href: `/#/accounts/${operation_account}`
+                                                },
+                                                collateralAssetLink: {
+                                                    text: additional_collateral_asset_id,
+                                                    href: `/#/assets/${asset_name1}`
+                                                },
+                                                debtAssetLink: {
+                                                    text: debt_covered_asset_id,
+                                                    href: `/#/assets/${asset_name2}`
+                                                },
+                                            });
+
                                             callback(operation_text);
                                         });
                                 });
@@ -466,10 +639,10 @@
 
                     var to = operation.to;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + asset_id)
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_id)
                                 .then(function (asset) {
 
                                     var asset_name = asset.data.symbol;
@@ -477,15 +650,26 @@
                                     var divideby = Math.pow(10, asset_precision);
                                     var amount = Number(amount_ / divideby);
 
-                                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + to)
+                                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + to)
                                         .then(function (response_name2) {
 
-                                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" +
-                                                response_name.data +
-                                                "</a> create HTLC to <a href='/#/accounts/" + to + "'>" +
-                                                response_name2.data + "</a> to transfer " +
-                                                formatNumber(amount) + " <a href='/#/assets/" + asset_id + "'>" +
-                                                asset_name + "</a>";
+                                            operation_text = $filter('translateWithLinks')('Operation HTLC Create Description', {
+                                                accountLink: {
+                                                    text: response_name.data,
+                                                    href: `/#/accounts/${operation_account}`
+                                                },
+                                                receiverAccountLink: {
+                                                    text: response_name2.data,
+                                                    href: `/#/accounts/${to}`
+                                                },
+                                                assetLink: {
+                                                    text: asset_id,
+                                                    href: `/#/assets/${asset_name}`
+                                                },
+
+                                                amount: formatNumber(amount),
+                                            });
+
                                             callback(operation_text);
                                         });
                                 });
@@ -495,11 +679,16 @@
                     operation_account = operation.redeemer;
                     var htlc_id = operation.htlc_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
-                                "</a> redeem HTLC";
+                            operation_text = $filter('translateWithLinks')('Operation HTLC Redeem Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`
+                                },
+                            });
+
                             callback(operation_text);
                         });
                 }
@@ -507,11 +696,16 @@
                     operation_account = operation.from;
                     var htlc_id = operation.htlc_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
-                                "</a> redeemed HTLC";
+                            operation_text = $filter('translateWithLinks')('Operation HTLC Redeemed Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`
+                                },
+                            });
+
                             callback(operation_text);
                         });
                 }
@@ -519,11 +713,16 @@
                     operation_account = operation.update_issuer;
                     var htlc_id = operation.htlc_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
-                                "</a> extend HTLC";
+                            operation_text = $filter('translateWithLinks')('Operation HTLC Extend Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`
+                                },
+                            });
+
                             callback(operation_text);
                         });
                 }
@@ -531,16 +730,122 @@
                     operation_account = operation.to;
                     var htlc_id = operation.htlc_id;
 
-                    $http.get(appConfig.urls.python_backend + "/account_name?account_id=" + operation_account)
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            operation_text = "<a href='/#/accounts/" + operation_account + "'>" + response_name.data +
-                                "</a> refund HTLC";
+                            operation_text = $filter('translateWithLinks')('Operation HTLC Refund Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`
+                                },
+                            });
+
+                            callback(operation_text);
+                        });
+                }
+                else if (operation_type === 32) { // Vesting Balance create
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation.creator)
+                        .then(function (creator_name) {
+                            creator_name = creator_name.data;
+                            $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation.owner_)
+                                .then(function (owner_name) {
+                                    owner_name = owner_name.data;
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + operation.amount_.asset_id)
+                                        .then(function (asset) {
+                                            let asset_name = asset.data.symbol;
+                                            let asset_precision = asset.data.precision;
+                                            let divideby = Math.pow(10, asset_precision);
+                                            let amount = Number(operation.amount_.amount / divideby);
+
+                                            operation_text = $filter('translateWithLinks')('Operation Vesting Balance Create For Personal Description', {
+                                                accountLink: {
+                                                    text: creator_name,
+                                                    href: `/#/accounts/${operation.creator}`
+                                                },
+                                                assetLink: {
+                                                    text: asset_name,
+                                                    href: `/#/assets/${operation.amount_.asset_id}`
+                                                },
+
+                                                amount: formatNumber(amount),
+                                            });
+
+                                            if (creator_name != owner_name) {
+
+                                                operation_text = $filter('translateWithLinks')('Operation Vesting Balance Create For Somebody Description', {
+                                                    accountLink: {
+                                                        text: creator_name,
+                                                        href: `/#/accounts/${operation.creator}`
+                                                    },
+                                                    ownerLink: {
+                                                        text: owner_name,
+                                                        href: `/#/accounts/${operation.owner_}`
+                                                    },
+                                                    assetLink: {
+                                                        text: asset_name,
+                                                        href: `/#/assets/${operation.amount_.asset_id}`
+                                                    },
+                                                    amount: formatNumber(amount),
+                                                    assetId: operation.amount_.asset_id,
+                                                    assetSymbol: asset_name,
+                                                    ownerAccountId: operation.owner_,
+                                                    ownerAccountName: owner_name,
+                                                });
+
+                                            }
+                                            callback(operation_text);
+                                        });
+                                });
+                        });
+                }
+                else if (operation_type === 20) { // Witness create
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation.witness_account)
+                        .then(function (witness_account_name) {
+                            witness_account_name = witness_account_name.data;
+
+                            function validURL(str) {
+                                const pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+                                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+                                    '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+                                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+                                    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+                                    '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+                                return !!pattern.test(str);
+                            }
+
+                            let translation_id = '';
+
+                            if(operation.url && validURL(operation.url)) {
+                                translation_id = 'Operation Witness Create Description with link';
+                            } else {
+                                translation_id = 'Operation Witness Create Description without link';
+                            }
+
+                            operation_text = $filter('translateWithLinks')(translation_id, {
+                                accountLink: {
+                                    text: witness_account_name,
+                                    href: `/#/accounts/${operation.witness_account}`
+                                },
+                                ...operation.url && validURL(operation.url) ? {
+                                    link: {
+                                        target: '_blank',
+                                        href  : operation.url,
+                                        rel   : 'noopener noreferrer',
+                                        text  : 'link'
+                                    }
+                                } : {}
+                            });
+
                             callback(operation_text);
                         });
                 }
                 else {
-                    operation_text = "";
+
+                    operation_text = $filter('translate')('Operation Beautifier Missing Description', {
+                        operationType: operation_type,
+                        operationShortDesc: JSON.stringify(operation).substr(0, 25),
+                    });
+
                     callback(operation_text);
                 }
 
@@ -765,6 +1070,22 @@
                     name = "HTLC REFUND";
                     color = "369694";
                 }
+                else if(opType === 54) {
+                    name = "CUSTOM AUTHORITY CREATE";
+                    color = "11e0dc";
+                }
+                else if(opType === 55) {
+                    name = "CUSTOM AUTHORITY UPDATE";
+                    color = "AB7781";
+                }
+                else if(opType === 56) {
+                    name = "CUSTOM AUTHORITY DELETE";
+                    color = "369694";
+                } else {
+                    name = "UNRECOGNIZED OP";
+                    color = "111111";
+                    console.log("Unknown operation type in chart", opType)
+                }
 
                 results[0] = name;
                 results[1] = color;
@@ -847,11 +1168,15 @@
                 $scope[columnToSort] = column;
 
 
-                // sort ordering (Ascending or Descending). Set true for desending
+                // sort ordering (Ascending or Descending). Default to true (oder ID ascending)
                 $scope[reverse] = true;
 
                 // called on header click
                 $scope[sortColumn] = function(col){
+                    if ($scope[columnToSort] !== col) {
+                      $scope[reverse] = false
+                    }
+
                     $scope[columnToSort] = col;
                     if($scope[reverse]){
                         $scope[reverse] = false;

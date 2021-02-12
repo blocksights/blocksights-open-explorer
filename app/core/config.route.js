@@ -46,6 +46,7 @@
 
                 .when('/fees', {templateUrl: 'html/fees.html'})
                 .when('/witness', {templateUrl: 'html/witnesses.html'})
+                .when('/witness/:name', {templateUrl: 'html/witness.html'})
                 .when('/workers', {templateUrl: 'html/workers.html'})
                 .when('/votes', {templateUrl: 'html/voting.html'})
                 .when('/committee_members', {templateUrl: 'html/committee_members.html'})
@@ -58,6 +59,8 @@
 
                 .when('/txs', {templateUrl: 'html/txs.html'})
                 .when('/txs/:name', {templateUrl: 'html/tx.html'})
+
+                .when('/welcome', {templateUrl: 'html/welcome.html'})
 
                 .otherwise({ redirectTo: '/404'});
 

@@ -1,20 +1,41 @@
+import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getGlobalConfig} from "../branding";
+
 (function() {
     'use strict';
 
     angular.module('app')
-        .factory('appConfig', [appConfig]);
+        .factory('appConfig', ['Api', appConfig]);
 
-
-    angular.module('app').config(['AnalyticsProvider', function (AnalyticsProvider) {
-        // Add configuration code as desired
-        AnalyticsProvider.setAccount('UA-101388661-2');  //UU-XXXXXXX-X should be your tracking code
-    }]).run(['Analytics', function(Analytics) { }]);
+    let gatag = getGATag();
+    if (gatag != null) {
+        angular.module('app').config(['AnalyticsProvider', function (AnalyticsProvider) {
+            // Add configuration code as desired
+            AnalyticsProvider.setAccount(gatag);  //UU-XXXXXXX-X should be your tracking code
+        }]).run(['Analytics', function (Analytics) {}]);
+    }
 
     angular.module('app').config(['$locationProvider', function($locationProvider) {
         $locationProvider.hashPrefix('');
+    }]).config(['ApiProvider', function (ApiProvider) {
+
+        /**
+         * Tell ApiProvider what are the endpoints and chains we will handle and display as available for our user
+         */
+
+        ApiProvider.setKnownEndpoints(
+            getAvailableEndpoints()
+        );
+
+        ApiProvider.setKnownBlockchains(
+            getAvailableBlockchains()
+        );
+
+        ApiProvider.enableLocalStorageSync();
+
     }]);
 
-    function appConfig() {
+    function appConfig(Api) {
+
         var pageTransitionOpts = [
             {
                 name: 'Fade up',
@@ -32,13 +53,18 @@
         ];
         var date = new Date();
         var year = date.getFullYear();
-        var main = {
-            brand: 'Bitshares Explorer',
-            name: 'oxarbitrage',
-            api_link: 'https://github.com/oxarbitrage/bitshares-python-api-backend',
-            source_code_link: 'https://github.com/oxarbitrage/open-explorer',
-            year: year,
-            pageTransition: pageTransitionOpts[0]
+        var getConfig = () => Api.getActiveBlockchain().config;
+        var main = () => {
+            let config = getConfig();
+            return {
+                brand: config.name + " Blocksights",
+                name: config.name,
+                api_link: "https://api.bitshares.ws/",
+                source_code_link: null,
+                fork_of: "https://github.com/bitshares/open-explorer",
+                year: year,
+                pageTransition: pageTransitionOpts[0]
+            }
         };
         var color = {
             primary:    '#4E7FE1',
@@ -49,24 +75,28 @@
             danger:     '#E96562',
             gray:       '#DCDCDC'
         };
-
         var urls = {
-            websocket: "ws://bts-seoul.clockwork.gr/ws",
-            //python_backend: "http://185.208.208.184:5000",
-            python_backend: "https://explorer.bitshares-kibana.info/",
-            //elasticsearch_wrapper: "https://eswrapper.bitshares.eu", // infrastructure
-            elasticsearch_wrapper: "https://explorer.bitshares-kibana.info/", // clockwork
-            //elasticsearch_wrapper: "/elastic",
-            //udf_wrapper: "http://185.208.208.184:5001"
-            udf_wrapper: "https://explorer.bitshares-kibana.info/udf"
+            python_backend: Api.getApiUrl,
+            elasticsearch_wrapper: Api.getApiUrl,
+            udf_wrapper: () => Api.getApiUrl() + "/udf"
         };
 
-        return {
+        var dateFormat = 'dd MMM yyyy hh:mm:ss';
+
+        const _appConfig = {
             pageTransitionOpts: pageTransitionOpts,
-            main: main,
+            getMain: main,
             color: color,
-            urls: urls
+            urls: urls,
+            dateFormat,
+            getConfig: getConfig,
+            globalConfig: getGlobalConfig()
         };
+        _appConfig.update = () => {
+            _appConfig.main = _appConfig.getMain();
+            _appConfig.branding = _appConfig.getConfig();
+        };
+        return _appConfig;
     }
 
 

@@ -1,3 +1,28 @@
+<script type="text/ng-template" id="fees-list-table.html">
+
+    <div ng-if="index === 'identifier'">
+        {{cell}}
+    </div>
+
+    <div ng-if="index === 'operation'">
+        <span class="badge badge-primary" style="background-color: #{{row.color}};">{{row.operation}}</span>
+    </div>
+
+    <div ng-if="index === 'basic_fee'">
+        {{ cell | number }}
+    </div>
+
+    <div ng-if="index === 'premium_fee'">
+        {{ cell | number }}
+    </div>
+
+    <div ng-if="index === 'price_per_kbyte'">
+        {{ cell | number }}
+    </div>
+
+
+</script>
+
 <div class="page page-table" data-ng-controller="feesCtrl">
 
     <div class="row">
@@ -21,29 +46,20 @@
                 <div class="form-group col-md-4">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search for a fee" ng-model="search">
+                        <input type="text" class="form-control" placeholder="{{ 'Search for a fee' | translate }}" ng-model="search">
                     </div>
                 </div>
             </form>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th ng-click='sortColumn("identifier")' ng-class='sortClass("identifier")'>ID</th>
-                        <th ng-click='sortColumn("operation")' ng-class='sortClass("operation")'><span data-translate="Operation"></span></th>
-                        <th class="align-right" ng-click='sortColumn("basic_fee")' ng-class='sortClass("basic_fee")'><span data-translate="Basic"></span></th>
-						<th class="align-right" ng-click='sortColumn("premium_fee")' ng-class='sortClass("premium_fee")'><span data-translate="Premium"></span></th>
-						<th class="align-right" ng-click='sortColumn("price_per_kbyte")' ng-class='sortClass("price_per_kbyte")'><span data-translate="Price per KB"></span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="fee in fees | orderBy:column:reverse | filter:search">
-                    <td>{{fee.identifier}}</td>
-                    <td><span class="badge badge-primary" style="background-color: #{{fee.color}};">{{fee.operation}}</span></td>
-                    <td class="align-right">{{fee.basic_fee | number}}</td>
-					<td class="align-right">{{fee.premium_fee | number}}</td>
-					<td class="align-right">{{fee.price_per_kbyte | number}}</td>
-                </tbody>
-            </table>
+
+            <responsive-table class="fees-list-table"
+                              data-data="fees"
+                              data-filter="search"
+                              data-template="fees-list-table.html"
+                              data-columns="feesColumns"
+                              data-loading="feesLoading"
+                              data-loading-error="feesLoadingError"
+            ></responsive-table>
+
         </div>
     </div>
 

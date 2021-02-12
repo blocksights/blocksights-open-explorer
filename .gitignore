@@ -5,3 +5,10 @@ bower_components/
 tmp
 .DS_Store
 .ideaapp/charting_library/
+.idea
+app/charting_library/datafeed/*
+app/charting_library/static/*
+app/charting_library/charting_library.min.js
+app/charting_library/jquery.min.js
+app/charting_library/charting_library.zip
+dist/*

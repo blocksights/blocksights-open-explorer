@@ -10,74 +10,80 @@
             getActiveAssets: function(callback) {
                 var assets = [];
 
-                $http.get(appConfig.urls.python_backend + "/assets").then(function (response) {
+                return new Promise((resolve, reject) => {
 
-                    angular.forEach(response.data, function (value, key) {
+                    $http.get(appConfig.urls.python_backend() + "/assets").then(function (response) {
 
-                        var market_cap;
-                        var supply;
+                        angular.forEach(response.data, function (value, key) {
 
-                        if (value.asset_name.indexOf("OPEN") >= 0 || value.asset_name.indexOf("RUDEX") >= 0 ||
-                            value.asset_name.indexOf("BRIDGE") >= 0 || value.asset_name.indexOf("GDEX") >= 0) {
-                            market_cap = "-";
-                            supply = "-";
-                        }
-                        else {
-                            market_cap = Math.round(value.market_cap / 100000); // in bts always by now
-                            var precision = 100000;
-                            if (value.precision) {
-                                precision = Math.pow(10, value.precision);
+                            var market_cap;
+                            var supply;
+
+                            if (value.asset_name.indexOf("OPEN") >= 0 || value.asset_name.indexOf("RUDEX") >= 0 ||
+                                value.asset_name.indexOf("BRIDGE") >= 0 || value.asset_name.indexOf("GDEX") >= 0) {
+                                market_cap = "-";
+                                supply = "-";
                             }
-                            supply = Math.round(value.current_supply / precision);
-                        }
-                        var volume = Math.round(value["24h_volume"]);
+                            else {
+                                market_cap = Math.round(value.market_cap / 100000); // in bts always by now
+                                var precision = 100000;
+                                if (value.precision) {
+                                    precision = Math.pow(10, value.precision);
+                                }
+                                supply = Math.round(value.current_supply / precision);
+                            }
+                            var volume = Math.round(value["24h_volume"]);
 
-                        var asset = {
-                            name: value.asset_name,
-                            id: value.asset_id,
-                            price: value.latest_price,
-                            volume: volume,
-                            type: value.asset_type,
-                            market_cap: market_cap,
-                            supply: supply,
-                            holders: value.holders_count
-                        };
+                            var asset = {
+                                name: value.asset_name,
+                                id: value.asset_id,
+                                price: value.latest_price,
+                                volume: volume,
+                                type: value.asset_type,
+                                market_cap: market_cap,
+                                supply: supply,
+                                holders: value.holders_count
+                            };
 
-                        /* Todo: create function */
-                        var name_lower = value.asset_name.replace("OPEN.", "").toLowerCase();
-                        var url = "images/asset-symbols/" + name_lower + ".png";
-                        var image_url = "";
-                        $http({method: 'GET', url: url}).then(function successCallback(response) {
-                            image_url = "images/asset-symbols/" + name_lower + ".png";
-                            asset.image_url = image_url;
-                            assets.push(asset);
-                        }, function errorCallback(response) {
-                            image_url = "images/asset-symbols/white.png";
-                            asset.image_url = image_url;
-                            assets.push(asset);
+                            /* Todo: create function */
+                            var name_lower = value.asset_name.replace("OPEN.", "").toLowerCase();
+                            var url = "images/asset-symbols/" + name_lower + ".png";
+                            var image_url = "";
+                            $http({method: 'GET', url: url}).then(function successCallback(response) {
+                                image_url = "images/asset-symbols/" + name_lower + ".png";
+                                asset.image_url = image_url;
+                                asset.base = appConfig.branding.coreSymbol;
+                                assets.push(asset);
+                            }, function errorCallback(response) {
+                                image_url = "images/asset-symbols/white.png";
+                                asset.image_url = image_url;
+                                asset.base = appConfig.branding.coreSymbol;
+                                assets.push(asset);
+                            });
+
                         });
+                        resolve(assets);
 
+                        callback(assets);
+                    }).catch((err) => {
+                        reject(err);
                     });
-                    callback(assets);
+
                 });
             },
             getDexVolume: function(callback) {
                 var dex;
-                $http.get(appConfig.urls.python_backend + "/dex_total_volume").then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/dex_total_volume").then(function (response) {
                     dex = {
-                        volume_bts: response.data.volume_bts,
-                        volume_cny: response.data.volume_cny,
-                        volume_usd: response.data.volume_usd,
-                        market_cap_bts: response.data.market_cap_bts.toString().slice(0, -12),
-                        market_cap_cny: response.data.market_cap_cny.toString().slice(0, -12),
-                        market_cap_usd: response.data.market_cap_usd.toString().slice(0, -12)
+                        volume_core_asset: response.data.volume_core_asset,
+                        market_cap_core_asset: response.data.market_cap_core_asset
                     };
                     callback(dex);
                 });
             },
             getAssetFull: function(asset_id, callback) {
 
-                $http.get(appConfig.urls.python_backend + "/asset_and_volume?asset_id=" + asset_id)
+                $http.get(appConfig.urls.python_backend() + "/asset_and_volume?asset_id=" + asset_id)
                     .then(function(response) {
 
                     var type;
@@ -91,7 +97,7 @@
                         description = description_p[3];
                         type = "User Issued";
                     }
-                    if (response.data.symbol === "BTS") {
+                    if (asset_id === "1.3.0") {
                         type = "Core Token";
                     }
 
@@ -143,7 +149,7 @@
             },
             getAssetHolders: function(asset_id, precision, callback) {
                 var accounts = [];
-                $http.get(appConfig.urls.python_backend + "/asset_holders?asset_id=" + asset_id)
+                return $http.get(appConfig.urls.python_backend() + "/asset_holders?asset_id=" + asset_id)
                     .then(function(response) {
                     angular.forEach(response.data, function(value, key) {
                         var account = {
@@ -157,7 +163,7 @@
                 });
             },
             getAssetHoldersCount: function(asset_id, callback) {
-                $http.get(appConfig.urls.python_backend + "/asset_holders_count?asset_id=" + asset_id)
+                $http.get(appConfig.urls.python_backend() + "/asset_holders_count?asset_id=" + asset_id)
                     .then(function(response) {
                     var holders_count = response.data;
                     callback(holders_count);
@@ -165,7 +171,7 @@
             },
             getAssetNameAndPrecision: function(asset_id, callback) {
                 var results = {};
-                $http.get(appConfig.urls.python_backend + "/asset?asset_id=" + asset_id).then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_id).then(function (response) {
                     results.symbol = response.data.symbol;
                     results.precision = response.data.precision;
                     callback(results);

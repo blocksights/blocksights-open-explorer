@@ -7,7 +7,40 @@
 
     function proxiesCtrl($scope, $filter, $routeParams, $http, appConfig, utilities) {
 
-        $http.get(appConfig.urls.python_backend + "/top_proxies").then(function(response) {
+        $scope.proxiesColumns = [
+            {
+                title: $filter('translate')('Position'),
+                index: 'position',
+                sort: true,
+                sortByDefault: true,
+            },
+            {
+                title: $filter('translate')('Account'),
+                index: 'account_name',
+                sort: true,
+            },
+            {
+                title: $filter('translate')('Voting Power'),
+                index: 'power',
+                sort: true,
+            },
+            {
+                title: $filter('translate')('Followers'),
+                index: 'followers',
+                sort: true,
+                hidden: ['xs']
+            },
+            {
+                title: $filter('translate')('Percent of all active Voting Power'),
+                index: 'perc',
+                sort: true,
+                hidden: ['xs']
+            },
+
+        ]
+
+        $scope.proxiesLoading = true;
+        $http.get(appConfig.urls.python_backend() + "/top_proxies").then(function(response) {
                 let proxies = [];
                 let counter = 1;
                 angular.forEach(response.data, function(value, key) {
@@ -15,16 +48,20 @@
                         position: counter,
                         account: value.id,
                         account_name: value.name,
-                        power: utilities.formatBalance(value.bts_weight, 5),
+                        power: utilities.formatBalance(value.voting_weight, 5),
                         followers: value.followers,
-                        perc: value.bts_weight_percentage
+                        perc: value.voting_weight_percentage
                     };
-                    if(counter <= 10)
+                    if(counter <= 100)
                         proxies.push(parsed);
                     counter++;
                 });
                 $scope.proxies = proxies;
-            });
+                $scope.proxiesLoading = false;
+            }).catch(() => {
+                $scope.proxiesLoadingError = true;
+                $scope.proxies = 'error';
+        });
 
         $scope.column = 'position';
         $scope.reverse = false;
@@ -51,5 +88,5 @@
             }
         }
     }
-    
+
 })();

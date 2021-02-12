@@ -6,6 +6,8 @@
 
     function searchCtrl($scope, $filter, $routeParams, $location, $http, appConfig) {
 
+        $scope.branding = appConfig.branding;
+
         $scope.add2block = function(block) {
             $scope.block = block;
         };
@@ -40,7 +42,7 @@
                 const start_block = $scope.block;
                 let block_data = [];
                 let number = start_block;
-                $http.get(appConfig.urls.python_backend + "/last_block_number").then(function (response) {
+                $http.get(appConfig.urls.python_backend() + "/last_block_number").then(function (response) {
                     while (number <= response.data) {
                         block_data.push(number);
                         number *= 10;
@@ -53,7 +55,7 @@
             else if(param == "asset") {
                 const start = $scope.asset;
                 let asset_data = [];
-                $http.get(appConfig.urls.python_backend + "/lookup_assets?start=" + start.toUpperCase())
+                $http.get(appConfig.urls.python_backend() + "/lookup_assets?start=" + start.toUpperCase())
                     .then(function (response) {
                     for (var i = 0; i < response.data.length; i++) {
                         asset_data[i] = response.data[i][0];
@@ -64,7 +66,7 @@
             else if(param == "account") {
                 const start = $scope.account;
                 let account_data = [];
-                $http.get(appConfig.urls.python_backend + "/lookup_accounts?start=" + start)
+                $http.get(appConfig.urls.python_backend() + "/lookup_accounts?start=" + start)
                     .then(function (response) {
                         for (var i = 0; i < response.data.length; i++) {
                             account_data[i] = response.data[i][0];

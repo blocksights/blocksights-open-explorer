@@ -2,60 +2,344 @@
     'use strict';
 
     angular.module('app').factory('chartService', chartService);
-    chartService.$inject = ['$http', 'appConfig', 'utilities'];
+    chartService.$inject = ['$http', 'appConfig', 'utilities', '$filter'];
 
-    function chartService($http, appConfig, utilities) {
+    function chartService($http, appConfig, utilities, $filter) {
+
+        function errorChart(message) {
+            return noChartWithMessage(message ? message : $filter('translate')('Data unavailable'))
+        }
+
+        function noChartWithMessage(message) {
+            return {
+                title: {
+                    text: ''
+                },
+                lang: {
+                    noData: message
+                }
+            };
+        }
+
+        function noDataChart(message) {
+            return noChartWithMessage(message ? message : $filter('translate')('No data found'))
+        }
+
+        function loadingChart(message) {
+            return noChartWithMessage(message ? message : $filter('translate')('Loading'))
+        }
+
+        /**
+         * Returns the config for highcharts pie chart
+         *
+         * @param {object}  params
+         * @param {string}  [params.title]          - The chart title
+         * @param {string}  [params.noData]         - The no data message
+         * @param {array}   [params.data]           - The chart data
+         * @param {object}  [params.series]         - The chart series options
+         * @param {object}  [params.series.title]   - The title of series
+         *
+         * */
+        function pieChart(params) {
+
+            /**
+             * For some reason, if to pass the series with empty data array, the highcharts throws the error
+             * To avoid this, the code below does the check for empty data and returns the noDataChart
+             * instead of pieChart
+             * */
+            if(Array.isArray(params.data) && params.data.length === 0) {
+                return noDataChart(params.noData);
+            }
+
+            return {
+                title: {
+                    text: params.title || ''
+                },
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie',
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <br>{point.percentage:.1f} % ({point.y})'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                legend: {
+                    itemMarginTop: 5,
+                    itemMarginBottom: 5,
+                    align: 'left',
+                    layout: 'vertical',
+                    verticalAlign: 'top',
+                },
+                responsive: {
+                    rules: [{
+                        chartOptions: {
+                            legend: {
+                                enabled: false
+                            }
+                        },
+                        condition: {
+                            maxWidth: 580
+                        }
+                    }]
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>:<br>{point.percentage:.1f} % ({point.y})',
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    name: params && params.series && params.series.title || $filter('translate')('Series Label'),
+                    colorByPoint: true,
+
+                    data: params.data || [],
+                }]
+            };
+
+        }
+
+        /**
+         * @param {object}  params
+         * @param {array}   params.categories       -
+         * @param {array}   params.data             -
+         * @param {string}  [params.title]          -
+         * @param {object}  [params.series]         -
+         * @param {string}  [params.series.title]   -
+         * @param {object}  [params.xAxis.title]    - title for xAxis
+         * @param {object}  [params.yAxis.title]    - title for yAxis
+         */
+
+        function barChart(params) {
+
+            return {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: params.title || '',
+                },
+                yAxis: {
+                    title: {
+                        text: params && params.yAxis && params.yAxis.title || ''
+                    },
+                },
+                xAxis: {
+                    type: 'category',
+                    title: {
+                        text: params && params.xAxis && params.xAxis.title || ''
+                    },
+                    categories: params.categories || [],
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: params && params.series && params.series.title || $filter('translate')('Series Label'),
+                    data: params.data,
+                }],
+                responsive: {
+                    rules: [{
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 20
+                                }
+                            }
+                        },
+                        condition: {
+                            maxWidth: 360,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 15
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 360,
+                            maxWidth: 550,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 10
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 550,
+                            maxWidth: 750,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 8
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 750,
+                        }
+                    }]
+                },
+            };
+        }
+
+        /**
+         * @param {object}  params
+         * @param {array}   params.categories       -
+         * @param {array}   params.data             -
+         * @param {string}  [params.title]          -
+         * @param {object}  [params.series]         -
+         * @param {string}  [params.series.title]   -
+         * @param {object}  [params.xAxis.title]    - title for xAxis
+         * @param {object}  [params.yAxis.title]    - title for yAxis
+         */
+
+        function lineChart(params) {
+
+            return {
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: params.title || '',
+                },
+                yAxis: {
+                    title: {
+                        text: params && params.yAxis && params.yAxis.title || ''
+                    },
+                },
+                plotOptions: {
+                    series: {
+                        connectNulls: true
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    title: {
+                        text: params && params.xAxis && params.xAxis.title || ''
+                    },
+                    categories: params.categories || [],
+                    labels: {
+                        style: {
+                            fontSize: '10px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                },
+                legend: params && params.legend ? params.legend : {
+                    enabled: false
+                },
+                series: params && params.series,
+                responsive: {
+                    rules: [{
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 20
+                                }
+                            }
+                        },
+                        condition: {
+                            maxWidth: 360,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 15
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 360,
+                            maxWidth: 550,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 10
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 550,
+                            maxWidth: 750,
+                        }
+                    }, {
+                        chartOptions: {
+                            xAxis: {
+                                labels: {
+                                    step: 8
+                                }
+                            }
+                        },
+                        condition: {
+                            minWidth: 750,
+                        }
+                    }]
+                },
+            };
+        }
 
         return {
-            dailyDEXChart: function(callback) {
+            noDataChart               : noDataChart,
+            errorChart                : errorChart,
+            loadingChart              : loadingChart,
+            dailyDEXChart             : function() {
 
-                var dex_volume_chart = {};
-                $http.get(appConfig.urls.python_backend + "/daily_volume_dex_dates").then(function (response) {
-                    $http.get(appConfig.urls.python_backend + "/daily_volume_dex_data").then(function (response2) {
+                return new Promise((resolve, reject) => {
 
-                        dex_volume_chart.options = {
-                            animation: true,
-                            title: {
-                                text: 'Daily DEX Volume in BTS for the last 30 days'
-                            },
-                            tooltip: {
-                                trigger: 'axis'
-                            },
-                            toolbox: {
-                                show: true,
-                                feature: {
-                                    saveAsImage: {show: true, title: "save as image"}
-                                }
-                            },
-                            xAxis: [{
-                                boundaryGap: true,
-                                data: response.data
-                            }],
-                            yAxis: [{
-                                type: 'value',
-                                scale: true,
-                                axisLabel: {
-                                    formatter: function (value) {
-                                        return value / 1000000 + "M";
-                                    }
-                                }
-                            }],
-                            calculable: true,
-                            series: [{
-                                name: 'Volume',
-                                type: 'bar',
-                                itemStyle: {
-                                    normal: {
-                                        color: 'green',
-                                        borderColor: 'green'
-                                    }
+                    $http.get(appConfig.urls.python_backend() + "/daily_volume_dex_dates").then(function (response) {
+                        $http.get(appConfig.urls.python_backend() + "/daily_volume_dex_data").then(function (response2) {
+
+                            const chartData = barChart({
+                                categories: response.data,
+                                title: $filter('translate')('Daily DEX Volume Chart Title', {
+                                    symbol: appConfig.branding.coreSymbol
+                                }),
+                                series: {
+                                    title: $filter('translate')('Daily DEX Volume Chart Series Title', {
+                                        symbol: appConfig.branding.coreSymbol
+                                    }),
                                 },
-                                data: response2.data
-                            }]
-                        };
-                        callback(dex_volume_chart);
+                                data: response2.data,
+                            });
+
+                            resolve(chartData);
+
+                        }).catch((err) => {
+                            reject(err);
+                        });
+                    }).catch((err) => {
+                        reject(err);
                     });
+
                 });
+
             },
             TradingView: function(base, quote) {
                 var widget = window.tvWidget = new TradingView.widget({
@@ -64,7 +348,7 @@
                     interval: '60',
                     container_id: "tv_chart_container",
                     //	BEWARE: no trailing slash is expected in feed URL
-                    datafeed: new Datafeeds.UDFCompatibleDatafeed(appConfig.urls.udf_wrapper),
+                    datafeed: new Datafeeds.UDFCompatibleDatafeed(appConfig.urls.udf_wrapper()),
                     library_path: "charting_library/",
                     locale: getParameterByName('lang') || "en",
                     //	Regression Trend-related functionality is not implemented yet, so it's hidden for a while
@@ -83,422 +367,256 @@
                     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
                 }
             },
-            topOperationsChart: function(callback) {
-                $http.get(appConfig.urls.elasticsearch_wrapper +
-                    "/es/account_history?from_date=now-1d&to_date=now&type=aggs&agg_field=operation_type&size=10")
-                    .then(function(response) {
+            topOperationsChart: function () {
+                return new Promise((resolve, reject) => {
 
-                    var legends = [];
-                    var data = [];
-                    var c = 0;
-                    for(var i = 0; i < response.data.length; i++) {
+                    $http.get(appConfig.urls.elasticsearch_wrapper() +
+                        "/es/account_history?from_date=now-180d&to_date=now&type=aggs&agg_field=operation_type&size=10")
+                        .then(function(response) {
 
-                        ++c;
-                        if(c > 7) { break; }
+                            const legends = [];
+                            const data = [];
 
-                        var name =  utilities.operationType(response.data[i].key)[0];
-                        var color =  utilities.operationType(response.data[i].key)[1];
+                            let c = 0;
 
-                        data.push({
-                            value: response.data[i].doc_count,
-                            name: name,
-                            itemStyle: {
-                                normal: {
-                                    color: '#' + color
-                                }
+                            for(let i = 0; i < response.data.length; i++) {
+                                ++c;
+
+                                if(c > 7) { break; }
+
+                                const name =  utilities.operationType(response.data[i].key)[0];
+                                const color =  utilities.operationType(response.data[i].key)[1];
+
+                                data.push({
+                                    y: response.data[i].doc_count,
+                                    name: name,
+                                    color: `#${color}`,
+                                });
                             }
-                        });
 
-                        legends.push(name);
-                    }
-                    var operations_chart = {};
-                    operations_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: legends,
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            name: 'Operation Type',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
+                            resolve(
+                                pieChart({
+                                    noData: $filter('translate')('No data about operations'),
+                                    series: {
+                                        title: $filter('translate')('Operations')
+                                    },
+                                    data: data
+                                })
+                            );
+                        }).catch((err) => {
+                        reject(err);
+                    });
+                })
+            },
+            topProxiesChart: function() {
+
+                return new Promise((resolve, reject) => {
+
+                    $http.get(appConfig.urls.python_backend() + "/top_proxies").then(function(response) {
+                        const data = [];
+                        const AMOUNT_TO_DISPLAY = 10;
+
+                        let i;
+
+                        for (i in response.data) {
+
+                            data.push({
+                                y:  response.data[i].voting_power,
+                                name: response.data[i].name
+                            });
+
+                            if (data.length >= AMOUNT_TO_DISPLAY) break;
+                        }
+
+                        resolve(pieChart({
+                            noData: $filter('translate')('No data about proxies'),
+                            series: {
+                                title: $filter('translate')('Proxies')
+                            },
+                            data: data
+                        }));
+                    }).catch((err) => {
+                        reject(err);
+                    });
+
+                });
+
+            },
+            topMarketsChart: function() {
+
+                return new Promise((resolve, reject) => {
+
+                    $http.get(appConfig.urls.python_backend() + "/top_markets").then(function(response) {
+                        const data = [];
+                        const amountToDisplay = 10;
+                        let i;
+                        for (i in response.data) {
+                            data.push({
+                                y: response.data[i]["24h_volume"],
+                                name: response.data[i].pair
+                            });
+                            if (data.length >= amountToDisplay) break;
+                        }
+
+                        resolve(pieChart({
+                            noData: $filter('translate')('No data about markets'),
+                            series: {
+                                title:  $filter('translate')('Traffic Source')
+                            },
                             data: data,
-                            label: {
-                                normal: {
-                                    show: false,
-                                    position: 'center'
-                                },
-                                emphasis: {
-                                    show: true,
-                                    textStyle: {
-                                        fontSize: '30',
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            labelLine: {
-                                normal: {
-                                    show: false
-                                }
-                            }
-                        }]
-                    };
-                    callback(operations_chart);
-                });
-            },
-            topProxiesChart: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_proxies").then(function(response) {
+                        }));
 
-                    var proxies_chart = {};
-                    proxies_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: [
-                                response.data[0].name,
-                                response.data[1].name,
-                                response.data[2].name,
-                                response.data[3].name,
-                                response.data[4].name,
-                                response.data[5].name,
-                                response.data[6].name
-                            ]
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                            name: 'Proxies',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
-                                    },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true,
-                                        position: 'center',
-                                        textStyle: {
-                                            fontSize: '30',
-                                            fontWeight: 'bold'
-                                        }
-                                    }
-                                }
-                            },
-                            data: [
-                                {value: response.data[0].bts_weight, name: response.data[0].name},
-                                {value: response.data[1].bts_weight, name: response.data[1].name},
-                                {value: response.data[2].bts_weight, name: response.data[2].name},
-                                {value: response.data[3].bts_weight, name: response.data[3].name},
-                                {value: response.data[4].bts_weight, name: response.data[4].name},
-                                {value: response.data[5].bts_weight, name: response.data[5].name},
-                                {value: response.data[6].bts_weight, name: response.data[6].name}
-                            ]
-                        }]
-                    };
-                    callback(proxies_chart);
-                });
-            },
-            topMarketsChart: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_markets").then(function(response) {
+                    }).catch((err) => {
+                        reject(err);
+                    });
 
-                    var markets_chart = {};
-                    markets_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: [
-                                response.data[0].pair,
-                                response.data[1].pair,
-                                response.data[2].pair,
-                                response.data[3].pair,
-                                response.data[4].pair,
-                                response.data[5].pair,
-                                response.data[6].pair
-                            ]
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                            name: 'Traffic source',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
-                                    },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true,
-                                        position: 'center',
-                                        textStyle: {
-                                            fontSize: '30',
-                                            fontWeight: 'bold'
-                                        }
-                                    }
-                                }
-                            },
-                            data: [
-                                {value: response.data[0]["24h_volume"], name: response.data[0].pair},
-                                {value: response.data[1]["24h_volume"], name: response.data[1].pair},
-                                {value: response.data[2]["24h_volume"], name: response.data[2].pair},
-                                {value: response.data[3]["24h_volume"], name: response.data[3].pair},
-                                {value: response.data[4]["24h_volume"], name: response.data[4].pair},
-                                {value: response.data[5]["24h_volume"], name: response.data[5].pair},
-                                {value: response.data[6]["24h_volume"], name: response.data[6].pair}
-                            ]
-                        }]
-                    };
-                    callback(markets_chart);
                 });
             },
-            topSmartCoinsChart: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_smartcoins").then(function(response) {
-                    var smartcoins_chart = {};
-                    smartcoins_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: [
-                                response.data[0].asset_name,
-                                response.data[1].asset_name,
-                                response.data[2].asset_name,
-                                response.data[3].asset_name,
-                                response.data[4].asset_name,
-                                response.data[5].asset_name,
-                                response.data[6].asset_name
-                            ]
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                            name: 'Top Smartcoins',
-                            type: 'pie',
-                            roseType: 'radius',
-                            max: 40,
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
-                                    },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true
-                                    },
-                                    labelLine: {
-                                        show: true
-                                    }
-                                }
-                            },
-                            data: [
-                                {value: response.data[0]["24h_volume"], name: response.data[0].asset_name},
-                                {value: response.data[1]["24h_volume"], name: response.data[1].asset_name},
-                                {value: response.data[2]["24h_volume"], name: response.data[2].asset_name},
-                                {value: response.data[3]["24h_volume"], name: response.data[3].asset_name},
-                                {value: response.data[4]["24h_volume"], name: response.data[4].asset_name},
-                                {value: response.data[5]["24h_volume"], name: response.data[5].asset_name},
-                                {value: response.data[6]["24h_volume"], name: response.data[6].asset_name}
-                            ]
-                        }]
-                    };
-                    callback(smartcoins_chart);
-                });
-            },
-            topUIAsChart: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_uias").then(function(response) {
-                    var uias_chart = {};
-                    uias_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: [
-                                response.data[0].asset_name,
-                                response.data[1].asset_name,
-                                response.data[2].asset_name,
-                                response.data[3].asset_name,
-                                response.data[4].asset_name,
-                                response.data[5].asset_name,
-                                response.data[6].asset_name
-                            ]
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                            name: 'Top User Issued Assets',
-                            type: 'pie',
-                            roseType: 'radius',
-                            max: 40,
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
-                                    },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true
-                                    },
-                                    labelLine: {
-                                        show: true
-                                    }
-                                }
-                            },
-                            data: [
-                                {value: response.data[0]["24h_volume"], name: response.data[0].asset_name},
-                                {value: response.data[1]["24h_volume"], name: response.data[1].asset_name},
-                                {value: response.data[2]["24h_volume"], name: response.data[2].asset_name},
-                                {value: response.data[3]["24h_volume"], name: response.data[3].asset_name},
-                                {value: response.data[4]["24h_volume"], name: response.data[4].asset_name},
-                                {value: response.data[5]["24h_volume"], name: response.data[5].asset_name},
-                                {value: response.data[6]["24h_volume"], name: response.data[6].asset_name}
-                            ]
-                        }]
-                    };
-                    callback(uias_chart);
-                });
-            },
-            topHoldersChart: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_holders").then(function(response) {
+            topSmartCoinsChart: function() {
 
-                    var holders_chart = {};
-                    holders_chart.options = {
-                        animation: true,
-                        tooltip: {
-                            trigger: 'item',
-                            formatter: "{a} <br/>{b} : {c} ({d}%)"
-                        },
-                        legend: {
-                            orient: 'vertical',
-                            x: 'left',
-                            data: [
-                                response.data[0].account_name,
-                                response.data[1].account_name,
-                                response.data[2].account_name,
-                                response.data[3].account_name,
-                                response.data[4].account_name,
-                                response.data[5].account_name,
-                                response.data[6].account_name
-                            ]
-                        },
-                        toolbox: {
-                            show: true,
-                            feature: {
-                                saveAsImage: {show: true, title: "save as image"}
-                            }
-                        },
-                        calculable: true,
-                        series: [{
-                            color: ['#81CA80','#6BBCD7', '#E9C842', '#E96562', '#008000', '#FB8817', '#552AFF'],
-                            name: 'Holders',
-                            type: 'pie',
-                            radius: ['50%', '70%'],
-                            itemStyle: {
-                                normal: {
-                                    label: {
-                                        show: false
-                                    },
-                                    labelLine: {
-                                        show: false
-                                    }
-                                },
-                                emphasis: {
-                                    label: {
-                                        show: true,
-                                        position: 'center',
-                                        textStyle: {
-                                            fontSize: '30',
-                                            fontWeight: 'bold'
-                                        }
-                                    }
-                                }
+                return new Promise((resolve, reject) => {
+                    $http.get(appConfig.urls.python_backend() + "/top_smartcoins").then(function(response) {
+                        const data = [];
+                        const AMOUNT_TO_DISPLAY = 10;
+                        let i;
+
+                        for (i in response.data) {
+                            data.push({
+                                y: response.data[i]["24h_volume"],
+                                name: response.data[i].asset_name
+                            });
+                            if (data.length >= AMOUNT_TO_DISPLAY) break;
+                        }
+
+                        resolve(pieChart({
+                            noData: $filter('translate')('No data about smartcoins'),
+                            series: {
+                                title: $filter('translate')('Top Smartcoins')
                             },
-                            data: [
-                                {value: response.data[0].amount, name: response.data[0].account_name},
-                                {value: response.data[1].amount, name: response.data[1].account_name},
-                                {value: response.data[2].amount, name: response.data[2].account_name},
-                                {value: response.data[3].amount, name: response.data[3].account_name},
-                                {value: response.data[4].amount, name: response.data[4].account_name},
-                                {value: response.data[5].amount, name: response.data[5].account_name},
-                                {value: response.data[6].amount, name: response.data[6].account_name}
-                            ]
-                        }]
-                    };
-                    callback(holders_chart);
+                            data: data,
+                        }));
+
+                    }).catch((err) => {
+                        reject(err);
+                    });
                 });
-            }
+
+            },
+            topUIAsChart: function() {
+
+                return new Promise((resolve, reject) => {
+                    $http.get(appConfig.urls.python_backend() + "/top_uias").then(function(response) {
+                        const data = [];
+                        const amountToDisplay = 10;
+                        let i;
+                        for (i in response.data) {
+                            data.push({
+                                y: response.data[i]["24h_volume"],
+                                name: response.data[i].asset_name
+                            });
+                            if (data.length >= amountToDisplay) break;
+                        }
+
+                        resolve(pieChart({
+                            noData: $filter('translate')('No data about UIAs'),
+                            series: {
+                                title: $filter('translate')('Top User Issued Assets')
+                            },
+                            data: data,
+                        }));
+                    }).catch((err) => {
+                        reject(err);
+                    });
+                });
+
+            },
+            votingActivityChart: function() {
+                console.log("todo")
+                return null;
+            },
+            topHoldersChart: function() {
+
+                return new Promise((resolve, reject) => {
+                    $http.get(appConfig.urls.python_backend() + "/top_holders").then(function (response) {
+
+                        const data = [];
+                        const amountToDisplay = 10;
+                        let i;
+
+                        for (i in response.data) {
+                            data.push({
+                                y: response.data[i].amount,
+                                name : response.data[i].account_name
+                            });
+                            if (data.length >= amountToDisplay) break;
+                        }
+
+                        resolve(pieChart({
+                            series: {
+                                title: $filter('translate')('Holders')
+                            },
+                            noData: $filter('translate')('No data about holders'),
+                            data: data,
+                        }));
+
+                    }).catch((err) => {
+                        reject(err);
+                    });
+
+                });
+
+            },
+            blocksProducedChart: function () {
+                return new Promise((resolve, reject) => {
+                    $http.get(appConfig.urls.python_backend() + "/block_statistics").then((response) => {
+
+                        resolve(barChart({
+                            categories: response.data.block_num,
+                            xAxis: {
+                                title: $filter('translate')('Block number symbol')
+                            },
+                            yAxis: {
+                                title: $filter('translate')('Operations Count')
+                            },
+                            series: {
+                                title: $filter('translate')('Operations')
+                            },
+                            data: response.data.op_count
+                        }));
+
+                    }).catch((err) => {
+                        reject(err);
+                    })
+                });
+            },
+            priceFeedChart: function (publisher) {
+                return new Promise((resolve, reject) => {
+                    $http.get(appConfig.urls.python_backend() + "/pricefeed?publisher=" + publisher + "&from_date=now-7d").then((response) => {
+                        resolve(lineChart({
+                            categories: response.data.blocks,
+                            xAxis: {
+                                title: $filter('translate')('Block number')
+                            },
+                            yAxis: {
+                                title: $filter('translate')('Price (base BTS)')
+                            },
+                            series: Object.keys(response.data).map(asset => {
+                                let publisher_data = response.data[asset][Object.keys(response.data[asset])[0]]
+                                return {
+                                    name: asset,
+                                    data: publisher_data["feed"]
+                                }
+                            }),
+                            legend: {
+                                enabled: true
+                            },
+                        }));
+
+                    }).catch((err) => {
+                        reject(err);
+                    })
+                });
+            },
         };
     }
 

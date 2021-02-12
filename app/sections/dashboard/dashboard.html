@@ -1,99 +1,133 @@
+<script type="text/ng-template" id="popover.html">
+    <div style="width: 230px">
+        Block Time: {{ dynamic !== 'error' ? (dynamic.time | dateFilter) : ('No Data' | translate) }}
+        <br/>
+        Number of Ops last 24Hr: {{ dynamic !== 'error' ? dynamic.statistics_per_x.op_count : ('No Data' | translate) }}
+    </div>
+</script>
+
+<script type="text/ng-template" id="dashboard-operations-table.html">
+
+    <div ng-if="index === 'operation_text'" ng-bind-html="row.operation_text | to_trusted"></div>
+
+    <div ng-if="index === 'operation_id'">
+        <a href='#/operations/{{cell}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'time'"> {{ cell | dateFilter }} </div>
+
+    <div ng-if="index === 'block_num'">
+        <a href="#/blocks/{{ cell }}">{{ cell | number }}</a>
+    </div>
+
+    <div ng-if="index === 'type'">
+        <span class="badge badge-primary" style="background-color: #{{row.color}};">{{row.type}}</span>
+    </div>
+
+</script>
+
 <div class="page page-dashboard" data-ng-controller="DashboardCtrl">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-5">
             <div class="row text-center">
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
-                        <div class="box-info">
-                            <p class="size-h4">{{dynamic.head_block_number | number}}<span class="size-h4"></span></p>
+                        <div
+                            class="box-info"
+                            uib-popover-template="'popover.html'"
+                            popover-trigger="'mouseover'"
+                            popover-placement="bottom-left"
+                        >
+                            <p class="size-h4">{{dynamic !== 'error' ? (dynamic.head_block_number | number) : ('No Data' | translate) }}<span class="size-h4"></span></p>
                             <p class="text-muted text-small"><span data-translate="BLOCK NUMBER"></span></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
-                            <p class="size-h4">{{dynamic.accounts_registered_this_interval}} <span class="size-h4"></span></p>
+                            <p class="size-h4">{{dynamic !== 'error' ? (dynamic.accounts_registered_this_interval | number) : ('No Data' | translate) }} <span class="size-h4"></span></p>
                             <p class="text-muted text-small"><span data-translate="NEW USERS"></span></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
-                            <p class="size-h4">{{dynamic.bts_market_cap | number}}</p>
-                            <p class="text-muted text-small"><span data-translate="BTS MARKET CAP"></span></p>
+                            <p class="size-h4">{{dynamic !== 'error' ? (dynamic.core_supply | number) : ('No Data' | translate) }} </p>
+                            <p class="text-muted text-small">{{ branding.coreSymbol }} <span data-translate="general.SUPPLY"></span></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
-                            <p class="size-h4">{{dynamic.quote_volume | number}}</p>
-                            <p class="text-muted text-small"><span data-translate="BTS/BTC VOLUME"></span></p>
+                            <p class="size-h4">{{dynamic !== 'error' ? (dynamic.quote_volume | number) : ('No Data' | translate) }} </p>
+                            <p class="text-muted text-small">{{ branding.coreSymbol }}/{{dynamic.quote_symbol}} <span data-translate="general.VOLUME"></span></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
-                            <p class="size-h4">{{dynamic.witness_count | number}}</p>
+                            <p class="size-h4">{{dynamic !== 'error' ? (dynamic.witness_count | number) : ('No Data' | translate) }} </p>
                             <p class="text-muted text-small"><span data-translate="WITNESSES"></span></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
                     <div class="well">
                         <div class="box-info">
-                            <p class="size-h4">{{dynamic.committee_count | number}}</p>
+                            <p class="size-h4">{{dynamic !== 'error' ? (dynamic.committee_count | number) : ('No Data' | translate) }} </p>
                             <p class="text-muted text-small"><span data-translate="COMMITTEE"></span></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-7">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a data-target="#operations" role="tab" data-toggle="tab"><span data-translate="Operations"></span></a></li>
-                        <li role="presentation"><a data-target="#proxies" role="tab" data-toggle="tab"><span data-translate="Proxies"></span></a></li>
-                        <li role="presentation"><a data-target="#markets" role="tab" data-toggle="tab"><span data-translate="Markets"></span></a></li>
-                        <li role="presentation"><a data-target="#smartcoin" role="tab" data-toggle="tab"><span data-translate="Smart coins"></span></a></li>
-                        <li role="presentation"><a data-target="#uia" role="tab" data-toggle="tab"><span data-translate="User issued assets"></span></a></li>
-                        <li role="presentation"><a data-target="#holders" role="tab" data-toggle="tab"><span data-translate="Holders"></span></a></li>
+                    <ul class="nav nav-tabs scrollable-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a data-target="#operations" role="tab" data-toggle="tab" ng-click="loadTabsCharts('operations')"><span data-translate="Operations"></span></a>
+                        </li>
+                        <li role="presentation">
+                            <a data-target="#proxies" role="tab" data-toggle="tab" ng-click="loadTabsCharts('proxies')"><span data-translate="Proxies"></span></a>
+                        </li>
+                        <li role="presentation">
+                            <a data-target="#markets" role="tab" data-toggle="tab" ng-click="loadTabsCharts('markets')"><span data-translate="Markets"></span></a>
+                        </li>
+                        <!--<li role="presentation">
+                            <a data-target="#smartcoin" role="tab" data-toggle="tab" ng-click="loadTabsCharts('smartcoin')"><span data-translate="Smart coins"></span></a>
+                        </li>-->
+                        <li role="presentation">
+                            <a data-target="#uia" role="tab" data-toggle="tab" ng-click="loadTabsCharts('uia')"><span data-translate="User issued assets"></span></a>
+                        </li>
+                        <li role="presentation">
+                            <a data-target="#holders" role="tab" data-toggle="tab" ng-click="loadTabsCharts('holders')"><span data-translate="Holders"></span></a>
+                        </li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="operations">
-                            <div style="width:100%;">
-                                <lz-chart config="operations_chart.options" style="min-height: 200px; width: 100%; min-width: 400px; margin-top: 10px"></lz-chart>
-                            </div></div>
+                            <highcharts-chart options="chartsData.operations_chart" allow-fullscreen-for-mobile="true" class="dashboard-operations-chart"></highcharts-chart>
+                        </div>
                         <div role="tabpanel" class="tab-pane" id="proxies">
-                            <div style="width:100%">
-                                <lz-chart config="proxies_chart.options" style="min-height: 200px; width: 100%; min-width: 400px; margin-top: 10px"></lz-chart>
-                            </div>
+                            <highcharts-chart options="chartsData.proxies_chart" allow-fullscreen-for-mobile="true" class="dashboard-operations-chart"></highcharts-chart>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="markets">
-                            <div style="width:100%">
-                                <lz-chart config="markets_chart.options" style="min-height: 200px; width: 100%; min-width: 400px; margin-top: 10px"></lz-chart>
-                            </div>
+                            <highcharts-chart options="chartsData.markets_chart" allow-fullscreen-for-mobile="true" class="dashboard-operations-chart"></highcharts-chart>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="smartcoin">
-                            <div style="width:100%">
-                                <lz-chart config="smartcoins_chart.options" style="min-height: 200px; width: 100%; min-width: 400px; margin-top: 10px"></lz-chart>
-                            </div>
+                            <highcharts-chart options="chartsData.smartcoins_chart" allow-fullscreen-for-mobile="true" class="dashboard-operations-chart"></highcharts-chart>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="uia">
-                            <div style="width:100%">
-                                <lz-chart config="uias_chart.options" style="min-height: 200px; width: 100%; min-width: 400px; margin-top: 10px"></lz-chart>
-                            </div>
+                            <highcharts-chart options="chartsData.uias_chart" allow-fullscreen-for-mobile="true" class="dashboard-operations-chart"></highcharts-chart>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="holders">
-                            <div style="width:100%">
-                                <lz-chart config="holders_chart.options" style="min-height: 200px; width: 100%; min-width: 400px; margin-top: 10px"></lz-chart>
-                            </div>
+                            <highcharts-chart options="chartsData.holders_chart" allow-fullscreen-for-mobile="true" class="dashboard-operations-chart"></highcharts-chart>
                         </div>
                     </div>
                 </div>
@@ -102,26 +136,15 @@
     </div>
     <div class="panel panel-default">
         <div class="panel-body table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th><span data-translate="Operation"></span></th>
-                        <th>ID</th>
-                        <th><span data-translate="Date and time"></span></th>
-                        <th><span data-translate="Block"></span></th>
-                        <th><span data-translate="Type"></span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="operation in operations track by $index">
-                    <td><div ng-bind-html="operation.operation_text | to_trusted" layout-align="center"></div></td>
-                    <td><a href='#/operations/{{operation.operation_id}}/'>{{operation.operation_id}}</a></td>
-                    <td>{{operation.time}}</td>
-					<td><a href='#/{{operation.block_num}}/'>{{operation.block_num | number}} </a></td>
-                    <td><span class="badge badge-primary" style="background-color: #{{operation.color}};">{{operation.type}}</span></td>
-                </tr>
-                </tbody>
-            </table>
+
+
+            <responsive-table data-data="operations"
+                              data-columns="operationsColumns"
+                              data-template="dashboard-operations-table.html"
+                              data-loading="operationsLoading"
+                              data-loading-error="operationsLoadingError">
+            </responsive-table>
+
             <footer class="table-footer">
                 <div class="row">
                     <div class="col-md-6 page-num-info">
@@ -139,6 +162,7 @@
                     </div>
                 </div>
             </footer>
+
         </div>
     </div>
 </div>

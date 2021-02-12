@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  web:
+    build: .
+    command: 'nginx -g "daemon off;"'
+    volumes:
+      - ./:/open-explorer/
+    ports:
+      - 9000:80

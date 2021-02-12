@@ -1,8 +1,8 @@
 (function () {
     'use strict';
 
-    angular.module('app').controller('DashboardCtrl', ['$scope', '$timeout', '$window', 'networkService',
-        'chartService',  DashboardCtrl])
+    angular.module('app').controller('DashboardCtrl', ['$scope', 'Notify', '$timeout', '$window', 'networkService',
+        'chartService', 'appConfig', '$filter', DashboardCtrl])
 
         .filter('to_trusted', ['$sce', function($sce){
             return function(text) {
@@ -10,49 +10,148 @@
             };
         }]);
 
-    function DashboardCtrl($scope, $timeout, $window, networkService, chartService) {
+    function DashboardCtrl($scope, Notify, $timeout, $window, networkService, chartService, appConfig, $filter) {
 
         networkService.getHeader(function (returnData) {
             $scope.dynamic = returnData;
+        }).catch(() => {
+            $scope.dynamic = 'error'
         });
-        
+
+        $scope.branding = appConfig.branding;
+
+        $scope.operationsColumns = [
+            {
+                title: $filter('translate')('Operation'),
+                index: 'operation_text',
+            },
+            {
+                title: $filter('translate')('ID'),
+                index: 'operation_id',
+            },
+            {
+                title: $filter('translate')('Date and time'),
+                index: 'time',
+                hidden: ['xs']
+            },
+            {
+                title: $filter('translate')('Block'),
+                index: 'block_num',
+                hidden: ['xs', 'sm']
+            },
+            {
+                title: $filter('translate')('Type'),
+                index: 'type',
+                hidden: ['xs', 'sm', 'md']
+            }
+        ];
+
         $scope.select = function(page_operations) {
             const page = page_operations -1;
             const limit = 20;
             const from = page * limit;
 
+            $scope.operationsLoading = true;
+            $scope.operationsLoadingError = false;
             networkService.getLastOperations(limit, from, function (returnData) {
+                $scope.operationsLoading = false;
                 $scope.operations = returnData;
                 $scope.currentPage = page_operations;
-                $scope.total_ops = 10000;
+                if (page_operations == 1) {
+                    if (returnData.length > 0) {
+                        $scope.total_ops = returnData[0].operation_id_num;
+                    } else {
+                        $scope.total_ops = 0;
+                    }
+                }
+            }).catch(err => {
+                $scope.operationsLoadingError = true;
             });
         };
         $scope.select(1);
 
-		chartService.topOperationsChart(function (returnData) {
-            $scope.operations_chart = returnData;
-        });
+        $scope.chartsData = {
+            operations_chart: chartService.loadingChart(),
+            proxies_chart: chartService.loadingChart(),
+            markets_chart: chartService.loadingChart(),
+            smartcoins_chart: chartService.loadingChart(),
+            uias_chart: chartService.loadingChart(),
+            holders_chart: chartService.loadingChart(),
+        };
 
-        chartService.topProxiesChart(function (returnData) {
-            $scope.proxies_chart = returnData;
-        });
+        // lazy load on tab change
+        $scope.loadTabsCharts = function(tabName) {
 
-        chartService.topMarketsChart(function (returnData) {
-            $scope.markets_chart = returnData;
-        });
+            const loadingText = $filter('translate')('Loading');
 
-        chartService.topSmartCoinsChart(function (returnData) {
-            $scope.smartcoins_chart = returnData;
-        });
+            const isChartLoading = (chartDataItem) => {
+                return chartDataItem && !chartDataItem.series;
+            };
 
-        chartService.topUIAsChart(function (returnData) {
-            $scope.uias_chart = returnData;
-        });
+            if (tabName == "operations") {
 
-        chartService.topHoldersChart(function (returnData) {
-            $scope.holders_chart = returnData;
-        });
+                if(isChartLoading($scope.chartsData.operations_chart)) {
 
+                    chartService.topOperationsChart().then((returnData) => {
+                        $scope.chartsData.operations_chart = returnData;
+                    }).catch((error) => {
+                        $scope.chartsData.operations_chart = chartService.noDataChart($filter('translate')('No data about operations'));
+                    });
+
+                }
+
+            } else if (tabName == "proxies") {
+                if(isChartLoading($scope.chartsData.proxies_chart)) {
+
+                    chartService.topProxiesChart().then((returnData) => {
+                        $scope.chartsData.proxies_chart = returnData;
+                    }).catch((error) => {
+                        $scope.chartsData.proxies_chart = chartService.noDataChart($filter('translate')('No data about proxies'));
+                    });
+                }
+
+            } else if (tabName == "markets") {
+                if(isChartLoading($scope.chartsData.markets_chart)) {
+
+                    chartService.topMarketsChart().then((returnData) => {
+                        $scope.chartsData.markets_chart = returnData;
+                    }).catch((error) => {
+                        $scope.chartsData.markets_chart = chartService.noDataChart($filter('translate')('No data about markets'));
+                    });
+                }
+
+            } else if (tabName == "smartcoin") {
+                if(isChartLoading($scope.chartsData.smartcoins_chart)) {
+                    chartService.topSmartCoinsChart().then((returnData) => {
+                        $scope.chartsData.smartcoins_chart = returnData;
+                    }).catch((error) => {
+                        $scope.chartsData.smartcoins_chart = chartService.noDataChart($filter('translate')('No data about smartcoins'));
+                    });
+                }
+
+            } else if (tabName == "uia") {
+                if(isChartLoading($scope.chartsData.uias_chart)) {
+                    chartService.topUIAsChart().then((returnData) => {
+                        $scope.chartsData.uias_chart = returnData;
+                    }).catch((error) => {
+                        $scope.chartsData.uias_chart = chartService.noDataChart($filter('translate')('No data about UIAs'));
+                    });
+                }
+
+            } else if (tabName == "holders") {
+                if(isChartLoading($scope.chartsData.holders_chart)) {
+                    chartService.topHoldersChart().then((returnData) => {
+                        $scope.chartsData.holders_chart = returnData;
+                    }).catch((error) => {
+                        $scope.chartsData.holders_chart = chartService.noDataChart($filter('translate')('No data about holders'));
+                    });
+                }
+            }
+        };
+
+        // laod default tab
         $scope.currentTabIndex = 0;
+        $scope.loadTabsCharts("operations");
+
     }
 })();

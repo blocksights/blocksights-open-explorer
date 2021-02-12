@@ -1,0 +1,83 @@
+<div>
+    <table class="table" ng-class="class">
+        <thead>
+        <tr>
+            <!-- the column with collapse buttons to toggle the state for all rows. Visible only when at least one column is hidden -->
+            <th class="{{ mobileSectionClass }}" ng-hide="loadingError">
+                <img src="images/plus.svg" class="collapse-table" ng-show="!getRowToggleAllState()" ng-click="toggleAllRows()"/>
+                <img src="images/minus.svg" class="collapse-table" ng-show="getRowToggleAllState()" ng-click="toggleAllRows()"/>
+            </th>
+            <!-- table columns which are not hidden inside the row-->
+            <th ng-repeat="column in columns track by column.title" class="{{ columnClass[column.title] ||  '' }}" ng-class="column.sort ? 'responsive-table-sort-enabled' : 'responsive-table-sort-disabled'" ng-click="sort(column)">
+                {{column.title}}
+                <span ng-if="column.index === sortingParameter" class="responsive-table-sort-button" ng-class="sortingOrder ? 'responsive-table-sort-button-desc' : 'responsive-table-sort-button-asc'"></span>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- the row with a loading -->
+        <tr ng-if="loading && !loadingError">
+            <td colspan={{columns.length+1}}>
+                <loading></loading>
+            </td>
+        </tr>
+        <!-- the row with a error message -->
+        <tr ng-if="loadingError">
+            <td colspan={{columns.length+1}}>
+                <loading-error data-text="loadingErrorMessage"></loading-error>
+            </td>
+        </tr>
+        <!-- the row with a "No data" message -->
+        <tr ng-if="!loading && !loadingError && items.length === 0">
+            <td colspan={{columns.length+1}}>
+                <loading-no-data data-text="noDataText"></loading-no-data>
+            </td>
+        </tr>
+        <!-- rows to display on a desktop  -->
+        <tr ng-if="!loading && !loadingError && items.length > 0" ng-class="item.tclass || null" ng-repeat-start="item in items">
+            <td class="{{ mobileSectionClass }}">
+                <img src="images/plus.svg" class="collapse-table" ng-show="!rowsState[$index]" ng-click="toggleRow($index)"/>
+                <img src="images/minus.svg" class="collapse-table" ng-show="rowsState[$index]" ng-click="toggleRow($index)"/>
+            </td>
+            <td ng-repeat="column in columns track by column.title" class="{{ columnClass[column.title] ||  '' }}">
+                <div ng-include src="template" onload="row = item; cell = item[column.index]; index = column.index"></div>
+            </td>
+        </tr>
+        <!-- column:value block to display a hidden cells on the mobile devices -->
+        <tr ng-repeat-end class="{{ mobileSectionClass || '' }}" ng-show="rowsState[$index]" style="margin-bottom: 12px;">
+
+            <td colspan="{{columns.length + 1}}">
+                <table style="margin-bottom: 12px;">
+                    <tr ng-repeat="column in columns track by column.title" class="{{ mobileColumnClass[column.title] ||  '' }}">
+                        <td style="max-width: 50%; min-width: 30%;padding-top: 6px;">
+                            <strong>
+                                {{column.title}}:
+                            </strong>
+                        </td>
+                        <td>
+                            <div ng-include style="padding-left: 12px;padding-top: 6px;" src="template" onload="row = item; cell = item[column.index]; index = column.index"></div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <footer class="table-footer" ng-class="{'hidden': !itemsPerPage}">
+        <div class="row">
+            <div class="col-md-6 page-num-info">
+            </div>
+            <div class="col-md-6 text-right pagination-container">
+                <ul uib-pagination class="pagination-sm"
+                    ng-model="currentPage"
+                    total-items="(data | filter:filter).length"
+                    ng-change="currentPage===undefined || select(currentPage)"
+                    items-per-page="itemsPerPage"
+                    rotate="false"
+                    previous-text="&lsaquo;" next-text="&rsaquo;"
+                    boundary-links="true"></ul>
+            </div>
+        </div>
+    </footer>
+</div>

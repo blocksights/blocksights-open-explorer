@@ -1,3 +1,29 @@
+<script type="text/ng-template" id="committee-members-list-table.html">
+
+    <div ng-if="index === 'counter'">
+        {{ cell }}
+    </div>
+
+    <div ng-if="index === 'id'">
+        <a href="#/witness/{{cell}}/">{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'committee_member_account_name'">
+        <a href="#/accounts/{{row.committee_member_account}}/">{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'url'">
+        <a href="{{cell}}" target="_blank">
+            <span data-translate="Link"></span>
+        </a>
+    </div>
+
+    <div ng-if="index === 'total_votes'">
+        {{ cell | number: 0 }}
+    </div>
+
+</script>
+
 <div class="page page-table" data-ng-controller="committeeCtrl">
     <div class="row">
         <div class="col-md-6">
@@ -19,29 +45,20 @@
                 <div class="form-group col-md-4">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search for active committee member" ng-model="search">
+                        <input type="text" class="form-control" placeholder="{{ 'Search for active committee member' | translate }}" ng-model="search">
                     </div>
                 </div>
             </form>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th ng-click='sortColumn("counter")' ng-class='sortClass("counter")'><span data-translate="Position"></span></th>
-                        <th ng-click='sortColumn("id")' ng-class='sortClass("id")'>ID</th>
-                        <th ng-click='sortColumn("committee_member_account_name")' ng-class='sortClass("committee_member_account_name")'><span data-translate="Account"></span></th>
-                        <th>Url</th>
-						<th class="align-right" ng-click='sortColumn("total_votes")' ng-class='sortClass("total_votes")'><span data-translate="Total votes"></span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="ac in active_committee | orderBy:column:reverse | filter:search">
-                    <td>{{ac.counter}}</td>
-                    <td><a href="#/objects/{{ac.id}}/">{{ac.id}}</a></td>
-                    <td><a href="#/accounts/{{ac.committee_member_account}}/">{{ac.committee_member_account_name}}</a></td>
-                    <td><a href="{{ac.url}}" target="_blank">Link</a></td>
-					<td class="align-right">{{ac.total_votes | number: 0}}</td>
-                </tbody>
-            </table>
+
+            <responsive-table class="committee-members-list-table"
+                              data-data="active_committee"
+                              data-loading="committeeLoading"
+                              data-loading-error="committeeLoadingError"
+                              data-columns="committeeColumns"
+                              data-template="committee-members-list-table.html"
+                              data-filter="search"
+            ></responsive-table>
+
         </div>
     </div>
 
@@ -54,29 +71,20 @@
                 <div class="form-group col-md-4">
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fas fa-search"></i></div>
-                        <input type="text" class="form-control" placeholder="Search for standby committee member" ng-model="search2">
+                        <input type="text" class="form-control" placeholder="{{ 'Search for standby committee member' | translate }}" ng-model="search2">
                     </div>
                 </div>
             </form>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th ng-click='sortColumn2("counter")' ng-class='sortClass2("counter")'><span data-translate="Position"></span></th>
-                    <th ng-click='sortColumn2("id")' ng-class='sortClass2("id")'>ID</th>
-                    <th ng-click='sortColumn2("committee_member_account_name")' ng-class='sortClass2("committee_member_account_name")'><span data-translate="Account"></span></th>
-                    <th>Url</th>
-                    <th class="align-right" ng-click='sortColumn2("total_votes")' ng-class='sortClass2("total_votes")'><span data-translate="Total votes"></span></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr data-ng-repeat="sc in standby_committee | orderBy:column2:reverse2 | filter:search2">
-                    <td>{{sc.counter}}</td>
-                    <td><a href="#/objects/{{sc.id}}/">{{sc.id}}</a></td>
-                    <td><a href="#/accounts/{{sc.committee_member_account}}/">{{sc.committee_member_account_name}}</a></td>
-                    <td><a href="{{sc.url}}" target="_blank">Link</a></td>
-                    <td class="align-right">{{sc.total_votes | number: 0}}</td>
-                </tbody>
-            </table>
+
+            <responsive-table class="committee-members-list-table"
+                              data-data="standby_committee"
+                              data-loading="committeeLoading"
+                              data-loading-error="committeeLoadingError"
+                              data-columns="committeeColumns"
+                              data-template="committee-members-list-table.html"
+                              data-filter="search2"
+            ></responsive-table>
+
         </div>
     </div>
 </div>

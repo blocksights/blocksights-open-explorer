@@ -8,51 +8,56 @@
 
         return {
             getCommitteeMembers: function(callback) {
-                var active_committee = [];
-                var standby_committee = [];
-                var committee = [];
+                return new Promise((resolve, reject) => {
+                    networkService.getHeader(function (returnData) {
+                        const active_committee = [];
+                        const standby_committee = [];
+                        const committee = [];
 
-                networkService.getHeader(function (returnData) {
-                    var committee_count = returnData.committee_count;
+                        const committee_count = returnData.committee_count;
 
-                    $http.get(appConfig.urls.python_backend + "/committee_members").then(function(response) {
-                        var counter = 1;
-                        angular.forEach(response.data, function(value, key) {
-                            var parsed = {
-                                id: value[0].id,
-                                total_votes: utilities.formatBalance(value[0].total_votes, 5),
-                                url: value[0].url,
-                                committee_member_account: value[0].committee_member_account,
-                                committee_member_account_name: value[0].committee_member_account_name,
-                                counter: counter
-                            };
+                        $http.get(appConfig.urls.python_backend() + "/committee_members").then(function(response) {
+                            let counter = 1;
+                            angular.forEach(response.data, function(value, key) {
+                                const parsed = {
+                                    id: value[0].id,
+                                    total_votes: utilities.formatBalance(value[0].total_votes, 5),
+                                    url: value[0].url,
+                                    committee_member_account: value[0].committee_member_account,
+                                    committee_member_account_name: value[0].committee_member_account_name,
+                                    counter: counter
+                                };
 
-                            if(counter <= committee_count) {
-                                active_committee.push(parsed);
-                            }
-                            else {
-                                standby_committee.push(parsed);
-                            }
-                            counter++;
+                                if(counter <= committee_count) {
+                                    active_committee.push(parsed);
+                                }
+                                else {
+                                    standby_committee.push(parsed);
+                                }
+                                counter++;
+                            });
+
+                            committee[0] = active_committee;
+                            committee[1] = standby_committee;
+                            callback(committee);
+                            resolve(committee);
+
+                        }).catch((err) => {
+                            reject(err);
                         });
+
+                    }).catch((err) => {
+                        reject(err);
                     });
-                    committee[0] = active_committee;
-                    committee[1] = standby_committee;
-                    callback(committee);
                 });
             },
-            getWitnesses: function(callback) {
-                var active_witnesses = [];
-                var standby_witnesses = [];
-                var witnesses = [];
-
-                networkService.getHeader(function (returnData) {
-                    var witness_count = returnData.witness_count;
-
-                    $http.get(appConfig.urls.python_backend + "/witnesses").then(function(response) {
-                        var counter = 1;
+            getWitnesses: function(status) {
+                return new Promise((resolve, reject) => {
+                    const witnesses = [];
+                    $http.get(appConfig.urls.python_backend() + "/witnesses?status=" + status).then(function(response) {
+                        let counter = 1;
                         angular.forEach(response.data, function(value, key) {
-                            var parsed = {
+                            const parsed = {
                                 id: value.id,
                                 last_aslot: value.last_aslot,
                                 last_confirmed_block_num: value.last_confirmed_block_num,
@@ -64,23 +69,18 @@
                                 witness_account_name: value.witness_account_name,
                                 counter: counter
                             };
-
-                            if(counter <= witness_count) {
-                                active_witnesses.push(parsed);
-                            }
-                            else {
-                                standby_witnesses.push(parsed);
-                            }
+                            witnesses.push(parsed);
                             counter++;
                         });
-                    });
-                    witnesses[0] = active_witnesses;
-                    witnesses[1] = standby_witnesses;
-                    callback(witnesses);
+                        resolve(witnesses);
+                    }).catch((err) => {
+                        reject(err);
+                    }) ;
+
                 });
             },
             getWorkers: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/workers").then(function(response) {
+                return $http.get(appConfig.urls.python_backend() + "/workers").then(function(response) {
                     var workers_current = [];
                     var workers_expired = [];
                     var workers = [];
@@ -159,7 +159,7 @@
                 });
             },
             getProxies: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/top_proxies").then(function(response) {
+                return $http.get(appConfig.urls.python_backend() + "/top_proxies").then(function(response) {
                     var proxies = [];
                     var counter = 1;
                     angular.forEach(response.data, function(value, key) {
@@ -167,9 +167,9 @@
                             position: counter,
                             account: value.id,
                             account_name: value.name,
-                            power: value.bts_weight,
+                            power: value.voting_power,
                             followers: value.followers,
-                            perc: value.bts_weight_percentage
+                            perc: value.voting_power_percentage
                         };
                         if(counter <= 10) {
                             proxies.push(parsed);
@@ -180,100 +180,55 @@
                 });
             },
             getWitnessVotes: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/witnesses_votes").then(function(response2) {
+                return $http.get(appConfig.urls.python_backend() + "/witnesses_votes").then(function(response2) {
                     var witnesses = [];
                     angular.forEach(response2.data, function (value, key) {
                         var parsed = {
-                            id: value.worker_id,
-                            witness_account_name: value.worker_account_name,
-                            proxy1: value[2].split(":")[1],
-                            proxy2: value[3].split(":")[1],
-                            proxy3: value[4].split(":")[1],
-                            proxy4: value[5].split(":")[1],
-                            proxy5: value[6].split(":")[1],
-                            proxy6: value[7].split(":")[1],
-                            proxy7: value[8].split(":")[1],
-                            proxy8: value[9].split(":")[1],
-                            proxy9: value[10].split(":")[1],
-                            proxy10: value[11].split(":")[1],
-                            tclass1: ((value[2].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass2: ((value[3].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass3: ((value[4].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass4: ((value[5].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass5: ((value[6].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass6: ((value[7].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass7: ((value[8].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass8: ((value[9].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass9: ((value[10].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass10: ((value[11].split(":")[1] === "Y") ? "success" : "danger")
+                            id: value.witness_id,
+                            witness_account_name: value.witness_account_name
                         };
+                        let i;
+                        for (i = 0; i < value.top_proxy_votes.length; i++) {
+                            parsed["proxy" + (i+1)] = value.top_proxy_votes[i].split(":")[1]
+                            parsed["tclass" + (i+1)] = ((value.top_proxy_votes[i].split(":")[1] === "Y") ? "success" : "danger")
+                        }
                         witnesses.push(parsed);
                     });
                     callback(witnesses);
                 });
             },
             getWorkersVotes: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/workers_votes").then(function(response2) {
+                return $http.get(appConfig.urls.python_backend() + "/workers_votes").then(function(response2) {
                     var workers = [];
                     angular.forEach(response2.data, function (value, key) {
                         var parsed = {
-                            id: value[1],
-                            worker_account_name: value[0],
-                            worker_name: value[2],
-                            proxy1: value[3].split(":")[1],
-                            proxy2: value[4].split(":")[1],
-                            proxy3: value[5].split(":")[1],
-                            proxy4: value[6].split(":")[1],
-                            proxy5: value[7].split(":")[1],
-                            proxy6: value[8].split(":")[1],
-                            proxy7: value[9].split(":")[1],
-                            proxy8: value[10].split(":")[1],
-                            proxy9: value[11].split(":")[1],
-                            proxy10: value[12].split(":")[1],
-                            tclass1: ((value[3].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass2: ((value[4].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass3: ((value[5].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass4: ((value[6].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass5: ((value[7].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass6: ((value[8].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass7: ((value[9].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass8: ((value[10].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass9: ((value[11].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass10: ((value[12].split(":")[1] === "Y") ? "success" : "danger")
+                            id: value.worker_id,
+                            worker_account_name: value.worker_account_name,
+                            worker_name: value.worker_name
                         };
+                        let i;
+                        for (i = 0; i < value.top_proxy_votes.length; i++) {
+                            parsed["proxy" + (i+1)] = value.top_proxy_votes[i].split(":")[1]
+                            parsed["tclass" + (i+1)] = ((value.top_proxy_votes[i].split(":")[1] === "Y") ? "success" : "danger")
+                        }
                         workers.push(parsed);
                     });
                     callback(workers);
                 });
             },
             getCommitteeVotes: function(callback) {
-                $http.get(appConfig.urls.python_backend + "/committee_votes").then(function(response) {
+                return $http.get(appConfig.urls.python_backend() + "/committee_votes").then(function(response) {
                     var committee = [];
                     angular.forEach(response.data, function (value, key) {
                         var parsed = {
-                            id: value[1],
-                            committee_account_name: value[0],
-                            proxy1: value[1].split(":")[1],
-                            proxy2: value[2].split(":")[1],
-                            proxy3: value[3].split(":")[1],
-                            proxy4: value[4].split(":")[1],
-                            proxy5: value[5].split(":")[1],
-                            proxy6: value[6].split(":")[1],
-                            proxy7: value[7].split(":")[1],
-                            proxy8: value[8].split(":")[1],
-                            proxy9: value[9].split(":")[1],
-                            proxy10: value[10].split(":")[1],
-                            tclass1: ((value[1].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass2: ((value[2].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass3: ((value[3].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass4: ((value[4].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass5: ((value[5].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass6: ((value[6].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass7: ((value[7].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass8: ((value[8].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass9: ((value[9].split(":")[1] === "Y") ? "success" : "danger"),
-                            tclass10: ((value[10].split(":")[1] === "Y") ? "success" : "danger")
+                            id: value.committee_id,
+                            committee_account_name: value.committee_account_name
                         };
+                        let i;
+                        for (i = 0; i < value.top_proxy_votes.length; i++) {
+                            parsed["proxy" + (i+1)] = value.top_proxy_votes[i].split(":")[1]
+                            parsed["tclass" + (i+1)] = ((value.top_proxy_votes[i].split(":")[1] === "Y") ? "success" : "danger")
+                        }
                         committee.push(parsed);
                     });
                     callback(committee);

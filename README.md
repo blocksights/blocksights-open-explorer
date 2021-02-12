@@ -4,22 +4,37 @@ http://open-explorer.io
 
 ## Install
 
-Clone repo:
+A node and npm installation on your machine is assumed. Checkout this repository and install the dependencies
 
 ```
-git clone https://github.com/bitshares/open-explorer
-cd open-explorer
+npm install
 ```
 
-Start development server, explorer will listen in http://localhost:9000:
+Start development serverwill listen to http://localhost:9000:
 
 ```
 npm start
 ```
 
-Build bundle and move to www:
+Build production bundle with
 
 ```
 npm run start:build
-cp -rf dist/* /var/www/open-explorer.io/public_html/
+```
+
+## Run as docker
+
+A docker and docker-compose installation on your machine is assumed. The docker file creates the necessary environment, builds
+the explorer and runs it through nginx listen on your host machine to http://localhost:9000:
+
+Run the docker
+
+```
+docker-compose up
+```
+
+Rebuild the image
+
+```
+docker-compose build
 ```

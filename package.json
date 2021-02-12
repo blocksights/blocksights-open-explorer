@@ -1,14 +1,18 @@
 {
-  "name": "bitshares-explorer",
+  "name": "open-explorer",
   "private": false,
-  "version": "1.0.0",
-  "description": "An opensource bitshares explorer.",
-  "repository": "https://github.com/oxarbitrage/bitshares-explorer",
-  "license": "MIT",
+  "version": "4.1.0",
+  "description": "An Open Source explorer for Graphene blockchains.",
+  "repository": "-",
+  "license": "MIT + Proprietary",
+  "browser": {
+    "ws": "./loadWebSocket.js"
+  },
   "devDependencies": {
     "angular": ">=1.7.9",
     "angular-animate": "1.7.8",
     "angular-aria": "1.7.8",
+    "angular-echarts-lite": "1.1.0",
     "angular-google-analytics": "1.1.8",
     "angular-loader": "1.7.8",
     "angular-loading-bar": "0.9.0",
@@ -17,22 +21,33 @@
     "angular-translate-loader-static-files": "2.18.1",
     "angular-ui-bootstrap": "2.5.6",
     "angular-websocket": "2.0.1",
+    "archiver": "^4.0.1",
     "bootstrap": "3.4.1",
     "components-font-awesome": "5.9.0",
+    "copy-webpack-plugin": "^5.1.1",
     "echarts": "4.2.1",
-    "jdenticon": "2.2.0",
-    "jquery": "3.4.1",
-    "js-sha256": "0.9.0",
-    "angular-echarts-lite": "1.1.0",
-    "webpack": "4.39.2",
-    "webpack-cli": "3.3.7",
-    "copy-webpack-plugin": "5.0.4",
+    "git-rev-sync": "^3.0.1",
     "html-webpack-plugin": "3.2.0",
-    "webpack-dev-server": "3.8.0"
+    "jdenticon": "2.2.0",
+    "jquery": "^3.5.1",
+    "js-sha256": "0.9.0",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "prestart": "npm install",
-    "start": "webpack-dev-server",
-    "start:build": "webpack --mode=production"
+    "postinstall": "npm run install-charting-library",
+    "install-charting-library": "node ./app/charting_library/install-charting-library.js",
+    "package-charting-library": "node ./app/charting_library/package-charting-library.js",
+    "start": "webpack-dev-server --mode=development",
+    "build": "webpack --mode=production"
+  },
+  "dependencies": {
+    "angular-ui-notification": "^0.3.6",
+    "clipboard": "^2.0.6",
+    "extract-zip": "^2.0.0",
+    "highcharts": "^8.1.2",
+    "md5-file": "^5.0.0",
+    "ngstorage": "^0.3.11"
   }
 }

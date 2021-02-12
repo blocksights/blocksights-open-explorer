@@ -1,0 +1,36 @@
+<div class="page" data-ng-controller="welcomeCtrl">
+    <div class="text-center">
+        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+            <div class="inner cover">
+                <h1 class="cover-heading">Welcome to the Blocksights Explorer</h1>
+                <img src="favicon.ico" class="rounded mx-auto d-block" alt="...">
+                <p class="lead">Get insight on transactions, governance, history and statistics of your favorite blockchain.</p>
+                <div ng-if="supportedBy.donations.length > 0 || supportedBy.blockproducers.length > 0">
+                    <p>This service is supported through donations and other means.</p>
+                    <p class="lead">
+                        <button type="button" class="btn btn-success btn-w-md" data-toggle="collapse" data-target="#collapseExample"><span data-translate="Learn more"></span></button>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body text-center">
+                            <p ng-if="supportedBy.donations.length > 0">Donations are much appreciated and received
+                                <ul class="list-group">
+                                    <li ng-repeat="item in supportedBy.donations" class="list-group-item">
+                                        on the {{ item[0] }} Blockchain: {{ item[1] }}
+                                    </li>
+                                </ul>
+                            </p>
+                            <p ng-if="supportedBy.blockproducers.length > 0">
+                                Furthermore you can support this service by voting for the block producer
+                                <ul class="list-group">
+                                    <li ng-repeat="item in supportedBy.blockproducers" class="list-group-item">
+                                        on the {{ item[0] }} Blockchain: {{ item[1] }}
+                                    </li>
+                                </ul>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
