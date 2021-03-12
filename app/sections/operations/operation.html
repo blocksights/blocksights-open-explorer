@@ -20,7 +20,12 @@
                         <span data-translate="Type"></span>
                     </li>
                     <li class="list-group-item">
-                        <span class="badge" style="background-color: #FFFFFF; color: #000000">2</span>
+                        <span class="badge" style="background-color: #FFFFFF; color: #000000">
+                            <span ng-repeat="fee in data.fees">
+                                <span ng-if="fee.key != 'trx' || !$first || !$last" data-translate="{{'Fee Type ' + fee.key}}"></span>
+                                <span ng-bind-html="fee.text | to_trusted"></span><span ng-if="!$last">, </span>
+                            </span>
+                        </span>
                         <span data-translate="Fee"></span>
                     </li>
                     <li class="list-group-item">

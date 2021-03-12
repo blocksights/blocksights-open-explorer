@@ -64,10 +64,10 @@
                 });
             },
             getLastOperations: function(limit, from, callback) {
-                return $http.get(appConfig.urls.elasticsearch_wrapper() + "/es/account_history"
-                    + "?size=" + limit
-                    + "&from_=" + from
-                    + "&from_date=now-90d"
+                return $http.get(appConfig.urls.elasticsearch_wrapper() + "/account_history"
+                    + "?limit=" + limit
+                    + "&offset=" + from
+                    + (from < 1000000 ? "&from_date=now-1M" : "&from_date=2015-10-10")
                 ).then(response => {
                     let last_ops = [];
 
@@ -213,24 +213,27 @@
                 let op;
                 $http.get(appConfig.urls.python_backend() + "/operation?operation_id=" + operation).then(function(response) {
                     const raw_obj = response.data.op;
+                    const raw_obj_with_result = {...raw_obj, result: response.data.result};
                     const op_type =  utilities.operationType(response.data.op_type);
-
-                    utilities.opText(appConfig, $http, response.data.op_type, raw_obj, function(returnData) {
-                        op = {
-                            name: operation,
-                            block_num: response.data.block_num,
-                            virtual_op: response.data.virtual_op,
-                            trx_in_block: response.data.trx_in_block,
-                            op_in_trx: response.data.op_in_trx,
-                            result: response.data.result,
-                            type: op_type[0],
-                            color: op_type[1],
-                            raw: raw_obj,
-                            operation_text: returnData,
-                            block_time: response.data.block_time,
-                            trx_id: response.data.trx_id
-                        };
-                        callback(op);
+                    utilities.opFees(appConfig, $http, response.data.op_type, raw_obj_with_result).then(fees => {
+                        utilities.opText(appConfig, $http, response.data.op_type, raw_obj_with_result, function(returnData) {
+                            op = {
+                                name: operation,
+                                block_num: response.data.block_num,
+                                virtual_op: response.data.virtual_op,
+                                trx_in_block: response.data.trx_in_block,
+                                op_in_trx: response.data.op_in_trx,
+                                result: response.data.result,
+                                type: op_type[0],
+                                color: op_type[1],
+                                raw: raw_obj,
+                                operation_text: returnData,
+                                block_time: response.data.block_time,
+                                trx_id: response.data.trx_id,
+                                fees: fees
+                            };
+                            callback(op);
+                        });
                     });
                 });
             },

@@ -6,9 +6,20 @@
 
     function utilities($filter) {
 
-        function formatNumber(x) {
+        function satToFloat(number, presicion) {
+            var divideby =  Math.pow(10, presicion);
+            return Number(number/divideby);
+        }
+
+        function formatNumber(x, precision=null) {
             try {
-                var parts = x.toString().split(".");
+                if (x == 0) {
+                    return "0";
+                }
+                if (precision != null) {
+                    x = satToFloat(x, precision);
+                }
+                let parts = x.toString().split(".");
 
                 if (x < 1) { parts[1] = parts[1]; }
                 else if (x > 1 && x < 100) { parts[1] = parts[1].substr(0, 2); }
@@ -25,6 +36,48 @@
         }
 
         return {
+            formatBalance: function (number, precision) {
+                return satToFloat(number, precision);
+            },
+            opFees: async function (appConfig, $http, operation_type, raw_obj) {
+                let feeAsset = await $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + raw_obj.fee.asset_id);
+                feeAsset = feeAsset.data;
+                let fees = [
+                    {
+                        key: "op",
+                        float: formatNumber(raw_obj.fee.amount, feeAsset.precision),
+                        symbol: feeAsset.symbol
+                    }
+                ];
+                if (operation_type === 4) {
+                    fees[0].key = "market";
+                } else if (operation_type === 63) {
+                    for (let i = 0; i < raw_obj.result[1].fees.length; i++) {
+                        let fee = raw_obj.result[1].fees[i];
+                        if (fee.amount > 0) {
+                            feeAsset = await $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + fee.asset_id);
+                            feeAsset = feeAsset.data;
+                            fees.push(
+                                {
+                                    key: "market",
+                                    float: formatNumber(fee.amount, feeAsset.precision),
+                                    symbol: feeAsset.symbol,
+                                }
+                            )
+                        }
+                    };
+                }
+                fees.forEach(fee => {
+                    fee.text = $filter('translateWithLinks')('Amount Link', {
+                        assetLink: {
+                            text: fee.symbol,
+                            href: `/#/assets/${fee.symbol}`
+                        },
+                        float: fee.float
+                    });
+                });
+                return fees;
+            },
             opText: function (appConfig, $http, operation_type, operation, callback) {
                 var operation_account = 0;
                 var operation_text;
@@ -63,11 +116,11 @@
                                                 },
                                                 assetLink: {
                                                     text: asset_name,
-                                                    href: `/#/assets/${amount_asset_id}`
+                                                    href: `/#/assets/${asset_name}`
                                                 },
                                                 receiverLink: {
                                                     text: to_name,
-                                                    href: `/#/assets/${to}`
+                                                    href: `/#/accounts/${to}`
                                                 },
                                                 amount: formatNumber(amount),
                                             })
@@ -400,7 +453,7 @@
                                                 },
                                                 assetLink: {
                                                     text: response_asset.data.symbol,
-                                                    href: `/#/assets/${asset_to_issue_asset_id}`
+                                                    href: `/#/assets/${response_asset.data.symbol}`
                                                 },
                                                 accountLink: {
                                                     text: response_name.data,
@@ -536,7 +589,7 @@
                                             href: `/#/accounts/${operation_account}`
                                         },
                                         assetLink: {
-                                            text: amount_asset_id,
+                                            text: asset_name,
                                             href: `/#/assets/${asset_name}`
                                         },
                                     });
@@ -568,7 +621,7 @@
                                             href: `/#/accounts/${operation_account}`
                                         },
                                         assetLink: {
-                                            text: total_claimed_asset_id,
+                                            text: asset_name,
                                             href: `/#/assets/${asset_name}`
                                         },
                                         amount: formatNumber(amount),
@@ -617,11 +670,11 @@
                                                     href: `/#/accounts/${operation_account}`
                                                 },
                                                 collateralAssetLink: {
-                                                    text: additional_collateral_asset_id,
+                                                    text: asset_name1,
                                                     href: `/#/assets/${asset_name1}`
                                                 },
                                                 debtAssetLink: {
-                                                    text: debt_covered_asset_id,
+                                                    text: asset_name2,
                                                     href: `/#/assets/${asset_name2}`
                                                 },
                                             });
@@ -663,7 +716,7 @@
                                                     href: `/#/accounts/${to}`
                                                 },
                                                 assetLink: {
-                                                    text: asset_id,
+                                                    text: asset_name,
                                                     href: `/#/assets/${asset_name}`
                                                 },
 
@@ -839,6 +892,268 @@
                             callback(operation_text);
                         });
                 }
+                else if (operation_type === 57) { // Ticket create
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation.account)
+                        .then(function (creator_name) {
+                            creator_name = creator_name.data;
+                                $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + operation.amount_.asset_id)
+                                    .then(function (asset) {
+                                        let asset_name = asset.data.symbol;
+                                        let asset_precision = asset.data.precision;
+                                        let divideby = Math.pow(10, asset_precision);
+                                        let amount = Number(operation.amount_.amount / divideby);
+
+                                        operation_text = $filter('translateWithLinks')('Operation Ticket Create Description', {
+                                            accountLink: {
+                                                text: creator_name,
+                                                href: `/#/accounts/${creator_name}`
+                                            },
+                                            assetLink: {
+                                                text: asset_name,
+                                                href: `/#/assets/${asset_name}`
+                                            },
+
+                                            amount: formatNumber(amount),
+                                        });
+                                        callback(operation_text);
+                                    });
+                        });
+                }
+                else if (operation_type === 58) { // Ticket update
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation.account)
+                        .then(function (creator_name) {
+                            creator_name = creator_name.data;
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + operation.amount_for_new_target.asset_id)
+                                .then(function (asset) {
+                                    let asset_name = asset.data.symbol;
+                                    let asset_precision = asset.data.precision;
+                                    let divideby = Math.pow(10, asset_precision);
+                                    let amount = Number(operation.amount_for_new_target.amount / divideby);
+
+                                    operation_text = $filter('translateWithLinks')('Operation Ticket Update Description', {
+                                        accountLink: {
+                                            text: creator_name,
+                                            href: `/#/accounts/${creator_name}`
+                                        },
+                                        assetLink: {
+                                            text: asset_name,
+                                            href: `/#/assets/${asset_name}`
+                                        },
+
+                                        amount: formatNumber(amount),
+                                    });
+                                    callback(operation_text);
+                                });
+                        });
+                }
+                else if (operation_type === 59) { // LP create
+                    operation_account = operation.account;
+
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
+                        .then(function (response_name) {
+
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + operation.asset_a)
+                                .then(function (response_asset1) {
+
+                                    var asset_a_name = response_asset1.data.symbol;
+
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + operation.asset_b)
+                                        .then(function (response_asset2) {
+
+                                            var asset_b_name = response_asset2.data.symbol;
+
+                                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + operation.share_asset)
+                                                .then(function (response_asset3) {
+
+                                                    var share_name = response_asset3.data.symbol;
+
+                                                    operation_text = $filter('translateWithLinks')('Operation Liquidity Pool Create Description', {
+                                                        accountLink: {
+                                                            text: response_name.data,
+                                                            href: `/#/accounts/${operation_account}`
+                                                        },
+                                                        assetALink: {
+                                                            text: asset_a_name,
+                                                            href: `/#/assets/${asset_a_name}`
+                                                        },
+                                                        assetBLink: {
+                                                            text: asset_b_name,
+                                                            href: `/#/assets/${asset_b_name}`
+                                                        },
+                                                        shareLink: {
+                                                            text: share_name,
+                                                            href: `/#/assets/${share_name}`
+                                                        },
+                                                    });
+
+                                                    callback(operation_text);
+                                                });
+
+
+                                        });
+                                });
+                        });
+                }
+                else if (operation_type === 60) { // LP delete
+                    operation_account = operation.account;
+
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
+                        .then(function (response_name) {
+
+                            operation_text = $filter('translateWithLinks')('Operation Liquidity Pool Delete Description', {
+                                accountLink: {
+                                    text: response_name.data,
+                                    href: `/#/accounts/${operation_account}`
+                                },
+                                pool: operation.pool,
+                            });
+
+                            callback(operation_text);
+                        });
+                }
+                else if (operation_type === 61) { // LP deposit
+                    operation_account = operation.account;
+
+                    var amount_to_sell_asset_id = operation.amount_a.asset_id;
+                    var amount_to_sell_amount = operation.amount_a.amount;
+
+                    var min_to_receive_asset_id = operation.amount_b.asset_id;
+                    var min_to_receive_amount = operation.amount_b.amount;
+
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
+                        .then(function (response_name) {
+
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_to_sell_asset_id)
+                                .then(function (response_asset1) {
+
+                                    var sell_asset_name = response_asset1.data.symbol;
+                                    var sell_asset_precision = response_asset1.data.precision;
+
+                                    var divideby = Math.pow(10, sell_asset_precision);
+                                    var sell_amount = Number(amount_to_sell_amount / divideby);
+
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" +
+                                        min_to_receive_asset_id)
+                                        .then(function (response_asset2) {
+
+                                            var receive_asset_name = response_asset2.data.symbol;
+                                            var receive_asset_precision = response_asset2.data.precision;
+
+                                            var divideby = Math.pow(10, receive_asset_precision);
+                                            var receive_amount = Number(min_to_receive_amount / divideby);
+
+                                            operation_text = $filter('translateWithLinks')('Operation Liquidity Pool Deposit Description', {
+                                                receiveAmount: formatNumber(receive_amount),
+                                                sellAmount: formatNumber(sell_amount),
+                                                accountLink: {
+                                                    text: response_name.data,
+                                                    href: `/#/accounts/${operation_account}`
+                                                },
+                                                buyAssetLink: {
+                                                    text: receive_asset_name,
+                                                    href: `/#/assets/${min_to_receive_asset_id}`
+                                                },
+                                                sellAssetLink: {
+                                                    text: sell_asset_name,
+                                                    href: `/#/assets/${amount_to_sell_asset_id}`
+                                                },
+                                                pool: operation.pool
+                                            });
+
+                                            callback(operation_text);
+                                        });
+                                });
+                        });
+                }
+                else if (operation_type === 62) { // LP withdraw
+                    operation_account = operation.account;
+
+                    var amount_amount = operation.share_amount.amount;
+                    var amount_asset_id = operation.share_amount.asset_id;
+
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
+                        .then(function (response_name) {
+
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_asset_id)
+                                .then(function (response_asset) {
+
+                                    var asset_name = response_asset.data.symbol;
+                                    var asset_precision = response_asset.data.precision;
+                                    var divideby = Math.pow(10, asset_precision);
+                                    var amount = Number(amount_amount / divideby);
+
+                                    operation_text = $filter('translateWithLinks')('Operation Liquidity Pool Withdraw Description', {
+                                        amount: formatNumber(amount),
+                                        accountLink: {
+                                            text: response_name.data,
+                                            href: `/#/accounts/${operation_account}`
+                                        },
+                                        assetLink: {
+                                            text: asset_name,
+                                            href: `/#/assets/${asset_name}`
+                                        },
+                                        pool: operation.pool
+                                    });
+
+                                    callback(operation_text);
+                                });
+                        });
+                }
+                else if (operation_type === 63) { // LP exchange
+                    var seller = operation.account;
+                    operation_account = seller;
+
+                    var amount_to_sell_asset_id = operation.result[1].paid[0].asset_id;
+                    var amount_to_sell_amount = operation.result[1].paid[0].amount;
+
+                    var min_to_receive_asset_id = operation.result[1].received[0].asset_id;
+                    var min_to_receive_amount = operation.result[1].received[0].amount;
+
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
+                        .then(function (response_name) {
+
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_to_sell_asset_id)
+                                .then(function (response_asset1) {
+
+                                    var sell_asset_name = response_asset1.data.symbol;
+                                    var sell_asset_precision = response_asset1.data.precision;
+
+                                    var divideby = Math.pow(10, sell_asset_precision);
+                                    var sell_amount = Number(amount_to_sell_amount / divideby);
+
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" +
+                                        min_to_receive_asset_id)
+                                        .then(function (response_asset2) {
+
+                                            var receive_asset_name = response_asset2.data.symbol;
+                                            var receive_asset_precision = response_asset2.data.precision;
+
+                                            var divideby = Math.pow(10, receive_asset_precision);
+                                            var receive_amount = Number(min_to_receive_amount / divideby);
+
+                                            operation_text = $filter('translateWithLinks')('Operation Liquidity Pool Exchange Description', {
+                                                receiveAmount: formatNumber(receive_amount),
+                                                sellAmount: formatNumber(sell_amount),
+                                                accountLink: {
+                                                    text: response_name.data,
+                                                    href: `/#/accounts/${operation_account}`
+                                                },
+                                                buyAssetLink: {
+                                                    text: receive_asset_name,
+                                                    href: `/#/assets/${min_to_receive_asset_id}`
+                                                },
+                                                sellAssetLink: {
+                                                    text: sell_asset_name,
+                                                    href: `/#/assets/${amount_to_sell_asset_id}`
+                                                },
+                                                pool: operation.pool
+                                            });
+
+                                            callback(operation_text);
+                                        });
+                                });
+                        });
+                }
                 else {
 
                     operation_text = $filter('translate')('Operation Beautifier Missing Description', {
@@ -848,9 +1163,9 @@
 
                     callback(operation_text);
                 }
-
             },
             operationType: function (opType) {
+                // https://github.com/bitshares/bitshares-core/blob/bd40332a3b9c25ca0acbe55e212f6959e5734fec/libraries/protocol/include/graphene/protocol/operations.hpp#L53
                 var name;
                 var color;
                 var results = [];
@@ -1081,6 +1396,34 @@
                 else if(opType === 56) {
                     name = "CUSTOM AUTHORITY DELETE";
                     color = "369694";
+                }
+                else if(opType === 57) {
+                    name = "TICKET CREATE";
+                    color = "AB7781";
+                }
+                else if(opType === 58) {
+                    name = "TICKET UPDATE";
+                    color = "AB7781";
+                }
+                else if(opType === 59) {
+                    name = "LIQUIDITY POOL CREATE";
+                    color = "369694";
+                }
+                else if(opType === 60) {
+                    name = "LIQUIDITY POOL DELETE";
+                    color = "369694";
+                }
+                else if(opType === 61) {
+                    name = "LIQUIDITY POOL DEPOSIT";
+                    color = "369694";
+                }
+                else if(opType === 62) {
+                    name = "LIQUIDITY POOL WITHDRAW";
+                    color = "369694";
+                }
+                else if(opType === 63) {
+                    name = "LIQUIDITY POOL EXCHANGE";
+                    color = "369694";
                 } else {
                     name = "UNRECOGNIZED OP";
                     color = "111111";
@@ -1091,10 +1434,6 @@
                 results[1] = color;
 
                 return results;
-            },
-            formatBalance: function (number, presicion) {
-                var divideby =  Math.pow(10, presicion);
-                return Number(number/divideby);
             },
             objectType: function (id) {
                 var parts = id.split(".");

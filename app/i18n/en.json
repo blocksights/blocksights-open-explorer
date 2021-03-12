@@ -134,6 +134,15 @@
   "Operation Witness Create Description without link": "{{accountLink}} become a witness candidate",
   "Operation Beautifier Missing Description": "Type {{operationType}} (beautifier missing): {{operationShortDesc}} ...",
 
+  "Operation Liquidity Pool Create Description": "{{accountLink}} created liquidity pool to swap {{assetALink}} and {{assetBLink}}, using {{shareLink}} as pool asset",
+  "Operation Liquidity Pool Delete Description": "{{accountLink}} deleted liquidity pool {{pool}}",
+  "Operation Liquidity Pool Deposit Description": "{{accountLink}} deposited {{receiveAmount}} {{buyAssetLink}} and {{sellAmount}} {{sellAssetLink}} into liquidity pool {{pool}}",
+  "Operation Liquidity Pool Exchange Description": "{{accountLink}} paid {{sellAmount}} {{sellAssetLink}} for {{receiveAmount}} {{buyAssetLink}} through liquidity pool {{pool}}",
+  "Operation Liquidity Pool Withdraw Description": "{{accountLink}} withdrew from liquidity pool {{pool}} by burning {{amount}} {{assetLink}}",
+
+  "Operation Ticket Create Description": "{{accountLink}} locked away {{amount}} {{assetLink}} in a voting ticket",
+  "Operation Ticket Update Description": "{{accountLink}} changed the locked away amount to {{amount}} {{assetLink}} of ticket {{ticket}}",
+
   "24H VOLUME IN BTS": "24H VOLUME IN BTS",
   "24H VOLUME": "24H VOLUME",
   "24H VOLUME IN USD": "24H VOLUME IN USD",
@@ -387,5 +396,11 @@
   "No Link": "No Link",
 
   "Voters Overview": "Voters Overview",
-  "Tallied on block": "Tallied on Block"
+  "Tallied on block": "Tallied on Block",
+
+  "Fee Type op": "Operation Fee",
+  "Fee Type market": "Market Fee",
+
+  "Amount Link": "{{float}} {{assetLink}}",
+  "Asset Link": "{{asset}}"
 }

@@ -288,10 +288,11 @@
                 }
             },
             getAccountHistory: function(account_id, limit, from, callback) {
-                return $http.get(appConfig.urls.elasticsearch_wrapper() + "/es/account_history"
+                return $http.get(appConfig.urls.elasticsearch_wrapper() + "/account_history"
                     + "?account_id=" + account_id
-                    + "&from_=" + from
-                    + "&size=" + limit
+                    + "&offset=" + from
+                    + "&limit=" + limit
+                    + (from == 0 ? "&from_date=now-1y" : "&from_date=2015-10-10")
                 ).then(response => {
                     let last_ops = [];
 
