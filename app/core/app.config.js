@@ -81,7 +81,7 @@ import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getGlobalConfi
             udf_wrapper: () => Api.getApiUrl() + "/udf"
         };
 
-        var dateFormat = 'dd MMM yyyy hh:mm:ss';
+        var dateFormat = 'dd MMM yyyy HH:mm:ss';
 
         const _appConfig = {
             pageTransitionOpts: pageTransitionOpts,
