@@ -1,5 +1,4 @@
-<div class="page page-table" data-ng-controller="marketsCtrl">
-
+<div class="page page-table market" data-ng-controller="marketsCtrl">
     <div class="row">
         <div class="col-md-6">
             <ol class="breadcrumb">
@@ -11,70 +10,84 @@
         <div class="col-md-6">
         </div>
     </div>
-
     <div class="row">
-        <div class="col-sm-2">
-            <div class="panel mini-box">
-                <div class="box-info">
-                    <p class="size-h3">{{ticker.price | number: ticker.base_precision}}<span class="size-h4"></span></p>
-                    <p class="text-muted text-small"><span data-translate="CURRENT PRICE"></span></p>
+        <div class="col-lg-6 col-md-5">
+            <div class="row text-center">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.price | number: ticker.base_precision}}</p>
+                            <p class="text-muted text-small"><span data-translate="CURRENT PRICE"></span></p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <div class="panel mini-box">
-                <div class="box-info">
-                    <p class="size-h3">{{ticker.ask | number: ticker.base_precision}}<span class="size-h4"></span></p>
-                    <p class="text-muted text-small"><span data-translate="LAST ASK"></span></p>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.perc_change | number:2}}%</p>
+                            <p class="text-muted text-small"><span data-translate="24 HS % CHANGE"></span></p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <div class="panel mini-box">
-                <div class="box-info">
-                    <p class="size-h3">{{ticker.bid | number: ticker.base_precision}}<span class="size-h4"></span></p>
-                    <p class="text-muted text-small"><span data-translate="LAST BID"></span></p>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.ask | number: ticker.base_precision}}<span class="size-h4"></span></p>
+                            <p class="text-muted text-small"><span data-translate="LAST ASK"></span></p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.bid | number: ticker.base_precision}}</p>
+                            <p class="text-muted text-small"><span data-translate="LAST BID"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.base_volume | number}}</p>
+                            <p class="text-muted text-small">{{ticker.base}} <span data-translate="VOLUME"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.quote_volume | number}}</p>
+                            <p class="text-muted text-small">{{ticker.quote}} <span data-translate="VOLUME"></span></p>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="col-sm-2">
-            <div class="panel mini-box">
-                <div class="box-info">
-                    <p class="size-h3">{{ticker.base_volume | number}}<span class="size-h4"></span></p>
-                    <p class="text-muted text-small">{{ticker.base}} <span data-translate="VOLUME"></span></p>
-                </div>
             </div>
         </div>
-        <div class="col-sm-2">
-            <div class="panel mini-box">
-                <div class="box-info">
-                    <p class="size-h3">{{ticker.quote_volume | number}}<span class="size-h4"></span></p>
-                    <p class="text-muted text-small">{{ticker.quote}} <span data-translate="VOLUME"></span></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <div class="panel mini-box">
-                <div class="box-info">
-                    <p class="size-h3">{{ticker.perc_change | number:2}}<span class="size-h4"></span></p>
-                    <p class="text-muted text-small"><span data-translate="24 HS % CHANGE"></span></p>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col-md-12">
+        <div class="col-lg-6 col-md-7">
             <div class="panel panel-default">
-                <div class="panel-heading"><span data-translate="Price chart"></span></div>
-                <div class="panel-body table-responsive">
-                    <!-- <div data-echarts data-options="pricechart.options"  style="height: 400px;"></div> -->
-                    <div id="tv_chart_container"></div>
+                <div class="panel-body">
+                    <ul class="nav nav-tabs scrollable-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a data-target="#price_chart" role="tab" data-toggle="tab" ng-click="loadTabsCharts('price_chart')"><span data-translate="Price chart"></span></a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="price_chart">
+                            <div
+                                class="market--tv_chart_container"
+                                id="tv_chart_container"
+                            />
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 <h2><span data-translate="Order book"></span></h2>
     <div class="row">
         <div class="col-md-6">

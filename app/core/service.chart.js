@@ -343,7 +343,7 @@
             },
             TradingView: function(base, quote) {
                 var widget = window.tvWidget = new TradingView.widget({
-                    fullscreen: true,
+                    fullscreen: false,
                     symbol: base + '_' + quote,
                     interval: '60',
                     container_id: "tv_chart_container",
@@ -357,6 +357,7 @@
                     enabled_features: ["study_templates"],
                     charts_storage_url: 'http://saveload.tradingview.com',
                     charts_storage_api_version: "1.1",
+                    autosize: true,
                     client_id: 'tradingview.com',
                     user_id: 'public_user_id'
                 });
