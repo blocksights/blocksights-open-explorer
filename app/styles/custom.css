@@ -273,14 +273,6 @@ img.inlineLoading {
     text-align: right;
 }
 
-.assets-list-table tbody td:nth-child(4),
-.assets-list-table tbody td:nth-child(5),
-.assets-list-table tbody td:nth-child(7),
-.assets-list-table tbody td:nth-child(8),
-.assets-list-table tbody td:nth-child(9) {
-    text-align: right;
-}
-
 @media(max-width: 400px) {
     .blocks--ops-in-trx {
         width: 100px;
@@ -362,5 +354,9 @@ ul.scrollable-tabs-shadow-right:after {
 }
 
 .market--tv_chart_container {
+    height: 43vh;
+}
+
+.pool--tv_chart_container {
     height: 43vh;
 }

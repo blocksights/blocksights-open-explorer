@@ -1,0 +1,74 @@
+<script type="text/ng-template" id="popover.html">
+    <div style="width: 250px">
+        The Annual Percentage Yield (APY) and Daily Percentage Yield (DPY) is estimated from the performance of the last 24 hours with respect to {{ baseSymbol }}, assumption is that the price stays in the same range with comparable movement. Yields are estimates and are provided for your convenience only, and by no means represent guaranteed returns.
+    </div>
+</script>
+
+<script type="text/ng-template" id="pools-list-table.html">
+    <div ng-switch on="index">
+        <a ng-switch-when="id" href='#/pools/{{row.id}}/'>{{row.id}}</a>
+        <span ng-switch-when="asset_a">{{row.asset_a_float}} <a href='#/assets/{{row.asset_a_symbol}}/'>{{row.asset_a_symbol}}</a></span>
+        <span ng-switch-when="asset_b">{{row.asset_b_float}} <a href='#/assets/{{row.asset_b_symbol}}/'>{{row.asset_b_symbol}}</a></span>
+        <span ng-switch-when="share_asset">{{row.share_asset_float | number}} <a href='#/assets/{{row.share_asset_symbol}}/'>{{row.share_asset_symbol}}</a></span>
+        <span ng-switch-when="value_in_core">{{row.value_in_core | number}} <a href='#/assets/{{row.baseSymbol}}/'>{{row.baseSymbol}}</a></span>
+        <span ng-switch-when="apy_24h_in_core">
+            <div
+                class="box-info"
+                uib-popover-template="'popover.html'"
+                popover-trigger="'outsideClick'"
+                popover-placement="bottom-left"
+            >
+                <span style="cursor: pointer;">{{row.apy_24h_in_core}}% *</span>
+            </div>
+        </span>
+        <span ng-switch-when="total_volume_24h_in_core"><span>{{row.total_volume_24h_in_core | number}} <a href='#/assets/{{row.baseSymbol}}/'>{{row.baseSymbol}}</a></span></span>
+        <span ng-switch-when="taker_fee_percent">{{(row.taker_fee_percent / 100) | number}}%</span>
+        <span ng-switch-when="withdrawal_fee_percent">{{(row.withdrawal_fee_percent / 100) | number}}%</span>
+        <span ng-switch-default>{{row[index]}}</span>
+    </div>
+</script>
+
+<div class="page page-table" data-ng-controller="poolsCtrl">
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li><a href="#/"><span data-translate="Home"></span></a></li>
+                <li class="active"><a href="#/pools/"><span data-translate="Liquidity Pools"></span></a></li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><span data-translate="Liquidity Pools"></span></div>
+        <div class="panel-body table-responsive">
+            <form>
+                <div class="col-md-8">
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="{{ 'Search for an asset or pair' | translate }}"
+                            ng-model="search"
+                            ng-change="updateSearchParam()"
+                        >
+                    </div>
+                </div>
+            </form>
+
+            <responsive-table
+                class="pools-list-table"
+                data-filter="search"
+                data-columns="columns"
+                data-data="listItems"
+                data-loading="listLoading"
+                data-loading-error="listLoadingError"
+                data-template="pools-list-table.html">
+            </responsive-table>
+
+        </div>
+    </div>
+</div>

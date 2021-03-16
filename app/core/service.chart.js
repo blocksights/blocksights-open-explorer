@@ -220,15 +220,12 @@
         function lineChart(params) {
 
             return {
-                chart: {
-                    type: 'line'
-                },
                 title: {
                     text: params.title || '',
                 },
-                yAxis: {
+                yAxis: params && params.yAxis ? params.yAxis : {
                     title: {
-                        text: params && params.yAxis && params.yAxis.title || ''
+                        text: ''
                     },
                 },
                 plotOptions: {
@@ -236,18 +233,10 @@
                         connectNulls: true
                     }
                 },
-                xAxis: {
-                    type: 'category',
+                xAxis: params && params.xAxis ? params && params.xAxis : {
                     title: {
-                        text: params && params.xAxis && params.xAxis.title || ''
+                        text: ''
                     },
-                    categories: params.categories || [],
-                    labels: {
-                        style: {
-                            fontSize: '10px',
-                            fontFamily: 'Verdana, sans-serif'
-                        }
-                    }
                 },
                 legend: params && params.legend ? params.legend : {
                     enabled: false
@@ -348,15 +337,38 @@
                     interval: '60',
                     container_id: "tv_chart_container",
                     //	BEWARE: no trailing slash is expected in feed URL
-                    datafeed: new Datafeeds.UDFCompatibleDatafeed(appConfig.urls.udf_wrapper()),
+                    datafeed: new Datafeeds.UDFCompatibleDatafeed(appConfig.urls.udf_wrapper(), 360 * 1000),
                     library_path: "charting_library/",
                     locale: getParameterByName('lang') || "en",
                     //	Regression Trend-related functionality is not implemented yet, so it's hidden for a while
                     drawings_access: { type: 'black', tools: [ { name: "Regression Trend" } ] },
-                    disabled_features: ["use_localstorage_for_settings"],
+                    disabled_features: ["header_saveload", "use_localstorage_for_settings"],
                     enabled_features: ["study_templates"],
-                    charts_storage_url: 'http://saveload.tradingview.com',
-                    charts_storage_api_version: "1.1",
+                    autosize: true,
+                    client_id: 'tradingview.com',
+                    user_id: 'public_user_id'
+                });
+                function getParameterByName(name) {
+                    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                        results = regex.exec(location.search);
+                    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+                }
+            },
+            PoolTradingView: function(poolId) {
+                var widget = window.tvWidget = new TradingView.widget({
+                    fullscreen: false,
+                    symbol: poolId,
+                    interval: '60',
+                    container_id: "pool_tv_chart_container",
+                    //	BEWARE: no trailing slash is expected in feed URL
+                    datafeed: new Datafeeds.UDFCompatibleDatafeed(appConfig.urls.python_backend() + "/pool/udf", 360 * 1000),
+                    library_path: "charting_library/",
+                    locale: getParameterByName('lang') || "en",
+                    //	Regression Trend-related functionality is not implemented yet, so it's hidden for a while
+                    drawings_access: { type: 'black', tools: [ { name: "Regression Trend" } ] },
+                    disabled_features: ["header_saveload", "use_localstorage_for_settings"],
+                    enabled_features: ["study_templates"],
                     autosize: true,
                     client_id: 'tradingview.com',
                     user_id: 'public_user_id'
@@ -616,6 +628,156 @@
                     }).catch((err) => {
                         reject(err);
                     })
+                });
+            },
+            depthChart: function (pool) {
+                return new Promise((resolve, reject) => {
+                    const prices = [
+                        {
+                            type: 'area',
+                            name: "",
+                            data: [
+                                [1/pool.details.price_sell_b_per_percent["10"], +pool.details.asset_b.float*0.1*pool.details.price_sell_b_per_percent["10"]],
+                                [1/pool.details.price_sell_b_per_percent["5"], +pool.details.asset_b.float*0.05*pool.details.price_sell_b_per_percent["5"]],
+                                [1/pool.details.price_sell_b_per_percent["1"], +pool.details.asset_b.float*0.01*pool.details.price_sell_b_per_percent["1"]]
+                            ]
+                        },
+                        {
+                            type: 'area',
+                            name: "",
+                            data: [
+                                [pool.details.price_sell_a_per_percent["1"], +pool.details.asset_a.float*0.01],
+                                [pool.details.price_sell_a_per_percent["5"], +pool.details.asset_a.float*0.05],
+                                [pool.details.price_sell_a_per_percent["10"], +pool.details.asset_a.float*0.1]
+                            ]
+                        }
+                    ];
+                    resolve(lineChart({
+                        categories: [1, 5, 10],
+                        xAxis: {
+                            title: $filter('translate')('Price') + " " + pool.details.price_sell_a_per_percent["unit"]
+                        },
+                        yAxis: {
+                            title: $filter('translate')('Depth') + " " + pool.asset_a_symbol
+                        },
+                            plotOptions: {
+                                area: {
+                                    fillColor: {
+                                        linearGradient: {
+                                            x1: 0,
+                                            y1: 0,
+                                            x2: 0,
+                                            y2: 1
+                                        },
+                                        stops: [
+                                            [0, Highcharts.getOptions().colors[0]],
+                                            [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                                        ]
+                                    },
+                                    marker: {
+                                        radius: 2
+                                    },
+                                    lineWidth: 1,
+                                    states: {
+                                        hover: {
+                                            lineWidth: 1
+                                        }
+                                    },
+                                    threshold: null
+                                }
+                            },
+                        series: prices,
+                        legend: {
+                            enabled: true
+                        },
+                    }));
+                });
+            },
+            balanceChart: function (pool) {
+                return new Promise((resolve, reject) => {
+                    $http.get(appConfig.urls.python_backend() + "/pool_balance_history?pool_id=" + pool.id + "&last_x=200").then((response) => {
+                        const series = [
+                            {
+                                name: "Asset A: " + pool.asset_a_symbol,
+                                data: [],
+                                yAxis: 0
+                            },
+                            {
+                                name: "Asset B: " + pool.asset_b_symbol,
+                                data: [],
+                                yAxis: 1
+                            },
+                            {
+                                name: "Share Asset: " + pool.share_asset_symbol,
+                                data: [],
+                                yAxis: 2
+                            }
+                        ];
+                        for (let i = 0; i < response.data.blocks.length; i++) {
+                            series[0].data.push([new Date(response.data.blocks[i] + "Z").getTime(), response.data.balances.asset_a[i]])
+                            series[1].data.push([new Date(response.data.blocks[i] + "Z").getTime(), response.data.balances.asset_b[i]])
+                            series[2].data.push([new Date(response.data.blocks[i] + "Z").getTime(), response.data.balances.share_asset[i]])
+                        }
+                        resolve(lineChart({
+                            xAxis: {
+                                title: $filter('translate')('Time'),
+                                type: "datetime",
+                                labels: {
+                                    formatter: function()  {
+                                        return $filter('date')(new Date(this.value), appConfig.dateFormat);
+                                    }
+                                },
+                            },
+                            yAxis: [
+                                {
+                                    title:  {
+                                        text: $filter('translate')('Asset A') + ": " + pool.asset_a_symbol,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                    opposite: true,
+                                    labels: {
+                                        format: '{value}',
+                                        style: {
+                                            color: Highcharts.getOptions().colors[0]
+                                        }
+                                    },
+                                }, {
+                                    title: {
+                                        text: $filter('translate')('Asset B') + ": " + pool.asset_b_symbol,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[1]
+                                        }
+                                    },
+                                    opposite: true,
+                                    labels: {
+                                        format: '{value}',
+                                        style: {
+                                            color: Highcharts.getOptions().colors[1]
+                                        }
+                                    },
+                                }, {
+                                    title: {
+                                        text: $filter('translate')('Share Asset') + ": " + pool.share_asset_symbol,
+                                        style: {
+                                            color: Highcharts.getOptions().colors[2]
+                                        }
+                                    },
+                                    labels: {
+                                        format: '{value}',
+                                        style: {
+                                            color: Highcharts.getOptions().colors[2]
+                                        }
+                                    },
+                                }
+                            ],
+                            series: series,
+                            legend: {
+                                enabled: true
+                            },
+                        }));
+                    });
                 });
             },
         };

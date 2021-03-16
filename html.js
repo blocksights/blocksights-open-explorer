@@ -27,7 +27,8 @@ const HTML = [
     "sections/witnesses/witness.html",
     "sections/generic-search/generic-search-result-item.html",
     "sections/generic-search/generic-search.html",
-
+    "sections/pools/pool.html",
+    "sections/pools/pools.html",
     "sections/workers/workers.html",
     "sections/welcome/welcome.html",
 

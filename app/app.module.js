@@ -37,7 +37,8 @@
         'app.blocks',
         'app.header',
         'app.welcome',
-        'app.generic-search'
+        'app.generic-search',
+        'app.pools',
     ]);
 })();
 

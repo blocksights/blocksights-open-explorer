@@ -88,8 +88,9 @@
                             parsed_op = JSON.parse(value.operation_history.op)[1];
                             if (parsed_op.amount)
                                 parsed_op.amount_ = parsed_op.amount;
-
-                        utilities.opText(appConfig, $http, value.operation_type, parsed_op, function(returnData) {
+                        const _with_result = {...parsed_op, result: value.operation_history.operation_result};
+                        if (typeof _with_result.result === "string") _with_result.result = JSON.parse(value.operation_history.operation_result);
+                        utilities.opText(appConfig, $http, value.operation_type, _with_result, function(returnData) {
                             operation.operation_text = returnData;
                         });
 
@@ -151,8 +152,9 @@
                             opArray = JSON.parse(value.operation_history.op)[1];
                         if (opArray.amount)
                             opArray.amount_ = opArray.amount;
-
-                        utilities.opText(appConfig, $http, value.operation_type, opArray, function (returnData) {
+                        const _with_result = {...opArray, result: value.operation_history.operation_result};
+                        if (typeof _with_result.result === "string") _with_result.result = JSON.parse(value.operation_history.operation_result);
+                        utilities.opText(appConfig, $http, value.operation_type, _with_result, function (returnData) {
                             parsed.operation_text = returnData;
                         });
                         operations.push(parsed);

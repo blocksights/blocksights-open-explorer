@@ -136,6 +136,7 @@ import {sha256} from "js-sha256";
                             } else {
                                 $scope.account = new_account;
                             }
+                            throw err;
                         });
                     }
                     $scope.select(1);

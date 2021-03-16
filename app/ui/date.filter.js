@@ -11,4 +11,5 @@
       return $filter('date')(new Date(input), appConfig.dateFormat);
     }
   }
+
 })();

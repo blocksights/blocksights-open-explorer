@@ -150,7 +150,6 @@
         };
 
         // laod default tab
-        $scope.currentTabIndex = 0;
         $scope.loadTabsCharts("operations");
 
     }

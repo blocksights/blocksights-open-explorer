@@ -402,5 +402,7 @@
   "Fee Type market": "Market Fee",
 
   "Amount Link": "{{float}} {{assetLink}}",
-  "Asset Link": "{{asset}}"
+  "Asset Link": "{{assetLink}}",
+
+  "Liquidity Pools": "Liquidity Pools"
 }

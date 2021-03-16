@@ -21,23 +21,38 @@
                 }
                 let parts = x.toString().split(".");
 
-                if (x < 1) { parts[1] = parts[1]; }
-                else if (x > 1 && x < 100) { parts[1] = parts[1].substr(0, 2); }
-                else if (x > 100 && x < 1000) { parts[1] = parts[1].substr(0, 1); }
-                else if (x > 1000) { parts[1] = ""; }
+                if (parts.length > 1) {
+                    if (x < 1) {
+                        parts[1] = parts[1].substr(0, 6);
+                    } else if (x > 1 && x < 100) {
+                        parts[1] = parts[1].substr(0, 4);
+                    } else if (x > 100 && x < 1000) {
+                        parts[1] = parts[1].substr(0, 3);
+                    } else if (x > 1000 && x < 100000) {
+                        parts[1] = parts[1].substr(0, 2);
+                    } else if (x > 100000 && x < 1000000) {
+                        parts[1] = parts[1].substr(0, 1);
+                    } else if (x > 1000000) {
+                        parts[1] = "";
+                    }
+                }
 
                 parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                if (x > 1000) { return parts[0]; }
+                if (x > 1000000 || parts.length == 1) { return parts[0]; }
                 else { return parts.join("."); }
             }
             catch(err) {
-                return x.toString();
+                if (!!x) {
+                    return x.toString();
+                } else {
+                    return "-";
+                }
             }
         }
 
         return {
-            formatBalance: function (number, precision) {
-                return satToFloat(number, precision);
+            formatBalance: function (number, precision=null) {
+                return formatNumber(number, precision);
             },
             opFees: async function (appConfig, $http, operation_type, raw_obj) {
                 let feeAsset = await $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + raw_obj.fee.asset_id);
@@ -59,7 +74,7 @@
                             feeAsset = feeAsset.data;
                             fees.push(
                                 {
-                                    key: "market",
+                                    key: (i < 2) ? "market" : "pool",
                                     float: formatNumber(fee.amount, feeAsset.precision),
                                     symbol: feeAsset.symbol,
                                 }

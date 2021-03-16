@@ -104,7 +104,6 @@
             },
             templateUrl: `html/responsive-table.html`,
             controller: ['$scope', '$filter', ($scope, $filter) => {
-
                 // prefixes for bootstrap's breakpoints
                 const VISIBLE_BOOTSTRAP_CLASSNAME_PREFIX = 'visible-';
                 const HIDDEN_BOOTSTRAP_CLASSNAME_PREFIX = 'hidden-';
@@ -125,32 +124,32 @@
                 $scope.select = () => {
                     if(!$scope.data || !Array.isArray($scope.data))
                         return false;
-                    
-                    if(!$scope.itemsPerPage) {
-                        $scope.items = $scope.data;
-                        return;
-                    }
-                    
+
                     const page = $scope.currentPage || 1;
-                    
+
                     let data = $scope.data;
-                    
+
                     if($scope.sortingParameter) {
-                        data = $filter('orderBy')($scope.data, $scope.sortingParameter, $scope.sortingOrder, $scope.sortingCompareFunc);
+                        data = $filter('orderBy')($scope.data, $scope.sortingParameterSortingIndex || $scope.sortingParameter, $scope.sortingOrder, $scope.sortingCompareFunc);
                     }
-                    
-                    data = $filter('filter')(data, $scope.filter);
-    
-                    const from = page * $scope.itemsPerPage - $scope.itemsPerPage;
-                    const limit = $scope.itemsPerPage;
-    
-                    $scope.items = data.slice(from, from+limit);
+                    if ($scope.filter) {
+                        const filters = $scope.filter.split("/");
+                        filters.forEach(filter => data = !!filter ? $filter('filter')(data, filter) : data);
+                    }
+
+                    if(!$scope.itemsPerPage) {
+                        $scope.items = data;
+                    } else {
+                        const from = page * $scope.itemsPerPage - $scope.itemsPerPage;
+                        const limit = $scope.itemsPerPage;
+                        $scope.items = data.slice(from, from+limit);
+                    }
                 };
-    
+
                 $scope.$watch('filter', () => {
                     $scope.select();
                 });
-                
+
                 $scope.$watch('data', () => {
                     // when user selects the next page of a table - a new data comes.
                     // to display a new page correctly we should remove the states of previous page
@@ -192,8 +191,8 @@
 
                     // if user click for this cell to sort for the first time
                     if (column.sort && $scope.sortingParameter !== column.index) {
-
                         $scope.sortingParameter = column.index;
+                        $scope.sortingParameterSortingIndex = column.sortingIndex;
                         $scope.sortingOrder = column.sortReverse === undefined ? false : !!column.sortReverse;
 
                         if (typeof column.sort === 'function') {
@@ -212,7 +211,7 @@
                         $scope.sortingOrder = false;
                         $scope.sortingCompareFunc = false;
                     }
-                    
+
                     $scope.select();
 
                 };

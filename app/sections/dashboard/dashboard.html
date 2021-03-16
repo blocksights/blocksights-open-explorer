@@ -31,15 +31,17 @@
         <div class="col-lg-6 col-md-5">
             <div class="row text-center">
                 <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
-                    <div class="well">
-                        <div
+                    <div
                             class="box-info"
                             uib-popover-template="'popover.html'"
-                            popover-trigger="'mouseover'"
+                            popover-trigger="'outsideClick'"
                             popover-placement="bottom-left"
-                        >
+                    >
+                        <div class="well" style="cursor: pointer;">
                             <p class="size-h4">{{dynamic !== 'error' ? (dynamic.head_block_number | number) : ('No Data' | translate) }}<span class="size-h4"></span></p>
-                            <p class="text-muted text-small"><span data-translate="BLOCK NUMBER"></span></p>
+                            <p class="text-muted text-small">
+                                <span data-translate="BLOCK NUMBER"></span>
+                            </p>
                         </div>
                     </div>
                 </div>
