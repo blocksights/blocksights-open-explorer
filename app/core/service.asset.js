@@ -148,13 +148,14 @@
                 });
             },
             getAssetHolders: function(asset_id, precision, callback) {
-                var accounts = [];
+                let accounts = [];
                 return $http.get(appConfig.urls.python_backend() + "/asset_holders?asset_id=" + asset_id)
                     .then(function(response) {
                     angular.forEach(response.data, function(value, key) {
-                        var account = {
+                        let account = {
                             name: value.name,
-                            amount: utilities.formatBalance(value.amount, precision),
+                            amount: +value.amount,
+                            amount_float: utilities.formatBalance(value.amount, precision),
                             id: value.account_id
                         };
                         accounts.push(account);

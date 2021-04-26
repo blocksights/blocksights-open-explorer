@@ -42,7 +42,8 @@
                     },
                     {
                         title: $filter('translate')('Amount'),
-                        index: 'amount',
+                        index: 'amount_float',
+                        sortingIndex: 'amount',
                         sort: true,
                         sortByDefault: true,
                         sortReverse: true,

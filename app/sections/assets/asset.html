@@ -24,6 +24,10 @@
         {{cell | number}}
     </div>
 
+    <div ng-if="index === 'amount_float'">
+        {{cell}}
+    </div>
+
 </script>
 
 <div class="page page-table" data-ng-controller="assetsCtrl">
@@ -95,7 +99,7 @@
                         <span data-translate="Max supply"></span>
                     </li>
                     <li class="list-group-item">
-                        <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href='#/accounts/{{data.issuer}}/'>{{data.issuer_name}}</a></span>
+                        <span class="badge" style="background-color: #FFFFFF; color: #000000"><a href='#/accounts/{{data.issuer_name}}/'>{{data.issuer_name}}</a></span>
                         <span data-translate="Issuer"></span>
                     </li>
                     <li class="list-group-item">
@@ -121,10 +125,9 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title"><span data-translate="Active markets"></span></h3>
+            <h3 class="panel-title"><span ng-if="!marketsLoading && markets.length == 0" data-translate="No active markets"></span><span ng-if="marketsLoading || markets.length > 0" data-translate="Active markets"></span><span ng-if="marketsLoading">(<span data-translate="Loading"></span>)</span></h3>
         </div>
-        <div class="panel-body">
-
+        <div ng-if="marketsLoading || markets.length > 0" class="panel-body">
             <div class="panel-body table-responsive">
                 <form>
                     <div class="col-md-8">
