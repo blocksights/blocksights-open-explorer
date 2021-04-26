@@ -127,7 +127,7 @@
                                             operation_text = $filter('translateWithLinks')('Operation Transfer Description', {
                                                 senderLink: {
                                                     text: response_name.data,
-                                                    href: `/#/accounts/${from}`
+                                                    href: `/#/accounts/${response_name.data}`
                                                 },
                                                 assetLink: {
                                                     text: asset_name,
@@ -135,7 +135,7 @@
                                                 },
                                                 receiverLink: {
                                                     text: to_name,
-                                                    href: `/#/accounts/${to}`
+                                                    href: `/#/accounts/${to_name}`
                                                 },
                                                 amount: formatNumber(amount),
                                             })
@@ -182,15 +182,15 @@
                                                 sellAmount: formatNumber(sell_amount),
                                                 accountLink: {
                                                     text: response_name.data,
-                                                    href: `/#/accounts/${operation_account}`
+                                                    href: `/#/accounts/${response_name.data}`
                                                 },
                                                 buyAssetLink: {
                                                     text: receive_asset_name,
-                                                    href: `/#/assets/${min_to_receive_asset_id}`
+                                                    href: `/#/assets/${receive_asset_name}`
                                                 },
                                                 sellAssetLink: {
                                                     text: sell_asset_name,
-                                                    href: `/#/assets/${amount_to_sell_asset_id}`
+                                                    href: `/#/assets/${sell_asset_name}`
                                                 },
 
                                             });
@@ -210,7 +210,7 @@
                             operation_text = $filter('translateWithLinks')('Operation Limit Order Cancel Description', {
                                 accountLink: {
                                     text: response_name.data,
-                                    href: `/#/accounts/${operation_account}`
+                                    href: `/#/accounts/${response_name.data}`
                                 }
                             });
 
@@ -238,7 +238,7 @@
                                             operation_text = $filter('translateWithLinks')('Operation Call Order Update Description', {
                                                 accountLink: {
                                                     text: response_name.data,
-                                                    href: `/#/accounts/${funding_account}`,
+                                                    href: `/#/accounts/${response_name.data}`,
                                                 },
                                                 marketLink: {
                                                     text: `${asset1}/${asset2}`,
@@ -289,15 +289,15 @@
                                                 receiveAmount: formatNumber(receive_amount),
                                                 accountLink: {
                                                     text: response_name.data,
-                                                    href: `/#/accounts/${operation_account}`
+                                                    href: `/#/accounts/${response_name.data}`
                                                 },
                                                 payAssetLink: {
                                                     text: pays_asset_name,
-                                                    href: `/#/assets/${pays_asset_id}`
+                                                    href: `/#/assets/${pays_asset_name}`
                                                 },
                                                 receiveAssetLink: {
                                                     text: receive_asset_name,
-                                                    href: `/#/assets/${receives_asset_id}`
+                                                    href: `/#/assets/${receive_asset_name}`
                                                 }
                                             });
 
@@ -334,7 +334,7 @@
                                         operation_text = $filter('translateWithLinks')('Operation Account Create with ref Description', {
                                             accountLink: {
                                                 text: response_name.data,
-                                                href: `/#/accounts/${operation_account}`
+                                                href: `/#/accounts/${response_name.data}`
                                             },
                                             registerLink: {
                                                 text: name,
@@ -342,7 +342,7 @@
                                             },
                                             referralLink: {
                                                 text: response_name2.data,
-                                                href: `/#/accounts/${referrer}`
+                                                href: `/#/accounts/${response_name2.data}`
                                             },
                                         });
 
@@ -364,7 +364,7 @@
                             operation_text = $filter('translateWithLinks')('Operation Account Update Description', {
                                 accountLink: {
                                     text: response_name.data,
-                                    href: `/#/accounts/${operation_account}`,
+                                    href: `/#/accounts/${response_name.data}`,
                                 }
                             });
 
@@ -387,12 +387,12 @@
                                 operation_text = $filter('translateWithLinks')('Operation Account Whitelist Description', {
                                     accountLink: {
                                         text: response_name.data,
-                                        href: `/#/accounts/${operation_account}`
+                                        href: `/#/accounts/${response_name.data}`
                                     },
 
                                     whitelistAccountLink: {
                                         text: response_name2.data,
-                                        href: `/#/accounts/${account_to_list}`
+                                        href: `/#/accounts/${response_name2.data}`
                                     },
 
                                     actionType: type,
@@ -411,7 +411,7 @@
                             operation_text = $filter('translateWithLinks')('Operation Account Upgrade Description', {
                                 accountLink: {
                                     text: response_name.data,
-                                    href: `/#/accounts/${operation_account}`
+                                    href: `/#/accounts/${response_name.data}`
                                 }
                             });
 
@@ -427,7 +427,7 @@
                             operation_text = $filter('translateWithLinks')('Operation Asset Create Description', {
                                 accountLink: {
                                     text: response_name.data,
-                                    href: `/#/accounts/${operation_account}`
+                                    href: `/#/accounts/${response_name.data}`
                                 },
                                 assetLink: {
                                     text: operation.symbol,
@@ -464,7 +464,7 @@
 
                                                 receiverAccountLink: {
                                                     text: response_name2.data,
-                                                    href: `/#/accounts/${issue_to_account}`
+                                                    href: `/#/accounts/${response_name2.data}`
                                                 },
                                                 assetLink: {
                                                     text: response_asset.data.symbol,
@@ -472,7 +472,7 @@
                                                 },
                                                 accountLink: {
                                                     text: response_name.data,
-                                                    href: `/#/accounts/${operation_account}`
+                                                    href: `/#/accounts/${response_name.data}`
                                                 },
                                             });
 
@@ -501,11 +501,11 @@
                                     operation_text = $filter('translateWithLinks')('Operation Asset Reserve Description', {
                                         accountLink: {
                                             text: response_name.data,
-                                            href: `/#/accounts/${operation_account}`
+                                            href: `/#/accounts/${response_name.data}`
                                         },
                                         assetLink: {
                                             text: asset_name,
-                                            href: `/#/assets/${amount_to_reserve_asset_id}`
+                                            href: `/#/assets/${asset_name}`
                                         },
                                         amount: formatNumber(amount),
                                     });
@@ -529,7 +529,7 @@
                                     operation_text = $filter('translateWithLinks')('Operation Asset Publish Feed Description', {
                                         accountLink: {
                                             text: response_name.data,
-                                            href: `/#/accounts/${operation_account}`
+                                            href: `/#/accounts/${response_name.data}`
                                         },
                                         assetLink: {
                                             text: response_asset.data.symbol,
@@ -551,7 +551,7 @@
                             operation_text = $filter('translateWithLinks')('Operation Proposal Create Description', {
                                 accountLink: {
                                     text: response_name.data,
-                                    href: `/#/accounts/${operation_account}`
+                                    href: `/#/accounts/${response_name.data}`
                                 },
                             });
 
@@ -569,7 +569,7 @@
                             operation_text = $filter('translateWithLinks')('Operation Proposal Update Description', {
                                 accountLink: {
                                     text: response_name.data,
-                                    href: `/#/accounts/${operation_account}`
+                                    href: `/#/accounts/${response_name.data}`
                                 },
                                 proposalLink: {
                                     text: proposal,
@@ -601,7 +601,7 @@
                                         amount: formatNumber(amount),
                                         accountLink: {
                                             text: response_name.data,
-                                            href: `/#/accounts/${operation_account}`
+                                            href: `/#/accounts/${response_name.data}`
                                         },
                                         assetLink: {
                                             text: asset_name,
@@ -633,7 +633,7 @@
                                     operation_text = $filter('translateWithLinks')('Operation Balance Claim Description', {
                                         accountLink: {
                                             text: response_name.data,
-                                            href: `/#/accounts/${operation_account}`
+                                            href: `/#/accounts/${response_name.data}`
                                         },
                                         assetLink: {
                                             text: asset_name,
@@ -682,7 +682,7 @@
                                                 amount2: formatNumber(amount2),
                                                 accountLink: {
                                                     text: response_name.data,
-                                                    href: `/#/accounts/${operation_account}`
+                                                    href: `/#/accounts/${response_name.data}`
                                                 },
                                                 collateralAssetLink: {
                                                     text: asset_name1,
@@ -724,11 +724,11 @@
                                             operation_text = $filter('translateWithLinks')('Operation HTLC Create Description', {
                                                 accountLink: {
                                                     text: response_name.data,
-                                                    href: `/#/accounts/${operation_account}`
+                                                    href: `/#/accounts/${response_name.data}`
                                                 },
                                                 receiverAccountLink: {
                                                     text: response_name2.data,
-                                                    href: `/#/accounts/${to}`
+                                                    href: `/#/accounts/${response_name2.data}`
                                                 },
                                                 assetLink: {
                                                     text: asset_name,
@@ -753,7 +753,7 @@
                             operation_text = $filter('translateWithLinks')('Operation HTLC Redeem Description', {
                                 accountLink: {
                                     text: response_name.data,
-                                    href: `/#/accounts/${operation_account}`
+                                    href: `/#/accounts/${response_name.data}`
                                 },
                             });
 
@@ -770,7 +770,7 @@
                             operation_text = $filter('translateWithLinks')('Operation HTLC Redeemed Description', {
                                 accountLink: {
                                     text: response_name.data,
-                                    href: `/#/accounts/${operation_account}`
+                                    href: `/#/accounts/${response_name.data}`
                                 },
                             });
 
@@ -787,7 +787,7 @@
                             operation_text = $filter('translateWithLinks')('Operation HTLC Extend Description', {
                                 accountLink: {
                                     text: response_name.data,
-                                    href: `/#/accounts/${operation_account}`
+                                    href: `/#/accounts/${response_name.data}`
                                 },
                             });
 
@@ -804,7 +804,7 @@
                             operation_text = $filter('translateWithLinks')('Operation HTLC Refund Description', {
                                 accountLink: {
                                     text: response_name.data,
-                                    href: `/#/accounts/${operation_account}`
+                                    href: `/#/accounts/${response_name.data}`
                                 },
                             });
 
@@ -828,11 +828,11 @@
                                             operation_text = $filter('translateWithLinks')('Operation Vesting Balance Create For Personal Description', {
                                                 accountLink: {
                                                     text: creator_name,
-                                                    href: `/#/accounts/${operation.creator}`
+                                                    href: `/#/accounts/${creator_name}`
                                                 },
                                                 assetLink: {
                                                     text: asset_name,
-                                                    href: `/#/assets/${operation.amount_.asset_id}`
+                                                    href: `/#/assets/${asset_name}`
                                                 },
 
                                                 amount: formatNumber(amount),
@@ -843,15 +843,15 @@
                                                 operation_text = $filter('translateWithLinks')('Operation Vesting Balance Create For Somebody Description', {
                                                     accountLink: {
                                                         text: creator_name,
-                                                        href: `/#/accounts/${operation.creator}`
+                                                        href: `/#/accounts/${creator_name}`
                                                     },
                                                     ownerLink: {
                                                         text: owner_name,
-                                                        href: `/#/accounts/${operation.owner_}`
+                                                        href: `/#/accounts/${owner_name}`
                                                     },
                                                     assetLink: {
                                                         text: asset_name,
-                                                        href: `/#/assets/${operation.amount_.asset_id}`
+                                                        href: `/#/assets/${asset_name}`
                                                     },
                                                     amount: formatNumber(amount),
                                                     assetId: operation.amount_.asset_id,
@@ -892,7 +892,7 @@
                             operation_text = $filter('translateWithLinks')(translation_id, {
                                 accountLink: {
                                     text: witness_account_name,
-                                    href: `/#/accounts/${operation.witness_account}`
+                                    href: `/#/accounts/${witness_account_name}`
                                 },
                                 ...operation.url && validURL(operation.url) ? {
                                     link: {
@@ -985,7 +985,7 @@
                                                     operation_text = $filter('translateWithLinks')('Operation Liquidity Pool Create Description', {
                                                         accountLink: {
                                                             text: response_name.data,
-                                                            href: `/#/accounts/${operation_account}`
+                                                            href: `/#/accounts/${response_name.data}`
                                                         },
                                                         assetALink: {
                                                             text: asset_a_name,
@@ -1062,15 +1062,15 @@
                                                 sellAmount: formatNumber(sell_amount),
                                                 accountLink: {
                                                     text: response_name.data,
-                                                    href: `/#/accounts/${operation_account}`
+                                                    href: `/#/accounts/${response_name.data}`
                                                 },
                                                 buyAssetLink: {
                                                     text: receive_asset_name,
-                                                    href: `/#/assets/${min_to_receive_asset_id}`
+                                                    href: `/#/assets/${receive_asset_name}`
                                                 },
                                                 sellAssetLink: {
                                                     text: sell_asset_name,
-                                                    href: `/#/assets/${amount_to_sell_asset_id}`
+                                                    href: `/#/assets/${sell_asset_name}`
                                                 },
                                                 pool: operation.pool
                                             });
@@ -1101,7 +1101,7 @@
                                         amount: formatNumber(amount),
                                         accountLink: {
                                             text: response_name.data,
-                                            href: `/#/accounts/${operation_account}`
+                                            href: `/#/accounts/${response_name.data}`
                                         },
                                         assetLink: {
                                             text: asset_name,
@@ -1151,15 +1151,15 @@
                                                 sellAmount: formatNumber(sell_amount),
                                                 accountLink: {
                                                     text: response_name.data,
-                                                    href: `/#/accounts/${operation_account}`
+                                                    href: `/#/accounts/${response_name.data}`
                                                 },
                                                 buyAssetLink: {
                                                     text: receive_asset_name,
-                                                    href: `/#/assets/${min_to_receive_asset_id}`
+                                                    href: `/#/assets/${receive_asset_name}`
                                                 },
                                                 sellAssetLink: {
                                                     text: sell_asset_name,
-                                                    href: `/#/assets/${amount_to_sell_asset_id}`
+                                                    href: `/#/assets/${sell_asset_name}`
                                                 },
                                                 pool: operation.pool
                                             });
