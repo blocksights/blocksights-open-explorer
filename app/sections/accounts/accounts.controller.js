@@ -66,8 +66,8 @@ import {sha256} from "js-sha256";
                         cashback: cashback_balance_id,
                         cashback_balance: utilities.formatBalance(cashback_balance_balance, 5),
                         lifetime: lifetime,
-                        lifetime_fees_paid: parseInt(utilities.formatBalance(lifetime_fees_paid, 5)),
-                        bts_balance: parseInt(utilities.formatBalance(core_balance, 5)),
+                        lifetime_fees_paid: utilities.formatBalance(lifetime_fees_paid, 5),
+                        bts_balance: utilities.formatBalance(core_balance, 5),
                         vesting: vesting_balances,
                         memo_key: fullAccount.account.options.memo_key
                     };

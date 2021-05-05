@@ -102,11 +102,11 @@
                                             <div class="panel-body">
                                                 <ul class="list-group">
                                                     <li class="list-group-item">
-                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{account.bts_balance | number}}</span>
-                                                        {{ coreSymbol }} <span data-translate="Balance"></span>
+                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{account.bts_balance}} / {{account.cashback_balance}}</span>
+                                                        {{ coreSymbol }} <span data-translate="Balance (liquid/cashback)"></span>
                                                     </li>
                                                     <li class="list-group-item">
-                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{account.lifetime_fees_paid | number}}</span>
+                                                        <span class="badge" style="background-color: #FFFFFF; color: #000000">{{account.lifetime_fees_paid}}</span>
                                                         <span data-translate="Lifetime fees paid"></span>
                                                     </li>
                                                     <li class="list-group-item">

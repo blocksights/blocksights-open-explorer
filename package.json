@@ -24,7 +24,7 @@
     "archiver": "^4.0.1",
     "bootstrap": "3.4.1",
     "components-font-awesome": "5.9.0",
-    "copy-webpack-plugin": "^5.1.1",
+    "copy-webpack-plugin": "^5.1.2",
     "echarts": "4.2.1",
     "git-rev-sync": "^3.0.1",
     "html-webpack-plugin": "3.2.0",
