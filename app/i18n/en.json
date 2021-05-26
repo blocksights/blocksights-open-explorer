@@ -139,7 +139,7 @@
 
   "Operation Liquidity Pool Create Description": "{{accountLink}} created liquidity pool to swap {{assetALink}} and {{assetBLink}}, using {{shareLink}} as pool asset",
   "Operation Liquidity Pool Delete Description": "{{accountLink}} deleted liquidity pool {{pool}}",
-  "Operation Liquidity Pool Deposit Description": "{{accountLink}} deposited {{receiveAmount}} {{buyAssetLink}} and {{sellAmount}} {{sellAssetLink}} into liquidity pool {{pool}}",
+  "Operation Liquidity Pool Deposit Description": "{{accountLink}} deposited {{asset_a_amount}} {{asset_a_link}} and {{asset_b_amount}} {{asset_b_link}} into liquidity pool {{pool}} and received {{pool_asset_amount}} {{pool_asset_link}}",
   "Operation Liquidity Pool Exchange Description": "{{accountLink}} paid {{sellAmount}} {{sellAssetLink}} for {{receiveAmount}} {{buyAssetLink}} through liquidity pool {{pool}}",
   "Operation Liquidity Pool Withdraw Description": "{{accountLink}} withdrew from liquidity pool {{pool}} by burning {{amount}} {{assetLink}}",
 

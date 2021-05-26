@@ -1082,55 +1082,57 @@
                 else if (operation_type === 61) { // LP deposit
                     operation_account = operation.account;
 
-                    var amount_to_sell_asset_id = operation.amount_a.asset_id;
-                    var amount_to_sell_amount = operation.amount_a.amount;
+                    const result = operation.result[1];
 
-                    var min_to_receive_asset_id = operation.amount_b.asset_id;
-                    var min_to_receive_amount = operation.amount_b.amount;
+                    const asset_a_id = operation.amount_a.asset_id;
+                    const asset_b_id = operation.amount_b.asset_id;
+
+                    const asset_a_amount = result.paid[0].asset_id == asset_a_id ? result.paid[0].amount : result.paid[1].amount;
+                    const asset_b_amount = result.paid[0].asset_id == asset_a_id ? result.paid[1].amount : result.paid[0].amount;
+
+                    const pool_asset_id = result.received[0].asset_id;
+                    const pool_asset_amount = result.received[0].amount;
 
                     $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
                         .then(function (response_name) {
 
-                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + amount_to_sell_asset_id)
-                                .then(function (response_asset1) {
+                            Promise.all([
+                                $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_a_id),
+                                $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_b_id),
+                                $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + pool_asset_id)
+                            ]).then(assets => {
+                                const asset_a = assets[0].data;
+                                const asset_a_float = Number(asset_a_amount / Math.pow(10, asset_a.precision));
+                                const asset_b = assets[1].data;
+                                const asset_b_float = Number(asset_b_amount / Math.pow(10, asset_b.precision));
+                                const pool_asset = assets[2].data;
+                                const pool_asset_float = Number(pool_asset_amount / Math.pow(10, pool_asset.precision));
 
-                                    var sell_asset_name = response_asset1.data.symbol;
-                                    var sell_asset_precision = response_asset1.data.precision;
-
-                                    var divideby = Math.pow(10, sell_asset_precision);
-                                    var sell_amount = Number(amount_to_sell_amount / divideby);
-
-                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" +
-                                        min_to_receive_asset_id)
-                                        .then(function (response_asset2) {
-
-                                            var receive_asset_name = response_asset2.data.symbol;
-                                            var receive_asset_precision = response_asset2.data.precision;
-
-                                            var divideby = Math.pow(10, receive_asset_precision);
-                                            var receive_amount = Number(min_to_receive_amount / divideby);
-
-                                            operation_text = $filter('translateWithLinks')('Operation Liquidity Pool Deposit Description', {
-                                                receiveAmount: formatNumber(receive_amount),
-                                                sellAmount: formatNumber(sell_amount),
-                                                accountLink: {
-                                                    text: response_name.data,
-                                                    href: `/#/accounts/${response_name.data}`
-                                                },
-                                                buyAssetLink: {
-                                                    text: receive_asset_name,
-                                                    href: `/#/assets/${receive_asset_name}`
-                                                },
-                                                sellAssetLink: {
-                                                    text: sell_asset_name,
-                                                    href: `/#/assets/${sell_asset_name}`
-                                                },
-                                                pool: operation.pool
-                                            });
-
-                                            callback(operation_text);
-                                        });
+                                operation_text = $filter('translateWithLinks')('Operation Liquidity Pool Deposit Description', {
+                                    accountLink: {
+                                        text: response_name.data,
+                                        href: `/#/accounts/${response_name.data}`
+                                    },
+                                    asset_a_amount: formatNumber(asset_a_float),
+                                    asset_b_amount: formatNumber(asset_b_float),
+                                    pool_asset_amount: formatNumber(pool_asset_float),
+                                    asset_a_link: {
+                                        text: asset_a.symbol,
+                                        href: `/#/assets/${asset_a.symbol}`
+                                    },
+                                    asset_b_link: {
+                                        text: asset_b.symbol,
+                                        href: `/#/assets/${asset_b.symbol}`
+                                    },
+                                    pool_asset_link: {
+                                        text: pool_asset.symbol,
+                                        href: `/#/assets/${pool_asset.symbol}`
+                                    },
+                                    pool: operation.pool
                                 });
+
+                                callback(operation_text);
+                            });
                         });
                 }
                 else if (operation_type === 62) { // LP withdraw
