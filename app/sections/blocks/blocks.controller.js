@@ -41,7 +41,7 @@
                     $scope.transactions = {};
 
                     if($scope.data && $scope.data.transactions) {
-                        $scope.data.transactions.map((transaction) => {
+                        $scope.data.transactions.map((transaction, idx) => {
 
                             $scope.transactions[transaction.trx_id] = {
                               data: undefined,
@@ -49,7 +49,11 @@
                             };
 
                             $scope.blocksTransactionsLoading[transaction.trx_id] = true;
-                            networkService.getTransaction(transaction.trx_id, function (trxData) {
+                            let trx_id = transaction.trx_id;
+                            if (!trx_id) {
+                                trx_id = name + ":" + idx;
+                            }
+                            networkService.getTransaction(trx_id, function (trxData) {
                                 $scope.blocksTransactionsLoading[transaction.trx_id] = false;
                                 $scope.transactions[transaction.trx_id] = {
                                     data: trxData.meta,
