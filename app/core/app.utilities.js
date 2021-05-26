@@ -699,6 +699,59 @@
                                 });
                         });
                 }
+                else if (operation_type === 46) { // EXECUTE BID
+                    operation_account = operation.bidder;
+
+                    var additional_collateral_amount = operation.collateral.amount;
+                    var additional_collateral_asset_id = operation.collateral.asset_id;
+
+                    var debt_covered_amount = operation.debt.amount;
+                    var debt_covered_asset_id = operation.debt.asset_id;
+
+                    $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + operation_account)
+                        .then(function (response_name) {
+
+                            $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" +
+                                additional_collateral_asset_id)
+                                .then(function (additional_collateral_asset) {
+
+                                    var asset_name1 = additional_collateral_asset.data.symbol;
+                                    var asset_precision1 = additional_collateral_asset.data.precision;
+                                    var divideby1 = Math.pow(10, asset_precision1);
+                                    var amount1 = Number(additional_collateral_amount / divideby1);
+
+                                    $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" +
+                                        debt_covered_asset_id)
+                                        .then(function (debt_covered_asset) {
+
+
+                                            var asset_name2 = debt_covered_asset.data.symbol;
+                                            var asset_precision2 = debt_covered_asset.data.precision;
+                                            var divideby2 = Math.pow(10, asset_precision2);
+                                            var amount2 = Number(debt_covered_amount / divideby2);
+
+                                            operation_text = $filter('translateWithLinks')('Operation Execute Bid Description', {
+                                                amount1: formatNumber(amount1),
+                                                amount2: formatNumber(amount2),
+                                                accountLink: {
+                                                    text: response_name.data,
+                                                    href: `/#/accounts/${response_name.data}`
+                                                },
+                                                collateralAssetLink: {
+                                                    text: asset_name1,
+                                                    href: `/#/assets/${asset_name1}`
+                                                },
+                                                debtAssetLink: {
+                                                    text: asset_name2,
+                                                    href: `/#/assets/${asset_name2}`
+                                                },
+                                            });
+
+                                            callback(operation_text);
+                                        });
+                                });
+                        });
+                }
                 else if (operation_type === 49) { // HTLC CREATE
                     operation_account = operation.from;
 

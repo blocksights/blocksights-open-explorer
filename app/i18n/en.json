@@ -125,6 +125,7 @@
   "Operation Vesting Balance Withdraw Description": "{{accountLink}} withdrew vesting balance of {{amount}} {{assetLink}}",
   "Operation Balance Claim Description": "{{accountLink}} claimed a balance of {{amount}} {{assetLink}}",
   "Operation Bid Collateral Description": "{{accountLink}} bid {{amount1}} {{collateralAssetLink}} for {{amount2}} {{debtAssetLink}}",
+  "Operation Execute Bid Description": "{{accountLink}} won a debt position with {{amount1}} {{collateralAssetLink}} and {{amount2}} {{debtAssetLink}}",
   "Operation HTLC Create Description": "{{accountLink}} create HTLC to {{receiverAccountLink}} to transfer {{amount}} {{assetLink}}",
   "Operation HTLC Redeem Description": "{{accountLink}} redeem HTLC",
   "Operation HTLC Redeemed Description": "{{accountLink}} redeemed HTLC",
