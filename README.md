@@ -1,6 +1,8 @@
-# Open Source Bitshares Explorer
+# Blocksights Explorer
 
-http://open-explorer.io
+https://blocksights.info
+
+Fork of https://github.com/bitshares/open-explorer
 
 ## Install
 
@@ -10,7 +12,7 @@ A node and npm installation on your machine is assumed. Checkout this repository
 npm install
 ```
 
-Start development serverwill listen to http://localhost:9000:
+Start development server will listen to http://localhost:9000:
 
 ```
 npm start

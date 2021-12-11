@@ -29,6 +29,6 @@ jobs:
               uses: s0/git-publish-subdir-action@master
               env:
                   REPO: self
-                  BRANCH: bitshares-insight-dist
+                  BRANCH: master-dist
                   FOLDER: dist
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
