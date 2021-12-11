@@ -1,0 +1,36 @@
+<div class="page page-table" data-ng-controller="objectsCtrl">
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li><a href="#/"><span data-translate="Home"></span></a></li>
+                <li><a href="#/objects/"><span data-translate="Objects"></span></a></li>
+                <li class="active">{{data.name}}</li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading"> <span data-translate="Exploring object"></span>: <strong>{{data.name}}</strong></div>
+        <div class="panel-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="badge" style="background-color: #FFFFFF; color: #000000">{{data.type}} object</span>
+                    <span data-translate="Object type"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span data-translate="Object raw data"></span></h3>
+        </div>
+        <div class="panel-body">
+            <pre>{{data.raw | json}}</pre>
+        </div>
+
+    </div>
+
+</div>

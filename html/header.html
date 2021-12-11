@@ -1,0 +1,81 @@
+<!-- Static navbar -->
+<nav class="navbar navbar-default" data-ng-controller="headerCtrl">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">
+                    <span data-translate="Toggle navigation"></span>
+                </span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/">{{ blockchain }} <span data-translate="Open Explorer"></span></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav header-left-navbar">
+                <li><a href="#/dashboard"><span data-translate="Dashboard"></span></a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Explore"></span> <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/search"><span data-translate="Search"></span></a></li>
+                        <li><a href="#/txs"><span data-translate="Transactions"></span></a></li>
+                        <li><a href="#/assets"><span data-translate="Assets"></span></a></li>
+                        <li><a href="#/markets"><span data-translate="Markets"></span></a></li>
+                        <li><a href="#/accounts"><span data-translate="Accounts"></span></a></li>
+                        <li><a href="#/fees"><span data-translate="Fees"></span></a></li>
+                        <li><a href="#/pools"><span data-translate="Pools"></span></a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-translate="Governance"></span> <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/committee_members"><span data-translate="Committee"></span></a></li>
+                        <li><a href="#/witness"><span data-translate="Witnesses"></span></a></li>
+                        <li><a href="#/workers"><span data-translate="Workers"></span></a></li>
+                        <li><a href="#/votes"><span data-translate="Voting"></span></a></li>
+                        <li><a href="#/proxies"><span data-translate="Proxies"></span></a></li>
+                    </ul>
+                </li>
+                <li class="header-left-navbar-search">
+                    <generic-search style="margin: 8px 10px;width: 300px;"></generic-search>
+                </li>
+
+            </ul>
+            <ul class="nav navbar-nav header-right-navbar navbar-right">
+                <network-dropdown></network-dropdown>
+                <li class="dropdown langs text-normal" uib-dropdown is-open="status.isopenLang" data-ng-controller="LangCtrl">
+                    <a href="javascript:;" class="active-flag" uib-dropdown-toggle ng-disabled="disabled">
+                        <img src="images/globe.svg" alt="globe" class="globe">
+                        {{ lang }}
+                    </a>
+                    <ul class="dropdown-menu list-langs pull-right">
+                        <li data-ng-show="lang !== 'English' ">
+                            <a href="javascript:;" data-ng-click="setLang('English')">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        English
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li data-ng-show="lang !== '中文' ">
+                            <a href="javascript:;" data-ng-click="setLang('中文')">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        中文
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+    <div class="header-one-line-search" style="display: none">
+        <generic-search style="width: 100%;"></generic-search>
+    </div>
+</nav>
+
+<!-- </header> -->

@@ -1,0 +1,90 @@
+<script type="text/ng-template" id="committee-members-list-table.html">
+
+    <div ng-if="index === 'counter'">
+        {{ cell }}
+    </div>
+
+    <div ng-if="index === 'id'">
+        <a href="#/witness/{{cell}}/">{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'committee_member_account_name'">
+        <a href="#/accounts/{{row.committee_member_account}}/">{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'url'">
+        <a href="{{cell}}" target="_blank">
+            <span data-translate="Link"></span>
+        </a>
+    </div>
+
+    <div ng-if="index === 'total_votes'">
+        {{ cell | number: 0 }}
+    </div>
+
+</script>
+
+<div class="page page-table" data-ng-controller="committeeCtrl">
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li><a href="#/"><span data-translate="Home"></span></a></li>
+                <li class="active"><a href="#/committee_members/"><span data-translate="Committee members"></span></a></li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+		<div class="panel-heading"><span data-translate="Current active committee members"></span></div>
+        <div class="panel-body table-responsive">
+            <form>
+                <div class="col-md-8">
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                        <input type="text" class="form-control" placeholder="{{ 'Search for active committee member' | translate }}" ng-model="search">
+                    </div>
+                </div>
+            </form>
+
+            <responsive-table class="committee-members-list-table"
+                              data-data="active_committee"
+                              data-loading="committeeLoading"
+                              data-loading-error="committeeLoadingError"
+                              data-columns="committeeColumns"
+                              data-template="committee-members-list-table.html"
+                              data-filter="search"
+            ></responsive-table>
+
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><span data-translate="Standby committee members"></span></div>
+        <div class="panel-body table-responsive">
+            <form>
+                <div class="col-md-8">
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                        <input type="text" class="form-control" placeholder="{{ 'Search for standby committee member' | translate }}" ng-model="search2">
+                    </div>
+                </div>
+            </form>
+
+            <responsive-table class="committee-members-list-table"
+                              data-data="standby_committee"
+                              data-loading="committeeLoading"
+                              data-loading-error="committeeLoadingError"
+                              data-columns="committeeColumns"
+                              data-template="committee-members-list-table.html"
+                              data-filter="search2"
+            ></responsive-table>
+
+        </div>
+    </div>
+</div>

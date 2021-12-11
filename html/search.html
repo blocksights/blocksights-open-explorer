@@ -1,0 +1,111 @@
+<div class="page page-table" data-ng-controller="searchCtrl">
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li><a href="#/"><span data-translate="Home"></span></a></li>
+                <li class="active"><a href="#/search/"><span data-translate="Search"></span></a></li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span data-translate="Search block"></span></div>
+                <div class="panel-body">
+                    <p><span data-translate="Search by block by inserting block number. No commas, no dots, just pure numbers."></span></p>
+                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2block(branding.example.block)" style="cursor: pointer;">{{ branding.example.block }}</a></p>
+                    <form role="form" data-ng-submit="submit()">
+                        <input type="hidden" class="form-control" ng-model="type" value="block">
+                        <div class="form-group ui-typeahead">
+                            <label for="block"><span data-translate="Block number"></span></label>
+                            <input type="text" class="form-control" ng-model="block" ng-change="updateData('block')" id="block" placeholder="{{ 'Enter block number' | translate }}"
+                                   uib-typeahead="b for b in blocks | filter:$viewValue | limitTo:8" ng-required="required">
+                        </div>
+                        <button type="submit" class="btn btn-success btn-w-md"><span data-translate="Go"></span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span data-translate="Search account"></span></div>
+                <div class="panel-body">
+                    <p><span data-translate="Looking for an account? Start typing the first letters of it's name and let the auto complete feature help you find the exact account name string."></span></p>
+                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2account(branding.example.account)" style="cursor: pointer;">{{ branding.example.account }}</a></p>
+                    <form role="form" data-ng-submit="submit()">
+                        <input type="hidden" class="form-control" ng-model="type" value="account">
+                        <div class="form-group ui-typeahead">
+                            <label for="account"><span data-translate="Account name or ID"></span></label>
+                            <input type="text" class="form-control" ng-model="account" ng-change="updateData('account')" id="account" placeholder="{{ 'Enter account name or id number' | translate }}"
+                                   uib-typeahead="a for a in accounts | filter:$viewValue | limitTo:8" ng-required="required">
+                        </div>
+                        <button type="submit" class="btn btn-success btn-w-md"><span data-translate="Go"></span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span data-translate="Search object"></span></h3>
+                </div>
+                <div class="panel-body">
+                    <p><span data-translate="In order to search for an object you need to insert an ID (assets are 1.3.X, accounts 1.2.X, etc.)."></span></p>
+                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2object('1.3.0')" style="cursor: pointer;">1.3.0</a></p>
+                    <form role="form" data-ng-submit="submit()">
+                        <input type="hidden" class="form-control" ng-model="type" value="object">
+                        <div class="form-group">
+                            <label for="object"><span data-translate="Object ID"></span></label>
+                            <input type="text" class="form-control" ng-model="object" id="object" placeholder="{{ 'Enter object id' | translate }}" ng-required="required">
+                        </div>
+                        <button type="submit" class="btn btn-success btn-w-md"><span data-translate="Go"></span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span data-translate="Search asset"></span></h3>
+                </div>
+                <div class="panel-body">
+                    <p><span data-translate="Looking for a SmartCoin or UIA? Start typing the first letters of it's name and let the auto complete feature help you find the exact asset name string."></span></p>
+                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2asset(branding.coreSymbol)" style="cursor: pointer;">{{ branding.coreSymbol }}</a></p>
+                    <form role="form" data-ng-submit="submit()">
+                        <input type="hidden" class="form-control" ng-model="type" value="asset">
+                        <div class="form-group ui-typeahead">
+                            <label for="asset"><span data-translate="Asset name or ID"></span></label>
+                            <input type="text" class="form-control" ng-model="asset" ng-change="updateData('asset')" id="asset" placeholder="{{ 'Enter asset name or id' | translate }}"
+                                   uib-typeahead="a for a in assets | filter:$viewValue | limitTo:8" ng-required="required">
+                        </div>
+                        <button type="submit" class="btn btn-success btn-w-md"><span data-translate="Go"></span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span data-translate="Search transaction hash"></span></h3>
+                </div>
+                <div class="panel-body">
+                    <p><span data-translate="If you have a transaction hash, please paste it here to get transaction information."></span></p>
+                    <p><span data-translate="Sample input"></span>: <a data-ng-click="add2tx(branding.example.tx)" style="cursor: pointer;">{{ branding.example.tx }}</a></p>
+                    <form role="form" data-ng-submit="submit()">
+                        <input type="hidden" class="form-control" ng-model="type" value="asset">
+                        <div class="form-group ui-typeahead">
+                            <label for="asset"><span data-translate="Transaction ID"></span></label>
+                            <input type="text" class="form-control" ng-model="tx" ng-change="updateData('tx')" id="tx" placeholder="{{ 'Enter tx hash' | translate }}"
+                                   uib-typeahead="a for a in txs | filter:$viewValue | limitTo:8" ng-required="required">
+                        </div>
+                        <button type="submit" class="btn btn-success btn-w-md"><span data-translate="Go"></span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

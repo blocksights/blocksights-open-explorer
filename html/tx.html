@@ -1,0 +1,66 @@
+<script type="text/ng-template" id="tx-operation-list-table.html">
+
+    <div ng-if="index === 'operation_text'" ng-bind-html="row.operation_text | to_trusted"></div>
+
+    <div ng-if="index === 'operation_id'">
+        <a href='#/operations/{{cell}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'op_type'">
+        <span class="badge badge-primary" style="background-color: #{{row.op_color}};">{{row.op_type}}</span>
+    </div>
+</script>
+
+<div class="page page-table" data-ng-controller="txsCtrl">
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li><a href="#/"><span data-translate="Home"></span></a></li>
+                <li><a href="#/txs/"><span data-translate="Transactions"></span></a></li>
+                <li class="active">{{data.hash}}</li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default" >
+                <div class="panel-heading" ><span data-translate="Operations in transaction"></span></div>
+                <div class="panel-body table-responsive">
+                    <responsive-table data-data="operations"
+                                      data-template="tx-operation-list-table.html"
+                                      data-loading="transactionLoading"
+                                      data-loading-error="transactionLoadingError"
+                                      data-columns="transactionOperationsColumns"
+                    ></responsive-table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default" >
+                <div class="panel-heading" ><span data-translate="Transaction data"></span></div>
+                <div class="panel-body table-responsive">
+                    <table class="table">
+                        <tr>
+                            <td><span data-translate="Hash"></span>:</td>
+                            <td><long-hash hash="data.hash"></td>
+                        </tr>
+                        <tr>
+                            <td><span data-translate="Block"></span>:</td>
+                            <td><a href="#/blocks/{{data.block_num}}/">{{data.block_num | number}}</a></td>
+                        </tr>
+                        <tr>
+                            <td><span data-translate="Date"></span>:</td>
+                            <td>{{data.date}}</td>
+                        </tr>
+                        <tr>
+                            <td><span data-translate="Operations in transaction"></span>:</td>
+                            <td>{{count | number}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

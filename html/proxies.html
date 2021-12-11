@@ -1,0 +1,51 @@
+<script type="text/ng-template" id="proxies-list-table.html">
+
+    <div ng-if="index === 'position'">
+        {{ cell }}
+    </div>
+
+    <div ng-if="index === 'account_name'">
+        <a href="#/accounts/{{row.account}}/">{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'power'">
+        {{cell | number: 0}}
+    </div>
+
+    <div ng-if="index === 'followers'">
+        {{cell | number }}
+    </div>
+
+    <div ng-if="index === 'perc'">
+        {{ cell | number: 3 }}
+    </div>
+
+</script>
+
+<div class="page page-table" data-ng-controller="proxiesCtrl">
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li><a href="#/"><span data-translate="Home"></span></a></li>
+                <li class="active"><a href="#/proxies/"><span data-translate="Proxies"></span></a></li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="panel panel-default">
+		<div class="panel-heading"><span data-translate="Top proxies"></span></div>
+        <div class="panel-body table-responsive">
+
+            <responsive-table class="proxies-list-table"
+                              data-data="proxies"
+                              data-columns="proxiesColumns"
+                              data-loading="proxiesLoading"
+                              data-loading-error="proxiesLoadingError"
+                              data-template="proxies-list-table.html"
+                              data-items-per-page="20"
+            ></responsive-table>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,186 @@
+<script type="text/ng-template" id="popover.html">
+    <div style="width: 250px">
+        The Annual Percentage Yield (APY) is estimated from the performance of the last 24 hours with respect to {{ baseSymbol }}, assumption is that the price stays in the same range with comparable movement. Yields are estimates and are provided for your convenience only, and by no means represent guaranteed returns.
+    </div>
+</script>
+
+<script type="text/ng-template" id="popover-tvl.html">
+    <div style="width: 250px">
+        <p class="size-h4">
+            {{pool.asset_a_float | number}} <a href='/#/assets/{{pool.asset_a_symbol}}'>{{pool.asset_a_symbol}}</a><br />
+            {{pool.asset_b_float | number}} <a href='/#/assets/{{pool.asset_b_symbol}}'>{{pool.asset_b_symbol}}</a>
+        </p>
+    </div>
+</script>
+
+<script type="text/ng-template" id="operations-table.html">
+
+    <div ng-if="index === 'operation_text'" ng-bind-html="row.operation_text | to_trusted"></div>
+
+    <div ng-if="index === 'operation_id'">
+        <a href='#/operations/{{cell}}/'>{{cell}}</a>
+    </div>
+
+    <div ng-if="index === 'time'"> {{ cell | dateFilter }} </div>
+
+    <div ng-if="index === 'block_num'">
+        <a href="#/blocks/{{ cell }}">{{ cell | number }}</a>
+    </div>
+
+    <div ng-if="index === 'type'">
+        <span class="badge badge-primary" style="background-color: #{{row.color}};">{{row.type}}</span>
+    </div>
+
+</script>
+
+<div class="page page-table pools" data-ng-controller="poolsCtrl">
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li><a href="#/"><span data-translate="Home"></span></a></li>
+                <li><a href="#/pools/"><span data-translate="Liquidity Pools"></span></a></li>
+                <li class="active"><a href="#/pools/{{pool.id}}/{{pool.asset_b_symbol}}/">{{pool.asset_a_symbol}}/{{pool.asset_b_symbol}}</a></li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-5">
+            <div class="row text-center">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div
+                        class="box-info"
+                        uib-popover-template="'popover-tvl.html'"
+                        popover-trigger="'outsideClick'"
+                        popover-placement="bottom-left"
+                    >
+                        <div class="well">
+                            <div class="box-info">
+                                <p class="size-h4">
+                                    ~{{pool.value_in_core | number}} <a href='/#/assets/{{baseSymbol}}'>{{baseSymbol}}</a>
+                                </p>
+                                <!--<p class="text-muted text-small">{{"Asset Link" | translateWithLinks: pool.asset_a_symbol | to_trusted}}</p>-->
+                                <p class="text-muted text-small"><span data-translate="VALUE LOCKED"/></p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{pool.share_asset_float | number}} <a href='/#/assets/{{pool.share_asset_symbol}}'>{{pool.share_asset_symbol}}</a></p>
+                            <p class="text-muted text-small"><span data-translate="POOL BITS"/></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{pool.taker_fee_percent / 100}}% / {{pool.withdrawal_fee_percent / 100}}%</p>
+                            <p class="text-muted text-small"><span data-translate="TAKER / WITHDRAWAL FEE"/></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well" style="padding: 9px">
+                        <div class="box-info">
+                            <p class="size-h4">
+                                {{pool.volume_a_24h | number}} <a href='/#/assets/{{pool.asset_a_symbol}}'>{{pool.asset_a_symbol}}</a><br />
+                                {{pool.volume_b_24h | number}} <a href='/#/assets/{{pool.asset_b_symbol}}'>{{pool.asset_b_symbol}}</a>
+                            </p>
+                            <p class="text-muted text-small"><span data-translate="24H VOLUME"/></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div
+                            class="box-info"
+                            uib-popover-template="'popover.html'"
+                            popover-trigger="'outsideClick'"
+                            popover-placement="bottom-left"
+                    >
+                        <div class="well" style="cursor: pointer;">
+                            <div class="box-info">
+                                <p class="size-h4">{{pool.apy_in_core | number}}% ({{pool.apy_24h_in_core}}% daily)</p>
+                                <p class="text-muted text-small">{{ baseSymbol }} <span data-translate="APY"/></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well" style="cursor: pointer;">
+                        <div class="box-info">
+                            <p class="size-h4">~{{pool.total_withdraw_value_in_core | number}} <a href='/#/assets/{{baseSymbol}}'>{{baseSymbol}}</a></p>
+                            <p class="text-muted text-small"><span data-translate="WITHDRAW VALUE PER BIT"/></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="nav nav-tabs scrollable-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a data-target="#price_chart" role="tab" data-toggle="tab" ng-click="loadTabsCharts('price_chart')"><span data-translate="Pool Price"></span></a>
+                        </li>
+                        <li role="presentation">
+                            <a data-target="#balance_chart" role="tab" data-toggle="tab" ng-click="loadTabsCharts('balance_chart')"><span data-translate="Pool Balances"></span></a>
+                        </li>
+                        <li role="presentation">
+                            <a data-target="#depth_chart" role="tab" data-toggle="tab" ng-click="loadTabsCharts('depth_chart')"><span data-translate="Pool Depth"></span></a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="price_chart">
+                            <div
+                                class="pool--tv_chart_container"
+                                id="pool_tv_chart_container"
+                            />
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="balance_chart">
+                            <highcharts-chart options="chartsData.balance_chart" allow-fullscreen-for-mobile="true" class="balance-chart"></highcharts-chart>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="depth_chart">
+                            <highcharts-chart options="chartsData.depth_chart" allow-fullscreen-for-mobile="true" class="depth-chart"></highcharts-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2><span data-translate="Liquidity Pools"></span></h2>
+        <div class="panel-body table-responsive">
+            <responsive-table data-data="operations"
+                              data-columns="operationsColumns"
+                              data-loading="operationsLoading"
+                              data-template="operations-table.html"
+                              data-loading-error="operationsLoadingError"
+            ></responsive-table>
+
+            <footer class="table-footer">
+                <div class="row">
+                    <div class="col-md-6 page-num-info">
+                    </div>
+                    <div class="col-md-6 text-right pagination-container">
+                        <ul
+                            uib-pagination class="pagination-sm"
+                            ng-model="currentPage"
+                            total-items="total_ops"
+                            max-size="4"
+                            ng-change="currentPage===undefined || select(currentPage)"
+                            items-per-page="20"
+                            rotate="false"
+                            previous-text="&lsaquo;" next-text="&rsaquo;"
+                            boundary-links="true"
+                        ></ul>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>

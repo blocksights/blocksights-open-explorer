@@ -1,0 +1,41 @@
+<script type="text/ng-template" id="blocks-list-table.html">
+    <div ng-if="index === 'block_num'">
+        <a href='#/blocks/{{cell}}/'>{{cell}}</a>
+    </div>
+    <div ng-if="index === 'timestamp'">
+        {{ cell | dateFilter }}
+    </div>
+    <div ng-if="index === 'transactions'">
+        {{ cell }}
+    </div>
+    <div ng-if="index === 'operations'">
+        {{ cell }}
+    </div>
+</script>
+
+<div class="page page-table" data-ng-controller="blocksCtrl">
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li><a href="#/"><span data-translate="Home"></span></a></li>
+                <li class="active"><a href="#/blocks/"><span data-translate="Blocks"></span></a></li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+
+    <div class="panel panel-default" >
+		<div class="panel-heading" ><span data-translate="Biggest network blocks"></span></div>
+        <div class="panel-body table-responsive">
+
+            <responsive-table   data-data="blocks"
+                                data-loading="blocksLoading"
+                                data-loading-error="blocksLoadingError"
+                                data-columns="blocksColumns"
+                                data-template="blocks-list-table.html">
+            </responsive-table>
+
+        </div>
+    </div>
+</div>

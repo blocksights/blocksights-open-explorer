@@ -1,0 +1,189 @@
+<div class="page page-table market" data-ng-controller="marketsCtrl">
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li><a href="#/"><span data-translate="Home"></span></a></li>
+                <li><a href="#/markets/"><span data-translate="Markets"></span></a></li>
+                <li class="active"><a href="#/markets/{{ticker.base}}/{{ticker.quote}}/">{{ticker.base}}/{{ticker.quote}}</a></li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-5">
+            <div class="row text-center">
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.price | number: ticker.base_precision}}</p>
+                            <p class="text-muted text-small"><span data-translate="CURRENT PRICE"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.perc_change | number:2}}%</p>
+                            <p class="text-muted text-small"><span data-translate="24 HS % CHANGE"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.ask | number: ticker.base_precision}}<span class="size-h4"></span></p>
+                            <p class="text-muted text-small"><span data-translate="LAST ASK"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.bid | number: ticker.base_precision}}</p>
+                            <p class="text-muted text-small"><span data-translate="LAST BID"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.base_volume | number}}</p>
+                            <p class="text-muted text-small">{{ticker.base}} <span data-translate="VOLUME"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{ticker.quote_volume | number}}</p>
+                            <p class="text-muted text-small">{{ticker.quote}} <span data-translate="VOLUME"></span></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <ul class="nav nav-tabs scrollable-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a data-target="#price_chart" role="tab" data-toggle="tab" ng-click="loadTabsCharts('price_chart')"><span data-translate="Price chart"></span></a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="price_chart">
+                            <div
+                                class="market--tv_chart_container"
+                                id="tv_chart_container"
+                            />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<h2><span data-translate="Order book"></span></h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span data-translate="Sell orders"></span></div>
+                <div class="panel-body table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style="text-align:right;" ng-click='sortColumn("price1")' ng-class='sortClass("price1")'><span data-translate="Price"></span></th>
+                                <th style="text-align:right;" ng-click='sortColumn("quote1")' ng-class='sortClass("quote1")'>{{ticker.quote}}</th>
+                                <th style="text-align:right;" ng-click='sortColumn("base1")' ng-class='sortClass("base1")'>{{ticker.base}}</th>
+                                <th style="text-align:right;" ng-click='sortColumn("total1")' ng-class='sortClass("total1")'><span data-translate="Total"></span>({{ticker.base}})</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="a in asks | orderBy:columnToSort:reverse">
+                            <td style="text-align:right;">{{a.price | number: a.base_precision}}</td>
+                            <td style="text-align:right;">{{a.quote | number: a.quote_precision}}</td>
+                            <td style="text-align:right;">{{a.base | number: a.base_precision}}</td>
+                            <td style="text-align:right;">{{a.total | number: a.base_precision}}</td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span data-translate="Buy orders"></span></div>
+                <div class="panel-body table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="text-align:right;" ng-click='sortColumn2("price2")' ng-class='sortClass2("price2")'><span data-translate="Price"></span></th>
+                            <th style="text-align:right;" ng-click='sortColumn2("base2")' ng-class='sortClass2("base2")'>{{ticker.base}}</th>
+                            <th style="text-align:right;" ng-click='sortColumn2("quote2")' ng-class='sortClass2("quote2")'>{{ticker.quote}}</th>
+                            <th style="text-align:right;" ng-click='sortColumn2("total2")' ng-class='sortClass2("total2")'><span data-translate="Total"></span>({{ticker.base}})</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="b in bids | orderBy:columnToSort2:reverse2">
+                            <td style="text-align:right;" class="align-right">{{b.price | number: b.base_precision}}</td>
+                            <td style="text-align:right;" class="align-right">{{b.base | number: b.base_precision}}</td>
+                            <td style="text-align:right;" class="align-right">{{b.quote | number: b.quote_precision}}</td>
+                            <td style="text-align:right;">{{b.total | number: b.base_precision}}</td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2><span data-translate="Grouped order book"></span></h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span data-translate="Sell orders groups"></span></div>
+                <div class="panel-body table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="text-align:right;" ng-click='sortColumn3("min_price3")' ng-class='sortClass3("min_price3")'><span data-translate="Min"></span></th>
+                            <th style="text-align:right;" ng-click='sortColumn3("max_price3")' ng-class='sortClass3("max_price3")'><span data-translate="Max"></span></th>
+                            <th style="text-align:right;" ng-click='sortColumn3("total_for_sale3")' ng-class='sortClass3("total_for_sale3")'><span data-translate="Total"></span>({{ticker.base}})</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="sg in sell_grouped | orderBy:columnToSort3:reverse3">
+                            <td style="text-align:right;">{{sg.max_price | number: sg.base_precision}}</td>
+                            <td style="text-align:right;">{{sg.min_price | number: sg.base_precision}}</td>
+                            <td style="text-align:right;">{{sg.total_for_sale | number: sg.base_precision}}</td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading"><span data-translate="Buy orders groups"></span></div>
+                <div class="panel-body table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="text-align:right;" ng-click='sortColumn4("min_price4")' ng-class='sortClass4("min_price4")'><span data-translate="Min"></span></th>
+                            <th style="text-align:right;" ng-click='sortColumn4("max_price4")' ng-class='sortClass4("max_price4")'><span data-translate="Max"></span></th>
+                            <th style="text-align:right;" ng-click='sortColumn4("total_for_sale4")' ng-class='sortClass4("total_for_sale4")'><span data-translate="Total"></span>({{ticker.base}})</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="bg in buy_grouped | orderBy:columnToSort4:reverse4">
+                            <td style="text-align:right;">{{bg.min_price | number: bg.base_precision}}</td>
+                            <td style="text-align:right;">{{bg.max_price | number: bg.base_precision}}</td>
+                            <td style="text-align:right;">{{bg.total_for_sale | number: bg.base_precision}}</td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

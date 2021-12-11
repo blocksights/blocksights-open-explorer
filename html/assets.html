@@ -1,0 +1,134 @@
+<script type="text/ng-template" id="assets-list-table.html">
+
+    <div ng-if="index === 'image_url'">
+        <img src="{{ cell || 'images/asset-symbols/' + row.base.toLowerCase() + '.png' }}" width="30"/>
+    </div>
+
+    <div ng-if="index === 'name'">
+        <a href='#/assets/{{row.id}}/'>{{row.name}}</a>
+    </div>
+
+    <div ng-if="index === 'price'">
+        {{row.price | number}}
+        <a href='#/assets/1.3.0/'>
+            <span data-translate="{{row.base}}"></span>
+        </a>
+    </div>
+
+    <div ng-if="index === 'volume'">
+        {{row.volume | number}}
+        <a href='#/assets/1.3.0/'>
+            <span data-translate="{{row.base}}"></span>
+        </a>
+    </div>
+
+    <div ng-if="index === 'type'">
+        {{row.type}}
+        <span ng-if="row.market_cap == '-'">
+            (<span data-translate="Gateway"></span>)
+        </span>
+        <span ng-if="row.market_cap != '-'">
+            (<span data-translate="Native"></span>)
+        </span>
+    </div>
+
+    <div ng-if="index === 'market_cap'">
+        <div ng-if="row.market_cap == '-'">
+            -
+        </div>
+        <div ng-if="row.market_cap != '-'">
+            {{row.market_cap | number}}
+            <a href='#/assets/1.3.0/'>
+                <span data-translate="{{row.base}}"></span>
+            </a>
+        </div>
+    </div>
+
+    <div ng-if="index === 'supply'">
+        <div ng-if="row.supply == '-'">
+            -
+        </div>
+        <div ng-if="row.supply != '-'">
+            <span ng-if="row.name == 'CNY'"><i class="fas fa-cny"></i></span>
+            <span ng-if="row.name == 'USD'"><i class="fas fa-usd"></i></span>
+            <span ng-if="row.name == 'BTC'"><i class="fas fa-btc"></i></span>
+            <span ng-if="row.name == 'JPY'"><i class="fas fa-jpy"></i></span>
+            <span ng-if="row.name == 'GBP'"><i class="fas fa-gbp"></i></span>
+            <span ng-if="row.name == 'EUR'"><i class="fas fa-eur"></i></span>
+            <span ng-if="row.name == 'AUD'"><i class="fas fa-usd"></i></span>
+            <span ng-if="row.name == 'CAD'"><i class="fas fa-usd"></i></span>
+            {{row.supply | number}}
+        </div>
+    </div>
+
+    <div ng-if="index === 'holders'">
+        {{row.holders| number}}
+    </div>
+
+
+</script>
+
+<div class="page page-table" data-ng-controller="assetsCtrl">
+
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li><a href="#/"><span data-translate="Home"></span></a></li>
+                <li class="active"><a href="#/assets/"><span data-translate="Assets"></span></a></li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="row text-center">
+                <!-- Stats -->
+                <div class="col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{dynamic.volume_core_asset | number}}<span class="size-h4"></span></p>
+                            <p class="text-muted text-small"><span data-translate="24H VOLUME"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="col-sm-4 col-xs-6">
+                    <div class="well">
+                        <div class="box-info">
+                            <p class="size-h4">{{dynamic.market_cap_core_asset | number}}</p>
+                            <p class="text-muted text-small"><span data-translate="24H MARKET CAP"></span></p>
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <highcharts-chart options="dex_volume_chart" class="assets-bar-chart" allow-fullscreen-for-mobile="true"></highcharts-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+		<div class="panel-heading"><span data-translate="Assets"></span></div>
+        <div class="panel-body table-responsive">
+            <form>
+                <div class="col-md-8">
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                        <input type="text" class="form-control" placeholder="{{ 'Search for an asset' | translate }}" ng-model="search">
+                    </div>
+                </div>
+            </form>
+
+            <responsive-table class="assets-list-table" data-filter="search" data-columns="columns" data-data="assets" data-loading="assetsListLoading" data-loading-error="assetsListLoadingError" data-template="assets-list-table.html"></responsive-table>
+
+        </div>
+    </div>
+
+</div>
