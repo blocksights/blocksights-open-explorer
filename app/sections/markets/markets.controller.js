@@ -63,7 +63,7 @@
         }
         else {
             if(path === "/markets") {
-                const ofLastHours = 128;
+                const ofLastHours = 24;
                 $scope.ofLastHours = ofLastHours;
                 marketService.getActiveMarkets(ofLastHours, function (returnData) {
                     $scope.markets = returnData;
