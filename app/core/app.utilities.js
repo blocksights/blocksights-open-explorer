@@ -97,6 +97,22 @@
                 var operation_account = 0;
                 var operation_text;
                 var fee_paying_account;
+                
+                // function to reduce the amount of duplicated code within operation account fetch
+                const getAccount = (account_id) => {
+                    return $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + account_id).then((response) => response.data);
+                }
+                
+                // function to reduce the amount of duplicated code within operation asset fetch/amount calculation
+                const getAsset = (asset_id, amount = 0) => {
+                    return $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_id).then((asset) => {
+                        return {
+                            asset: asset.data,
+                            symbol: asset.data.symbol,
+                            amount: formatNumber(amount, asset.data.precision)
+                        }
+                    })
+                }
 
                 if (operation_type === 0) {
                     var from = operation.from;
@@ -1224,6 +1240,110 @@
                                 });
                         });
                 }
+                else if (operation_type === 69) { // Credit Offer Create
+                    const operation_account = operation.owner_account;
+                    
+                    getAccount(operation_account).then((account_name) => {
+                        getAsset(operation.asset_type, operation.balance).then((asset) => {
+                           
+                            operation_text = $filter('translateWithLinks')('Operation Credit Offer Create', {
+                                accountLink: {
+                                    text: account_name,
+                                    href: `/#/accounts/${account_name}`
+                                },
+                                fee: String(operation.fee_rate),
+                                amount: asset.amount,
+                                assetLink: {
+                                    text: asset.symbol,
+                                    href: `/#/assets/${asset.symbol}`
+                                }
+                            });
+                            callback(operation_text)
+                        })
+                    })
+                }
+                else if (operation_type === 70) { // Credit Offer Delete
+                    const operation_account = operation.owner_account;
+                    const asset = operation.result[1];
+                    getAccount(operation_account).then((account_name) => {
+                        getAsset(asset.asset_id, asset.amount).then((asset) => {
+                            operation_text = $filter('translateWithLinks')('Operation Credit Offer Delete', {
+                                accountLink: {
+                                    text: account_name,
+                                    href: `/#/accounts/${account_name}`
+                                },
+                                offerId: operation.offer_id,
+                                amount: asset.amount,
+                                asset: asset.symbol
+                            });
+                            callback(operation_text)
+                        })
+                    })
+                }
+                else if (operation_type === 71) { // Credit Offer Update
+                    const operation_account = operation.owner_account;
+                    
+                    getAccount(operation_account).then((account_name) => {
+                        operation_text = $filter('translateWithLinks')('Operation Credit Offer Update', {
+                            accountLink: {
+                                text: account_name,
+                                href: `/#/accounts/${account_name}`
+                            },
+                            offerId: operation.offer_id,
+                        });
+                        callback(operation_text)
+                    })
+                }
+                else if (operation_type === 72) { // Credit Offer Accept
+                    const operation_account = operation.borrower;
+                    const asset = operation.borrow_amount;
+                    getAccount(operation_account).then((account_name) => {
+                        getAsset(asset.asset_id, asset.amount).then((asset) => {
+                            operation_text = $filter('translateWithLinks')('Operation Credit Offer Accept', {
+                                accountLink: {
+                                    text: account_name,
+                                    href: `/#/accounts/${account_name}`
+                                },
+                                amount: asset.amount,
+                                assetLink: {
+                                    text: asset.symbol,
+                                    href: `/#/assets/${asset.symbol}`
+                                },
+                                offerId: operation.offer_id,
+                            });
+                            callback(operation_text)
+                        })
+                    })
+                }
+                else if (operation_type === 73) { // Credit Offer Accept
+                    const operation_account = operation.account;
+                    const repay = operation.repay_amount;
+                    const fee = operation.credit_fee;
+                    getAccount(operation_account).then((account_name) => {
+                        getAsset(repay.asset_id, repay.amount).then((repayAsset) => {
+                            getAsset(fee.asset_id, fee.amount).then((feeAsset) => {
+                                operation_text = $filter('translateWithLinks')('Operation Credit Deal Repay', {
+                                    accountLink : {
+                                        text: account_name,
+                                        href: `/#/accounts/${account_name}`
+                                    },
+                                    amount      : repayAsset.amount,
+                                    feeAmount   : feeAsset.amount,
+                                    assetLink   : {
+                                        text: repayAsset.symbol,
+                                        href: `/#/assets/${repayAsset.symbol}`
+                                    },
+                                    feeAssetLink: {
+                                        text: feeAsset.symbol,
+                                        href: `/#/assets/${feeAsset.symbol}`
+                                    },
+                                });
+                                callback(operation_text)
+                            });
+                        })
+                    })
+                }
+                
                 else {
 
                     operation_text = $filter('translate')('Operation Beautifier Missing Description', {
@@ -1494,6 +1614,30 @@
                 else if(opType === 63) {
                     name = "LIQUIDITY POOL EXCHANGE";
                     color = "369694";
+                }
+                else if(opType === 69) {
+                    name = "CREATE CREDIT OFFER";
+                    color = "f35b92";
+                }
+                else if(opType === 70) {
+                    name = "DELETE CREDIT OFFER";
+                    color = "f35b92";
+                }
+                else if(opType === 71) {
+                    name = "UPDATE CREDIT OFFER";
+                    color = "f35b92";
+                }
+                else if(opType === 72) {
+                    name = "ACCEPT CREDIT OFFER";
+                    color = "21d19f";
+                }
+                else if(opType === 73) {
+                    name = "REPAY CREDIT DEAL";
+                    color = "21d19f";
+                }
+                else if(opType === 74) {
+                    name = "EXPIRED CREDIT DEAL";
+                    color = "f35b92";
                 } else {
                     name = "UNRECOGNIZED OP";
                     color = "111111";
