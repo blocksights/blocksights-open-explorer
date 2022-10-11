@@ -72,8 +72,18 @@
 
                     // the code below generates the response in specific format and
                     // adds groups' titles to split accounts / transactions / blocks etc. in the dropdown list
+                    
+                    const mapOperationsProperType = (item) => {
+                        return item.identifier.indexOf('1.11') === 0 ? {
+                            ...item,
+                            type: SEARCH_TYPES.OPERATION,
+                        } : {
+                            ...item,
+                        }
+                    }
+                    
                     try {
-                        items = response.data.found;
+                        items = (Array.isArray(response.data.found) ? response.data.found : []).map(mapOperationsProperType);
 
                         for(let i = 0; i < items.length; i++) {
                             if(i === 0) {
