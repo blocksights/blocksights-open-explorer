@@ -124,6 +124,14 @@
                         href: `/#/accounts/${accountName}`
                     })
                 })
+                
+                const translateCallback = (key, params = {}) => {
+                    callback(
+                        $filter('translateWithLinks')(key, {
+                            ...params
+                        })
+                    )
+                }
 
                 if (operation_type === 0) {
                     var from = operation.from;
@@ -444,6 +452,19 @@
 
                             callback(operation_text);
                         });
+                }
+                else if (operation_type === 9) { // account transfer
+                    operation_account = operation.account_to_upgrade;
+                    
+                    getAccount(operation.account_id).then((account_name) => {
+                        getAccount(operation.new_owner).then((owner_account_name) => {
+                            translateCallback('Operation Account Transfer', {
+                                account: getLink().account(account_name),
+                                newAccount: getLink().account(owner_account_name),
+                            })
+                        });
+                        
+                    })
                 }
                 else if (operation_type === 10) {
                     operation_account = operation.issuer;
