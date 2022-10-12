@@ -798,6 +798,20 @@
                                 });
                         });
                 }
+                else if (operation_type === 38) { // override transfer
+                    getAccount(operation.issuer).then((issuer) => {
+                        getAccount(operation.from).then((from) => {
+                            getAccount(operation.to).then((to) => {
+                                translateCallback('Operation Override Transfer', {
+                                    issuer: getLink().account(issuer),
+                                    from: getLink().account(from),
+                                    to: getLink().account(to),
+                                    amount: operation.amount.toString(),
+                                })
+                            })
+                        })
+                    })
+                }
                 else if (operation_type === 45) { // BID COLLATERAL
                     operation_account = operation.bidder;
 
