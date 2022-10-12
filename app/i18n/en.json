@@ -149,6 +149,7 @@
   "Operation Asset Global Settle": "{{account}} requested global settlement of {{asset}} at {{price}}",
   "Operation Witness Create": "{{account}} was upgraded to become a witness",
   "Operation Witness Update": "{{account}} update its witness info",
+  "Operation Proposal Delete": "{{account}} deleted a proposal {{proposal}}",
   "Operation Credit Offer Delete": "{{accountLink}} delete credit offer for #{{offerId}} of {{amount}} {{assetLink}} ",
   "Operation Credit Offer Create": "{{accountLink}} create a credit offer of {{amount}} {{assetLink}} with fee rate {{fee}}%",
   "Operation Credit Offer Update": "{{accountLink}} update a credit offer #{{offerId}}",

@@ -122,6 +122,10 @@
                     account: (accountName) => ({
                         text: accountName,
                         href: `/#/accounts/${accountName}`
+                    }),
+                    object: (objectId) => ({
+                        text: objectId,
+                        href: `/#/objects/${objectId}`
                     })
                 })
                 
@@ -686,6 +690,14 @@
 
                             callback(operation_text);
                     });
+                }
+                else if (operation_type === 24) { // proposal delete
+                    getAccount(operation.fee_paying_account).then((account_name) => {
+                        translateCallback('Operation Proposal Delete', {
+                            account: getLink().account(account_name),
+                            proposal: getLink().object(operation.proposal),
+                        });
+                    })
                 }
                 else if (operation_type === 33) {
                     operation_account = operation.owner_;
