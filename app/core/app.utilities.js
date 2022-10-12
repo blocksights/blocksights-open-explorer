@@ -1454,6 +1454,14 @@
                         })
                     })
                 }
+                else if (operation_type === 66) { // samet fund update
+                    getAccount(operation.owner_account).then((account_name) => {
+                        translateCallback('Operation Samet Fund Update', {
+                            account: getLink().account(account_name),
+                            id: getLink().object(operation.fund_id),
+                        })
+                    })
+                }
                 else if (operation_type === 69) { // Credit Offer Create
                     const operation_account = operation.owner_account;
                     
