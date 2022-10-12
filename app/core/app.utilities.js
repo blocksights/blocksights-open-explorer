@@ -641,6 +641,13 @@
                         })
                     })
                 }
+                else if (operation_type === 21) { // witness update
+                    getAccount(operation.witness_account).then((account_name) => {
+                        translateCallback('Operation Witness Update', {
+                            account: getLink().account(account_name)
+                        })
+                    })
+                }
                 else if (operation_type === 22) {
                     fee_paying_account = operation.fee_paying_account;
                     operation_account = fee_paying_account;
