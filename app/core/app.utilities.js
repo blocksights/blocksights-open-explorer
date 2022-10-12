@@ -497,6 +497,17 @@
                         
                     })
                 }
+                else if (operation_type === 13) { // asset update feed producers
+                    getAccount(operation.issuer).then((account_name) => {
+                        getAsset(operation.asset_to_update).then((asset) => {
+                            translateCallback('Operation Asset Update Feed Producers', {
+                                account: getLink().account(account_name),
+                                asset: getLink().asset(asset.symbol),
+                            })
+                        });
+                        
+                    })
+                }
                 else if (operation_type === 14) {
                     var issuer = operation.issuer;
                     var issue_to_account =  operation.issue_to_account;
