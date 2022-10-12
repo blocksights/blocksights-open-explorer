@@ -1434,7 +1434,7 @@
                                 });
                         });
                 }
-                else if (operation_type === 64) {
+                else if (operation_type === 64) { // samet fund create
                     getAccount(operation.owner_account).then((account_name) => {
                         getAsset(operation.asset_type, operation.balance).then((asset) => {
                             translateCallback('Operation Samet Fund Create', {
@@ -1444,6 +1444,14 @@
                                 amount: asset.amount,
                             })
                         });
+                    })
+                }
+                else if (operation_type === 65) { // samet fund delete
+                    getAccount(operation.owner_account).then((account_name) => {
+                        translateCallback('Operation Samet Fund Delete', {
+                            account: getLink().account(account_name),
+                            id: getLink().object(operation.fund_id),
+                        })
                     })
                 }
                 else if (operation_type === 69) { // Credit Offer Create

@@ -152,6 +152,7 @@
   "Operation Asset Claim Pool": "{{account}} claimed {{amount}} from asset {{asset}}'s fee pool",
   "Operation Asset Update Issuer": "{{from}} transferred {{asset}} ownership to {{to}}",
   "Operation Samet Fund Create": "{{account}} created flash loan of {{amount}} {{asset}} with fee rate {{fee}}",
+  "Operation Samet Fund Delete": "{{account}} delete flash loan {{id}}",
   "Operation Witness Create": "{{account}} was upgraded to become a witness",
   "Operation Witness Update": "{{account}} update its witness info",
   "Operation Proposal Delete": "{{account}} deleted a proposal {{proposal}}",
