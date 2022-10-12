@@ -150,6 +150,7 @@
   "Operation Asset Settle Cancel": "{{account}} cancelled settlement of {{amount}}",
   "Operation Asset Claim Fees": "{{account}} claimed asset fees of {{amount}} from {{asset}} fee pool",
   "Operation Asset Claim Pool": "{{account}} claimed {{amount}} from asset {{asset}}'s fee pool",
+  "Operation Asset Update Issuer": "{{from}} transferred {{asset}} ownership to {{to}}",
   "Operation Witness Create": "{{account}} was upgraded to become a witness",
   "Operation Witness Update": "{{account}} update its witness info",
   "Operation Proposal Delete": "{{account}} deleted a proposal {{proposal}}",
