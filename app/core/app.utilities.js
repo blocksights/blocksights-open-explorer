@@ -812,6 +812,26 @@
                         })
                     })
                 }
+                else if (operation_type === 42) { // asset settle cancel
+                    getAccount(operation.account).then((account) => {
+                        translateCallback('Operation Asset Settle Cancel', {
+                            account: getLink().account(account),
+                            amount: operation.amount.toString(),
+                        })
+                    })
+                }
+                else if (operation_type === 43) { // asset claim fees
+                    getAccount(operation.issuer).then((account) => {
+                        getAsset(operation.amount_to_claim.asset_id, operation.amount_to_claim.amount).then((asset) => {
+                            translateCallback('Operation Asset Claim Fees', {
+                                account: getLink().account(account),
+                                amount : asset.amount,
+                                asset  : getLink().asset(asset.symbol),
+                            })
+                        })
+                    })
+                }
+                
                 else if (operation_type === 45) { // BID COLLATERAL
                     operation_account = operation.bidder;
 

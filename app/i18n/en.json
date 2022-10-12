@@ -147,6 +147,8 @@
   "Operation Asset Update Feed Producers": "{{account}} updated the feed producers for the asset {{asset}}",
   "Operation Asset Fund Fee Pool": "{{account}} funded {{asset}} fee pool with {{amount}}",
   "Operation Asset Global Settle": "{{account}} requested global settlement of {{asset}} at {{price}}",
+  "Operation Asset Settle Cancel": "{{account}} cancelled settlement of {{amount}}",
+  "Operation Asset Claim Fees": "{{account}} claimed asset fees of {{amount}} from {{asset}} fee pool",
   "Operation Witness Create": "{{account}} was upgraded to become a witness",
   "Operation Witness Update": "{{account}} update its witness info",
   "Operation Proposal Delete": "{{account}} deleted a proposal {{proposal}}",
