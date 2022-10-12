@@ -754,6 +754,17 @@
                                 });
                         });
                 }
+                else if (operation_type === 34) { // worker create
+                    getAccount(operation.owner).then((account_name) => {
+                        getAsset('1.3.0', operation.daily_pay).then((asset) => {
+                            translateCallback('Operation Worker Create', {
+                                account: getLink().account(account_name),
+                                asset: getLink().asset(asset.symbol),
+                                amount: asset.amount,
+                            })
+                        });
+                    })
+                }
                 else if (operation_type === 37) { // BALANCE_CLAIM
                     operation_account = operation.deposit_to_account;
 
