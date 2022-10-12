@@ -634,6 +634,13 @@
                             });
                     });
                 }
+                else if (operation_type === 20) { // witness create
+                    getAccount(operation.witness_account).then((account_name) => {
+                        translateCallback('Operation Witness Create', {
+                            account: getLink().account(account_name)
+                        })
+                    })
+                }
                 else if (operation_type === 22) {
                     fee_paying_account = operation.fee_paying_account;
                     operation_account = fee_paying_account;
