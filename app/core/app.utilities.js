@@ -699,6 +699,13 @@
                         });
                     })
                 }
+                else if (operation_type === 29) { // committee create
+                    getAccount(operation.committee_member_account).then((account_name) => {
+                        translateCallback('Operation Committee Member Create', {
+                            account: getLink().account(account_name),
+                        });
+                    })
+                }
                 else if (operation_type === 33) {
                     operation_account = operation.owner_;
 
