@@ -151,6 +151,7 @@
   "Operation Witness Update": "{{account}} update its witness info",
   "Operation Proposal Delete": "{{account}} deleted a proposal {{proposal}}",
   "Operation Committee Member Create": "Created the committee member {{account}}",
+  "Operation Vesting Balance Create": "{{creator}} create a vesting balance of {{owner}} in {{amount}} {{asset}}",
   "Operation Credit Offer Delete": "{{accountLink}} delete credit offer for #{{offerId}} of {{amount}} {{assetLink}} ",
   "Operation Credit Offer Create": "{{accountLink}} create a credit offer of {{amount}} {{assetLink}} with fee rate {{fee}}%",
   "Operation Credit Offer Update": "{{accountLink}} update a credit offer #{{offerId}}",

@@ -706,6 +706,21 @@
                         });
                     })
                 }
+                else if (operation_type === 32) { // vesting balance create
+                    getAccount(operation.creator).then((account_name1) => {
+                        getAccount(operation.owner).then((account_name2) => {
+                            getAsset(operation.amount.asset_id, operation.amount.amount).then((asset) => {
+                                translateCallback('Operation Vesting Balance Create', {
+                                    creator: getLink().account(account_name1),
+                                    owner: getLink().account(account_name2),
+                                    amount: asset.amount,
+                                    asset: getLink().asset(asset.symbol),
+                                });
+                            });
+                        });
+                    })
+                }
+                
                 else if (operation_type === 33) {
                     operation_account = operation.owner_;
 
