@@ -155,6 +155,7 @@
   "Operation Samet Fund Delete": "{{account}} delete flash loan {{id}}",
   "Operation Samet Fund Update": "{{account}} update flash loan {{id}}",
   "Operation Samet Fund Borrow": "{{account}} lent {{amount}} from flash loan {{id}}",
+  "Operation Samet Fund Repay": "{{account}} repays flash loan {{id}} {{amount}} with fee {{fee}}",
   "Operation Witness Create": "{{account}} was upgraded to become a witness",
   "Operation Witness Update": "{{account}} update its witness info",
   "Operation Proposal Delete": "{{account}} deleted a proposal {{proposal}}",

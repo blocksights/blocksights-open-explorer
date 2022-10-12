@@ -1470,6 +1470,16 @@
                         })
                     })
                 }
+                else if (operation_type === 68) { // samet fund borrow
+                    getAccount(operation.account).then((account_name) => {
+                        translateCallback('Operation Samet Fund Repay', {
+                            account: getLink().account(account_name),
+                            id: getLink().object(operation.fund_id),
+                            fee: operation.fund_fee,
+                            amount: operation.repay_amount.toString(),
+                        })
+                    })
+                }
                 else if (operation_type === 69) { // Credit Offer Create
                     const operation_account = operation.owner_account;
                     
