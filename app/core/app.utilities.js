@@ -584,7 +584,18 @@
                             });
                     });
                 }
-
+                else if (operation_type === 16) { // asset fund fee pool
+                    getAccount(operation.from_account).then((account_name) => {
+                        getAsset(operation.asset_id, operation.amount).then((asset) => {
+                            translateCallback('Operation Asset Fund Fee Pool', {
+                                account: getLink().account(account_name),
+                                asset: getLink().asset(asset.symbol),
+                                amount: asset.amount,
+                            })
+                        });
+                        
+                    })
+                }
                 else if (operation_type === 19) {
                     var publisher = operation.publisher;
                     var asset_id =  operation.asset_id;
