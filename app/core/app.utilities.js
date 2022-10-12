@@ -1434,6 +1434,18 @@
                                 });
                         });
                 }
+                else if (operation_type === 64) {
+                    getAccount(operation.owner_account).then((account_name) => {
+                        getAsset(operation.asset_type, operation.balance).then((asset) => {
+                            translateCallback('Operation Samet Fund Create', {
+                                account: getLink().account(account_name),
+                                fee: `${(parseFloat(operation.fee_rate) / 1000000) * 100}%`,
+                                asset: getLink().asset(asset.symbol),
+                                amount: asset.amount,
+                            })
+                        });
+                    })
+                }
                 else if (operation_type === 69) { // Credit Offer Create
                     const operation_account = operation.owner_account;
                     
