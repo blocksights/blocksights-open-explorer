@@ -938,6 +938,17 @@
                                 });
                         });
                 }
+                else if (operation_type === 47) { // asset claim pool
+                    getAccount(operation.issuer).then((account) => {
+                        getAsset(operation.asset_id, operation.amount_to_claim).then((asset) => {
+                            translateCallback('Operation Asset Claim Pool', {
+                                account: getLink().account(account),
+                                amount : asset.amount,
+                                asset  : getLink().asset(asset.symbol),
+                            })
+                        })
+                    })
+                }
                 else if (operation_type === 49) { // HTLC CREATE
                     operation_account = operation.from;
 
