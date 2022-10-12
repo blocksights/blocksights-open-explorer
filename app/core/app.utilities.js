@@ -113,6 +113,17 @@
                         }
                     })
                 }
+                
+                const getLink = () => ({
+                    asset: (assetName) => ({
+                        text: assetName,
+                        href: `/#/assets/${assetName}`
+                    }),
+                    account: (accountName) => ({
+                        text: accountName,
+                        href: `/#/accounts/${accountName}`
+                    })
+                })
 
                 if (operation_type === 0) {
                     var from = operation.from;
@@ -1247,16 +1258,10 @@
                         getAsset(operation.asset_type, operation.balance).then((asset) => {
                            
                             operation_text = $filter('translateWithLinks')('Operation Credit Offer Create', {
-                                accountLink: {
-                                    text: account_name,
-                                    href: `/#/accounts/${account_name}`
-                                },
+                                accountLink: getLink().account(account_name),
                                 fee: String(operation.fee_rate),
                                 amount: asset.amount,
-                                assetLink: {
-                                    text: asset.symbol,
-                                    href: `/#/assets/${asset.symbol}`
-                                }
+                                assetLink: getLink().asset(asset.symbol),
                             });
                             callback(operation_text)
                         })
@@ -1268,13 +1273,10 @@
                     getAccount(operation_account).then((account_name) => {
                         getAsset(asset.asset_id, asset.amount).then((asset) => {
                             operation_text = $filter('translateWithLinks')('Operation Credit Offer Delete', {
-                                accountLink: {
-                                    text: account_name,
-                                    href: `/#/accounts/${account_name}`
-                                },
+                                accountLink: getLink().account(account_name),
                                 offerId: operation.offer_id,
                                 amount: asset.amount,
-                                asset: asset.symbol
+                                assetLink: getLink().asset(asset.symbol),
                             });
                             callback(operation_text)
                         })
@@ -1285,10 +1287,7 @@
                     
                     getAccount(operation_account).then((account_name) => {
                         operation_text = $filter('translateWithLinks')('Operation Credit Offer Update', {
-                            accountLink: {
-                                text: account_name,
-                                href: `/#/accounts/${account_name}`
-                            },
+                            accountLink: getLink().account(account_name),
                             offerId: operation.offer_id,
                         });
                         callback(operation_text)
@@ -1300,15 +1299,9 @@
                     getAccount(operation_account).then((account_name) => {
                         getAsset(asset.asset_id, asset.amount).then((asset) => {
                             operation_text = $filter('translateWithLinks')('Operation Credit Offer Accept', {
-                                accountLink: {
-                                    text: account_name,
-                                    href: `/#/accounts/${account_name}`
-                                },
+                                accountLink: getLink().account(account_name),
                                 amount: asset.amount,
-                                assetLink: {
-                                    text: asset.symbol,
-                                    href: `/#/assets/${asset.symbol}`
-                                },
+                                assetLink: getLink().asset(asset.symbol),
                                 offerId: operation.offer_id,
                             });
                             callback(operation_text)
@@ -1323,20 +1316,11 @@
                         getAsset(repay.asset_id, repay.amount).then((repayAsset) => {
                             getAsset(fee.asset_id, fee.amount).then((feeAsset) => {
                                 operation_text = $filter('translateWithLinks')('Operation Credit Deal Repay', {
-                                    accountLink : {
-                                        text: account_name,
-                                        href: `/#/accounts/${account_name}`
-                                    },
+                                    accountLink : getLink().account(account_name),
                                     amount      : repayAsset.amount,
                                     feeAmount   : feeAsset.amount,
-                                    assetLink   : {
-                                        text: repayAsset.symbol,
-                                        href: `/#/assets/${repayAsset.symbol}`
-                                    },
-                                    feeAssetLink: {
-                                        text: feeAsset.symbol,
-                                        href: `/#/assets/${feeAsset.symbol}`
-                                    },
+                                    assetLink   : getLink().asset(repayAsset.symbol),
+                                    feeAssetLink: getLink().asset(feeAsset.symbol),
                                 });
                                 callback(operation_text)
                             });
