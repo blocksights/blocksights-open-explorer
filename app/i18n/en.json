@@ -143,6 +143,7 @@
   "Operation Liquidity Pool Exchange Description": "{{accountLink}} paid {{sellAmount}} {{sellAssetLink}} for {{receiveAmount}} {{buyAssetLink}} through liquidity pool {{pool}}",
   "Operation Liquidity Pool Withdraw Description": "{{accountLink}} withdrew from liquidity pool {{pool}} by burning {{amount}} {{assetLink}}",
   "Operation Account Transfer": "account {{account}} transferred to new owner {{newAccount}}",
+  "Operation Asset Update": "Update the asset {{asset}} using the account {{account}}",
   "Operation Credit Offer Delete": "{{accountLink}} delete credit offer for #{{offerId}} of {{amount}} {{assetLink}} ",
   "Operation Credit Offer Create": "{{accountLink}} create a credit offer of {{amount}} {{assetLink}} with fee rate {{fee}}%",
   "Operation Credit Offer Update": "{{accountLink}} update a credit offer #{{offerId}}",

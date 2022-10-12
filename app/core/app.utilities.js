@@ -486,6 +486,17 @@
                             callback(operation_text);
                         });
                 }
+                else if (operation_type === 11 || operation_type === 12) { // asset/bitasset update
+                    getAccount(operation.issuer).then((account_name) => {
+                        getAsset(operation.asset_to_update).then((asset) => {
+                            translateCallback('Operation Asset Update', {
+                                account: getLink().account(account_name),
+                                asset: getLink().asset(asset.symbol),
+                            })
+                        });
+                        
+                    })
+                }
                 else if (operation_type === 14) {
                     var issuer = operation.issuer;
                     var issue_to_account =  operation.issue_to_account;
