@@ -596,6 +596,18 @@
                         
                     })
                 }
+                else if (operation_type === 18) { // asset global settle
+                    getAccount(operation.issuer).then((account_name) => {
+                        getAsset(operation.asset_to_settle, operation.settle_price).then((asset) => {
+                            translateCallback('Operation Asset Global Settle', {
+                                account: getLink().account(account_name),
+                                asset: getLink().asset(asset.symbol),
+                                price: asset.amount,
+                            })
+                        });
+                        
+                    })
+                }
                 else if (operation_type === 19) {
                     var publisher = operation.publisher;
                     var asset_id =  operation.asset_id;
