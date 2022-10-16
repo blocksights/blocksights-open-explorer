@@ -97,6 +97,45 @@
                 var operation_account = 0;
                 var operation_text;
                 var fee_paying_account;
+                
+                // function to reduce the amount of duplicated code within operation account fetch
+                const getAccount = (account_id) => {
+                    return $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + account_id).then((response) => response.data);
+                }
+                
+                // function to reduce the amount of duplicated code within operation asset fetch/amount calculation
+                const getAsset = (asset_id, amount = 0) => {
+                    return $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_id).then((asset) => {
+                        return {
+                            asset: asset.data,
+                            symbol: asset.data.symbol,
+                            amount: formatNumber(amount, asset.data.precision)
+                        }
+                    })
+                }
+                
+                const getLink = () => ({
+                    asset: (assetName) => ({
+                        text: assetName,
+                        href: `/#/assets/${assetName}`
+                    }),
+                    account: (accountName) => ({
+                        text: accountName,
+                        href: `/#/accounts/${accountName}`
+                    }),
+                    object: (objectId) => ({
+                        text: objectId,
+                        href: `/#/objects/${objectId}`
+                    })
+                })
+                
+                const translateCallback = (key, params = {}) => {
+                    callback(
+                        $filter('translateWithLinks')(key, {
+                            ...params
+                        })
+                    )
+                }
 
                 if (operation_type === 0) {
                     var from = operation.from;
@@ -418,6 +457,19 @@
                             callback(operation_text);
                         });
                 }
+                else if (operation_type === 9) { // account transfer
+                    operation_account = operation.account_to_upgrade;
+                    
+                    getAccount(operation.account_id).then((account_name) => {
+                        getAccount(operation.new_owner).then((owner_account_name) => {
+                            translateCallback('Operation Account Transfer', {
+                                account: getLink().account(account_name),
+                                newAccount: getLink().account(owner_account_name),
+                            })
+                        });
+                        
+                    })
+                }
                 else if (operation_type === 10) {
                     operation_account = operation.issuer;
 
@@ -437,6 +489,28 @@
 
                             callback(operation_text);
                         });
+                }
+                else if (operation_type === 11 || operation_type === 12) { // asset/bitasset update
+                    getAccount(operation.issuer).then((account_name) => {
+                        getAsset(operation.asset_to_update).then((asset) => {
+                            translateCallback('Operation Asset Update', {
+                                account: getLink().account(account_name),
+                                asset: getLink().asset(asset.symbol),
+                            })
+                        });
+                        
+                    })
+                }
+                else if (operation_type === 13) { // asset update feed producers
+                    getAccount(operation.issuer).then((account_name) => {
+                        getAsset(operation.asset_to_update).then((asset) => {
+                            translateCallback('Operation Asset Update Feed Producers', {
+                                account: getLink().account(account_name),
+                                asset: getLink().asset(asset.symbol),
+                            })
+                        });
+                        
+                    })
                 }
                 else if (operation_type === 14) {
                     var issuer = operation.issuer;
@@ -514,7 +588,30 @@
                             });
                     });
                 }
-
+                else if (operation_type === 16) { // asset fund fee pool
+                    getAccount(operation.from_account).then((account_name) => {
+                        getAsset(operation.asset_id, operation.amount).then((asset) => {
+                            translateCallback('Operation Asset Fund Fee Pool', {
+                                account: getLink().account(account_name),
+                                asset: getLink().asset(asset.symbol),
+                                amount: asset.amount,
+                            })
+                        });
+                        
+                    })
+                }
+                else if (operation_type === 18) { // asset global settle
+                    getAccount(operation.issuer).then((account_name) => {
+                        getAsset(operation.asset_to_settle, operation.settle_price).then((asset) => {
+                            translateCallback('Operation Asset Global Settle', {
+                                account: getLink().account(account_name),
+                                asset: getLink().asset(asset.symbol),
+                                price: asset.amount,
+                            })
+                        });
+                        
+                    })
+                }
                 else if (operation_type === 19) {
                     var publisher = operation.publisher;
                     var asset_id =  operation.asset_id;
@@ -540,6 +637,20 @@
                                     callback(operation_text);
                             });
                     });
+                }
+                else if (operation_type === 20) { // witness create
+                    getAccount(operation.witness_account).then((account_name) => {
+                        translateCallback('Operation Witness Create', {
+                            account: getLink().account(account_name)
+                        })
+                    })
+                }
+                else if (operation_type === 21) { // witness update
+                    getAccount(operation.witness_account).then((account_name) => {
+                        translateCallback('Operation Witness Update', {
+                            account: getLink().account(account_name)
+                        })
+                    })
                 }
                 else if (operation_type === 22) {
                     fee_paying_account = operation.fee_paying_account;
@@ -580,6 +691,36 @@
                             callback(operation_text);
                     });
                 }
+                else if (operation_type === 24) { // proposal delete
+                    getAccount(operation.fee_paying_account).then((account_name) => {
+                        translateCallback('Operation Proposal Delete', {
+                            account: getLink().account(account_name),
+                            proposal: getLink().object(operation.proposal),
+                        });
+                    })
+                }
+                else if (operation_type === 29) { // committee create
+                    getAccount(operation.committee_member_account).then((account_name) => {
+                        translateCallback('Operation Committee Member Create', {
+                            account: getLink().account(account_name),
+                        });
+                    })
+                }
+                else if (operation_type === 32) { // vesting balance create
+                    getAccount(operation.creator).then((account_name1) => {
+                        getAccount(operation.owner).then((account_name2) => {
+                            getAsset(operation.amount.asset_id, operation.amount.amount).then((asset) => {
+                                translateCallback('Operation Vesting Balance Create', {
+                                    creator: getLink().account(account_name1),
+                                    owner: getLink().account(account_name2),
+                                    amount: asset.amount,
+                                    asset: getLink().asset(asset.symbol),
+                                });
+                            });
+                        });
+                    })
+                }
+                
                 else if (operation_type === 33) {
                     operation_account = operation.owner_;
 
@@ -612,6 +753,17 @@
                                     callback(operation_text);
                                 });
                         });
+                }
+                else if (operation_type === 34) { // worker create
+                    getAccount(operation.owner).then((account_name) => {
+                        getAsset('1.3.0', operation.daily_pay).then((asset) => {
+                            translateCallback('Operation Worker Create', {
+                                account: getLink().account(account_name),
+                                asset: getLink().asset(asset.symbol),
+                                amount: asset.amount,
+                            })
+                        });
+                    })
                 }
                 else if (operation_type === 37) { // BALANCE_CLAIM
                     operation_account = operation.deposit_to_account;
@@ -646,6 +798,40 @@
                                 });
                         });
                 }
+                else if (operation_type === 38) { // override transfer
+                    getAccount(operation.issuer).then((issuer) => {
+                        getAccount(operation.from).then((from) => {
+                            getAccount(operation.to).then((to) => {
+                                translateCallback('Operation Override Transfer', {
+                                    issuer: getLink().account(issuer),
+                                    from: getLink().account(from),
+                                    to: getLink().account(to),
+                                    amount: operation.amount.toString(),
+                                })
+                            })
+                        })
+                    })
+                }
+                else if (operation_type === 42) { // asset settle cancel
+                    getAccount(operation.account).then((account) => {
+                        translateCallback('Operation Asset Settle Cancel', {
+                            account: getLink().account(account),
+                            amount: operation.amount.toString(),
+                        })
+                    })
+                }
+                else if (operation_type === 43) { // asset claim fees
+                    getAccount(operation.issuer).then((account) => {
+                        getAsset(operation.amount_to_claim.asset_id, operation.amount_to_claim.amount).then((asset) => {
+                            translateCallback('Operation Asset Claim Fees', {
+                                account: getLink().account(account),
+                                amount : asset.amount,
+                                asset  : getLink().asset(asset.symbol),
+                            })
+                        })
+                    })
+                }
+                
                 else if (operation_type === 45) { // BID COLLATERAL
                     operation_account = operation.bidder;
 
@@ -751,6 +937,30 @@
                                         });
                                 });
                         });
+                }
+                else if (operation_type === 47) { // asset claim pool
+                    getAccount(operation.issuer).then((account) => {
+                        getAsset(operation.asset_id, operation.amount_to_claim).then((asset) => {
+                            translateCallback('Operation Asset Claim Pool', {
+                                account: getLink().account(account),
+                                amount : asset.amount,
+                                asset  : getLink().asset(asset.symbol),
+                            })
+                        })
+                    })
+                }
+                else if (operation_type === 48) { // asset claim pool
+                    getAccount(operation.issuer).then((account1) => {
+                        getAccount(operation.new_issuer).then((account2) => {
+                            getAsset(operation.asset_to_update).then((asset) => {
+                                translateCallback('Operation Asset Update Issuer', {
+                                    from: getLink().account(account1),
+                                    to: getLink().account(account2),
+                                    asset  : getLink().asset(asset.symbol),
+                                })
+                            })
+                        })
+                    })
                 }
                 else if (operation_type === 49) { // HTLC CREATE
                     operation_account = operation.from;
@@ -1224,6 +1434,129 @@
                                 });
                         });
                 }
+                else if (operation_type === 64) { // samet fund create
+                    getAccount(operation.owner_account).then((account_name) => {
+                        getAsset(operation.asset_type, operation.balance).then((asset) => {
+                            translateCallback('Operation Samet Fund Create', {
+                                account: getLink().account(account_name),
+                                fee: `${(parseFloat(operation.fee_rate) / 1000000) * 100}%`,
+                                asset: getLink().asset(asset.symbol),
+                                amount: asset.amount,
+                            })
+                        });
+                    })
+                }
+                else if (operation_type === 65) { // samet fund delete
+                    getAccount(operation.owner_account).then((account_name) => {
+                        translateCallback('Operation Samet Fund Delete', {
+                            account: getLink().account(account_name),
+                            id: getLink().object(operation.fund_id),
+                        })
+                    })
+                }
+                else if (operation_type === 66) { // samet fund update
+                    getAccount(operation.owner_account).then((account_name) => {
+                        translateCallback('Operation Samet Fund Update', {
+                            account: getLink().account(account_name),
+                            id: getLink().object(operation.fund_id),
+                        })
+                    })
+                }
+                else if (operation_type === 67) { // samet fund borrow
+                    getAccount(operation.borrower).then((account_name) => {
+                        translateCallback('Operation Samet Fund Borrow', {
+                            account: getLink().account(account_name),
+                            id: getLink().object(operation.fund_id),
+                        })
+                    })
+                }
+                else if (operation_type === 68) { // samet fund borrow
+                    getAccount(operation.account).then((account_name) => {
+                        translateCallback('Operation Samet Fund Repay', {
+                            account: getLink().account(account_name),
+                            id: getLink().object(operation.fund_id),
+                            fee: operation.fund_fee,
+                            amount: operation.repay_amount.toString(),
+                        })
+                    })
+                }
+                else if (operation_type === 69) { // Credit Offer Create
+                    const operation_account = operation.owner_account;
+                    
+                    getAccount(operation_account).then((account_name) => {
+                        getAsset(operation.asset_type, operation.balance).then((asset) => {
+                           
+                            operation_text = $filter('translateWithLinks')('Operation Credit Offer Create', {
+                                accountLink: getLink().account(account_name),
+                                fee: String(operation.fee_rate),
+                                amount: asset.amount,
+                                assetLink: getLink().asset(asset.symbol),
+                            });
+                            callback(operation_text)
+                        })
+                    })
+                }
+                else if (operation_type === 70) { // Credit Offer Delete
+                    const operation_account = operation.owner_account;
+                    const asset = operation.result[1];
+                    getAccount(operation_account).then((account_name) => {
+                        getAsset(asset.asset_id, asset.amount).then((asset) => {
+                            operation_text = $filter('translateWithLinks')('Operation Credit Offer Delete', {
+                                accountLink: getLink().account(account_name),
+                                offerId: operation.offer_id,
+                                amount: asset.amount,
+                                assetLink: getLink().asset(asset.symbol),
+                            });
+                            callback(operation_text)
+                        })
+                    })
+                }
+                else if (operation_type === 71) { // Credit Offer Update
+                    const operation_account = operation.owner_account;
+                    
+                    getAccount(operation_account).then((account_name) => {
+                        operation_text = $filter('translateWithLinks')('Operation Credit Offer Update', {
+                            accountLink: getLink().account(account_name),
+                            offerId: operation.offer_id,
+                        });
+                        callback(operation_text)
+                    })
+                }
+                else if (operation_type === 72) { // Credit Offer Accept
+                    const operation_account = operation.borrower;
+                    const asset = operation.borrow_amount;
+                    getAccount(operation_account).then((account_name) => {
+                        getAsset(asset.asset_id, asset.amount).then((asset) => {
+                            operation_text = $filter('translateWithLinks')('Operation Credit Offer Accept', {
+                                accountLink: getLink().account(account_name),
+                                amount: asset.amount,
+                                assetLink: getLink().asset(asset.symbol),
+                                offerId: operation.offer_id,
+                            });
+                            callback(operation_text)
+                        })
+                    })
+                }
+                else if (operation_type === 73) { // Credit Offer Accept
+                    const operation_account = operation.account;
+                    const repay = operation.repay_amount;
+                    const fee = operation.credit_fee;
+                    getAccount(operation_account).then((account_name) => {
+                        getAsset(repay.asset_id, repay.amount).then((repayAsset) => {
+                            getAsset(fee.asset_id, fee.amount).then((feeAsset) => {
+                                operation_text = $filter('translateWithLinks')('Operation Credit Deal Repay', {
+                                    accountLink : getLink().account(account_name),
+                                    amount      : repayAsset.amount,
+                                    feeAmount   : feeAsset.amount,
+                                    assetLink   : getLink().asset(repayAsset.symbol),
+                                    feeAssetLink: getLink().asset(feeAsset.symbol),
+                                });
+                                callback(operation_text)
+                            });
+                        })
+                    })
+                }
+                
                 else {
 
                     operation_text = $filter('translate')('Operation Beautifier Missing Description', {
@@ -1494,6 +1827,30 @@
                 else if(opType === 63) {
                     name = "LIQUIDITY POOL EXCHANGE";
                     color = "369694";
+                }
+                else if(opType === 69) {
+                    name = "CREATE CREDIT OFFER";
+                    color = "f35b92";
+                }
+                else if(opType === 70) {
+                    name = "DELETE CREDIT OFFER";
+                    color = "f35b92";
+                }
+                else if(opType === 71) {
+                    name = "UPDATE CREDIT OFFER";
+                    color = "f35b92";
+                }
+                else if(opType === 72) {
+                    name = "ACCEPT CREDIT OFFER";
+                    color = "21d19f";
+                }
+                else if(opType === 73) {
+                    name = "REPAY CREDIT DEAL";
+                    color = "21d19f";
+                }
+                else if(opType === 74) {
+                    name = "EXPIRED CREDIT DEAL";
+                    color = "f35b92";
                 } else {
                     name = "UNRECOGNIZED OP";
                     color = "111111";
