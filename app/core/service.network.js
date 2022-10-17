@@ -63,11 +63,12 @@
 
                 });
             },
-            getLastOperations: function(limit, from, callback) {
+            getLastOperations: function(limit, from, date_to = (new Date().toISOString()), callback) {
                 return $http.get(appConfig.urls.elasticsearch_wrapper() + "/account_history"
                     + "?limit=" + limit
                     + "&offset=" + from
                     + (from < 1000000 ? "&from_date=now-1M" : "&from_date=2015-10-10")
+                    + "&to_date=" + date_to
                 ).then(response => {
                     let last_ops = [];
 
