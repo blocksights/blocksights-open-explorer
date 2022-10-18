@@ -37,6 +37,7 @@ require("./app/sections/witnesses/witnesses.module.js");
 require("./app/sections/workers/workers.module.js");
 require("./app/sections/operations/operations.module.js");
 require("./app/sections/blocks/blocks.module.js");
+require("./app/sections/credit_offers/credit_offers.module.js");
 require("./app/sections/pools/pools.module.js");
 require("./app/sections/welcome/welcome.module.js");
 require("./app/chart/chart.module.js");
@@ -79,6 +80,7 @@ require("./app/sections/workers/workers.controller.js");
 require("./app/sections/operations/operations.controller.js");
 require("./app/sections/blocks/blocks.controller.js");
 require("./app/sections/pools/pools.controller.js");
+require("./app/sections/credit_offers/credit_offers.controller.js");
 require("./app/sections/welcome/welcome.controller.js");
 require("./app/chart/echarts.controller.js");
 

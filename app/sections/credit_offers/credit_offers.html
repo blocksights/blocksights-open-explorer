@@ -1,0 +1,66 @@
+<script type="text/ng-template" id="credit-offers-list-table.html">
+    <div ng-switch on="index">
+        <a ng-switch-when="id" href='#/objects/{{row.id}}/'>{{row.id}}</a>
+        <span ng-switch-when="asset">
+            <a href='#/assets/{{row.asset_symbol}}/'>{{row.asset_symbol}}</a>
+        </span>
+        <span ng-switch-when="collateral">
+            <a href='#/assets/{{row.collateral}}/'>{{row.collateral}}</a>
+        </span>
+        <span ng-switch-when="account">
+            <a href='#/accounts/{{row.account}}/' target="_blank">{{row.account}}</a>
+        </span>
+        <span ng-switch-when="total">{{row.total}}</span>
+        <span ng-switch-when="available">{{row.available}}</span>
+        <span ng-switch-when="minimum">{{row.minimum}}</span>
+        <span ng-switch-when="rate">{{row.rate}}%</span>
+        <span ng-switch-when="repay_period">{{row.repay_period}}</span>
+        <span ng-switch-when="expiration_date">{{row.expiration | dateFilter}}</span>
+
+    </div>
+</script>
+
+<div class="page page-table" data-ng-controller="creditOffersCtrl">
+    <div class="row">
+        <div class="col-md-6">
+            <ol class="breadcrumb">
+                <li><a href="#/"><span data-translate="Home"></span></a></li>
+                <li class="active"><a href="#/credit-offers/"><span data-translate="Credit Offers"></span></a></li>
+            </ol>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><span data-translate="Credit Offers"></span></div>
+        <div class="panel-body table-responsive">
+            <form>
+                <div class="col-md-8">
+                </div>
+                <div class="form-group col-md-4">
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fas fa-search"></i></div>
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="{{ 'Type to search' | translate }}"
+                            ng-model="search"
+                        >
+                    </div>
+                </div>
+            </form>
+
+            <responsive-table
+                class="pools-list-table"
+                data-filter="search"
+                data-items-per-page="20"
+                data-columns="columns"
+                data-data="listItems"
+                data-loading="listLoading"
+                data-loading-error="listLoadingError"
+                data-template="credit-offers-list-table.html">
+            </responsive-table>
+
+        </div>
+    </div>
+</div>

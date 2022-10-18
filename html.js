@@ -29,6 +29,7 @@ const HTML = [
     "sections/generic-search/generic-search.html",
     "sections/pools/pool.html",
     "sections/pools/pools.html",
+    "sections/credit_offers/credit_offers.html",
     "sections/workers/workers.html",
     "sections/welcome/welcome.html",
 
