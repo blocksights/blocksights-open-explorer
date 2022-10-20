@@ -50,7 +50,56 @@
     }
 
     function creditOffersCtrl($scope, $route, $routeParams, $location, $filter, utilities, marketService, chartService, appConfig) {
-        $scope.columns = [
+        
+        $scope.credit_offer_id = $routeParams.name;
+
+        if($scope.credit_offer_id) {
+            
+            $scope.operationsColumns = [
+                    {
+                        title: $filter('translate')('Operation'),
+                        index: 'operation_text',
+                    },
+                    {
+                        title: $filter('translate')('ID'),
+                        index: 'operation_id'
+                    },
+                    {
+                        title: $filter('translate')('Date and time'),
+                        index: 'time',
+                        hidden: ['xs']
+                    },
+                    {
+                        title: $filter('translate')('Block'),
+                        index: 'block_num',
+                        hidden: ['xs', 'sm']
+                    },
+                    {
+                        title: $filter('translate')('Type'),
+                        index: 'type',
+                        hidden: ['xs', 'sm', 'md']
+                    }
+                ];
+            $scope.select = function(page_operations) {
+                    const page = page_operations - 1;
+                    const limit = 20;
+                    const from = page * limit;
+
+                    $scope.operationsLoading = true;
+                    $scope.operationsLoadingError = false;
+                    marketService.getCreditOfferOperationsHistory($scope.credit_offer_id, limit, from).then((returnData) => {
+                        console.log('test?');
+                        $scope.operationsLoading = false;
+                        $scope.operations = returnData;
+                        $scope.currentPage = page_operations;
+                    }).catch(err => {
+                        $scope.operationsLoadingError = true;
+                        throw err;
+                    });
+                }
+            $scope.select(1);
+        } else {
+            $scope.columns = [
             {
                 title: 'ID',
                 index: 'id',
@@ -106,20 +155,21 @@
                 hidden: ['xs', 'sm']
             },
         ];
-        $scope.listLoading = true;
-        marketService.getCreditOffers().then(function (returnData) {
-            $scope.listLoading = false;
-            $scope.listItems = returnData.map(item => {
-                return {
-                    id: item.id,
-                    ...item,
-                    ...mapCreditOffers(item, $filter)
-                }
+            $scope.listLoading = true;
+            marketService.getCreditOffers().then(function (returnData) {
+                $scope.listLoading = false;
+                $scope.listItems = returnData.map(item => {
+                    return {
+                        id: item.id,
+                        ...item,
+                        ...mapCreditOffers(item, $filter)
+                    }
+                });
+            }).catch((error) => {
+                console.log('error:', error)
+                $scope.listLoadingError = true;
             });
-        }).catch((error) => {
-            console.log('error:', error)
-            $scope.listLoadingError = true;
-        });
+        }
     }
 
 })();

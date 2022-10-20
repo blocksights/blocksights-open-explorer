@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="credit-offers-list-table.html">
     <div ng-switch on="index">
-        <a ng-switch-when="id" href='#/objects/{{row.id}}/'>{{row.id}}</a>
+        <a ng-switch-when="id" href='#/credit-offers/{{row.id}}/'>{{row.id}}</a>
         <span ng-switch-when="asset">
             <a href='#/assets/{{row.asset_symbol}}/'>{{row.asset_symbol}}</a>
         </span>

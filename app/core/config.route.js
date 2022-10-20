@@ -64,6 +64,7 @@
                 .when('/pools/:name', {templateUrl: 'html/pool.html'})
                 
                 .when('/credit-offers', {templateUrl: 'html/credit_offers.html'})
+                .when('/credit-offers/:name', {templateUrl: 'html/credit_offer.html'})
 
                 .when('/welcome', {templateUrl: 'html/welcome.html'})
 
