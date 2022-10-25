@@ -360,3 +360,15 @@ ul.scrollable-tabs-shadow-right:after {
 .pool--tv_chart_container {
     height: 43vh;
 }
+
+.credit_offers__filter input[type=checkbox] {
+    cursor: pointer;
+    vertical-align: middle;
+    margin: 0;
+}
+.credit_offers__filter label {
+    cursor: pointer;
+    line-height: 30px;
+    vertical-align: middle;
+    display: inline;
+}

@@ -210,9 +210,9 @@
                     callback(last_ops);
                 });
             },
-            getCreditOffers: function (exclude_disabled=true) {
+            getCreditOffers: function () {
                 return $http.get(appConfig.urls.python_backend() + "/creditoffers").then((response) => {
-                    const data = response && response.data.filter((item) => item.enabled === exclude_disabled);
+                    const data = response && response.data;
                     const fetchNames = data.map((item) => utilities.getAsset(item.acceptable_collateral_raw[0][0]));
                     return Promise.all(fetchNames).then((values) => {
                         values.forEach((value, i) => {

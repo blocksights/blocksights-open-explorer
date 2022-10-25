@@ -52,6 +52,7 @@
     function creditOffersCtrl($scope, $route, $routeParams, $location, $filter, utilities, marketService, chartService, appConfig) {
         
         $scope.credit_offer_id = $routeParams.name;
+        $scope.showOnlyActive = true;
 
         if($scope.credit_offer_id) {
             
@@ -99,11 +100,16 @@
                 }
             $scope.select(1);
         } else {
-            $scope.columns = [
-            {
+            $scope.columns = [{
                 title: 'ID',
                 index: 'id',
                 sortingIndex: 'id_float',
+                sort: true,
+            },
+            {
+                title: 'Active',
+                index: 'enabled',
+                sortingIndex: 'enabled',
                 sort: true,
             },
             {
@@ -153,8 +159,10 @@
                 title: 'Expiration date',
                 index: 'expiration_date',
                 hidden: ['xs', 'sm']
-            },
-        ];
+            }];
+            
+            const onlyActiveFilter = (item) => ($scope.showOnlyActive ? item.enabled === $scope.showOnlyActive : true);
+            
             $scope.listLoading = true;
             marketService.getCreditOffers().then(function (returnData) {
                 $scope.listLoading = false;
@@ -165,10 +173,23 @@
                         ...mapCreditOffers(item, $filter)
                     }
                 });
+                
+                $scope.filteredItems = $scope.listItems.filter(onlyActiveFilter);
             }).catch((error) => {
                 console.log('error:', error)
                 $scope.listLoadingError = true;
             });
+            
+            const showOnlyActiveWatcher = $scope.$watch('showOnlyActive', () => {
+                if($scope && $scope.listItems) {
+                    $scope.filteredItems = $scope.listItems.filter(onlyActiveFilter);
+                }
+            })
+            
+            $scope.$on('$destroy', () => {
+                showOnlyActiveWatcher();
+            });
+        
         }
     }
 
