@@ -63,13 +63,20 @@
 
                 });
             },
-            getLastOperations: function(limit, from, date_to = (new Date().toISOString()), callback) {
-                return $http.get(appConfig.urls.elasticsearch_wrapper() + "/account_history"
-                    + "?limit=" + limit
-                    + "&offset=" + from
-                    + (from < 1000000 ? "&from_date=now-1M" : "&from_date=2015-10-10")
-                    + "&to_date=" + date_to
-                ).then(response => {
+            getLastOperations: function({ limit = 10, from = 0, assetId = undefined, operationType = undefined, date_to = (new Date().toISOString()) }, callback) {
+                return $http.get(appConfig.urls.elasticsearch_wrapper() + "/account_history", {
+                    params: {
+                        "limit": limit,
+                        "offset": from,
+                        "from_date": (from < 1000000 ? "now-1M" : "2015-10-10"),
+                        "asset_id": assetId,
+                        "operation_type": operationType,
+                        "to_date": date_to,
+                    }
+                }).then(response => {
+                    if(response && response.data && response.data.asset_not_found) {
+                        return callback(response.data)
+                    }
                     let last_ops = [];
 
                     // only add if the op id is not already added (transfer appears in both accounts!)

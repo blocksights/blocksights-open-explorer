@@ -139,6 +139,19 @@
     <div class="panel panel-default">
         <div class="panel-body table-responsive">
 
+            <div class="dashboard-operations-filters">
+                <div>
+                    <input type="text" ng-model-options="assetNameOrSymbolFilterModelOptions" ng-model="assetNameOrSymbolFilter" placeholder="Type asset name or id" class="form-control" style="width: 200px" ng-model="asset_id">
+                </div>
+                <div>
+                    <select class="form-control" style="width: 200px" ng-model="operationTypeFilter">
+                        <option value="-1">Filter by operation type</option>
+                        <option value="{{operationType.id}}" ng-repeat="operationType in operationTypes">
+                            {{ operationType.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
 
             <responsive-table data-data="operations"
                               data-columns="operationsColumns"
