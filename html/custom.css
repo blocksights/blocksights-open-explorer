@@ -360,3 +360,7 @@ ul.scrollable-tabs-shadow-right:after {
 .pool--tv_chart_container {
     height: 43vh;
 }
+
+.pool-tils-grid > div {
+    height: 140px;
+}
