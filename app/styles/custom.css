@@ -361,6 +361,7 @@ ul.scrollable-tabs-shadow-right:after {
     height: 43vh;
 }
 
+
 .credit_offers__filter input[type=checkbox] {
     cursor: pointer;
     vertical-align: middle;
@@ -371,4 +372,7 @@ ul.scrollable-tabs-shadow-right:after {
     line-height: 30px;
     vertical-align: middle;
     display: inline;
+}
+.pool-tils-grid > div {
+    height: 140px;
 }

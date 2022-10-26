@@ -44,14 +44,22 @@
                         hidden: ['xs', 'sm', 'md']
                     }
                 ];
+                
+                $scope.userOpenedFirstPageTime = null;
 
                 $scope.select = function (page_operations) {
                     const page = page_operations - 1;
                     const limit = 50;
                     const from = page * limit;
+                    
+                    if(page_operations === 1 || !$scope.userOpenedFirstPageTime) { // if user switches back from page Y (Y>1) to page 1 we need to fetch new transactions and update time range
+                        $scope.userOpenedFirstPageTime = new Date();
+                    }
+                    
+                    const date_to = $scope.userOpenedFirstPageTime.toISOString();
 
                     $scope.operationsLoading = true;
-                    networkService.getLastOperations(limit, from, function (returnData) {
+                    networkService.getLastOperations(limit, from, date_to, function (returnData) {
                         $scope.operationsLoading = false;
                         $scope.operations = returnData;
                         $scope.currentPage = page_operations;
