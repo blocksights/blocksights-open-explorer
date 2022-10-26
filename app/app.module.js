@@ -39,6 +39,7 @@
         'app.welcome',
         'app.generic-search',
         'app.pools',
+        'app.credit_offers'
     ]);
 })();
 

@@ -223,12 +223,20 @@
   "BTS/BTC VOLUME": "BTS/BTC VOLUME",
   "WITNESSES": "WITNESSES",
   "COMMITTEE": "COMMITTEE",
-
+  "Credit Offers": "Credit Offers",
+  "Credit Offer Operations History": "Credit Offer Operations History",
   "Fees": "Fees",
   "Fee schedule": "Fee schedule",
   "Basic": "Basic",
   "Premium": "Premium",
   "Price per KB": "Price per KB",
+
+  "short-day": "d",
+  "short-hour": "h",
+  "short-minute": "min",
+  "short-second": "s",
+
+  "Type to search": "Type to search",
 
   "per Block": "per Block",
 

@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module('app')
-        .factory('utilities', ['$filter', utilities]);
+        .factory('utilities', ['$filter', 'appConfig', '$http', utilities]);
 
-    function utilities($filter) {
+    function utilities($filter, appConfig, $http) {
 
         function satToFloat(number, presicion) {
             var divideby =  Math.pow(10, presicion);
@@ -49,8 +49,26 @@
                 }
             }
         }
+        
+        // function to reduce the amount of duplicated code within operation asset fetch/amount calculation
+        const getAsset = (asset_id, amount = 0) => {
+            return $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_id).then((asset) => {
+                return {
+                    asset: asset.data,
+                    symbol: asset.data.symbol,
+                    amount: formatNumber(amount, asset.data.precision)
+                }
+            })
+        }
+        
+        // function to reduce the amount of duplicated code within operation account fetch
+        const getAccount = (account_id) => {
+            return $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + account_id).then((response) => response.data);
+        }
 
         return {
+            getAsset: getAsset,
+            getAccount: getAccount,
             formatBalance: function (number, precision=null) {
                 return formatNumber(number, precision);
             },
@@ -97,22 +115,6 @@
                 var operation_account = 0;
                 var operation_text;
                 var fee_paying_account;
-                
-                // function to reduce the amount of duplicated code within operation account fetch
-                const getAccount = (account_id) => {
-                    return $http.get(appConfig.urls.python_backend() + "/account_name?account_id=" + account_id).then((response) => response.data);
-                }
-                
-                // function to reduce the amount of duplicated code within operation asset fetch/amount calculation
-                const getAsset = (asset_id, amount = 0) => {
-                    return $http.get(appConfig.urls.python_backend() + "/asset?asset_id=" + asset_id).then((asset) => {
-                        return {
-                            asset: asset.data,
-                            symbol: asset.data.symbol,
-                            amount: formatNumber(amount, asset.data.precision)
-                        }
-                    })
-                }
                 
                 const getLink = () => ({
                     asset: (assetName) => ({
