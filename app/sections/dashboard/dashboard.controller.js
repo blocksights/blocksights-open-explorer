@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('app').controller('DashboardCtrl', ['$scope', 'Notify', '$timeout', '$window', 'networkService',
-        'chartService', 'appConfig', '$filter', 'utilities', DashboardCtrl])
+        'chartService', 'appConfig', '$filter', DashboardCtrl])
 
         .filter('to_trusted', ['$sce', function($sce){
             return function(text) {
@@ -10,7 +10,7 @@
             };
         }]);
 
-    function DashboardCtrl($scope, Notify, $timeout, $window, networkService, chartService, appConfig, $filter, utilities) {
+    function DashboardCtrl($scope, Notify, $timeout, $window, networkService, chartService, appConfig, $filter) {
 
         networkService.getHeader(function (returnData) {
             $scope.dynamic = returnData;
@@ -19,95 +19,7 @@
         });
 
         $scope.branding = appConfig.branding;
-
-        $scope.operationsColumns = [
-            {
-                title: $filter('translate')('Operation'),
-                index: 'operation_text',
-            },
-            {
-                title: $filter('translate')('ID'),
-                index: 'operation_id',
-            },
-            {
-                title: $filter('translate')('Date and time'),
-                index: 'time',
-                hidden: ['xs']
-            },
-            {
-                title: $filter('translate')('Block'),
-                index: 'block_num',
-                hidden: ['xs', 'sm']
-            },
-            {
-                title: $filter('translate')('Type'),
-                index: 'type',
-                hidden: ['xs', 'sm', 'md']
-            }
-        ];
         
-        $scope.userOpenedFirstPageTime = null;
-
-        $scope.select = function(page_operations) {
-            const page = page_operations -1;
-            const limit = 20;
-            const from = page * limit;
-            const operationType = $scope.operationTypeFilter !== '-1' ? $scope.operationTypeFilter : undefined;
-            const assetId = $scope.assetNameOrSymbolFilter && $scope.assetNameOrSymbolFilter.length ? $scope.assetNameOrSymbolFilter.toUpperCase() : undefined
-            
-            if(page_operations === 1 || !$scope.userOpenedFirstPageTime) { // if user switches back from page Y (Y>1) to page 1 we need to fetch new transactions and update time range
-                $scope.userOpenedFirstPageTime = new Date();
-            }
-            
-            const date_to = $scope.userOpenedFirstPageTime.toISOString();
-
-            $scope.operationsLoading = true;
-            $scope.operationsLoadingError = false;
-            networkService.getLastOperations({limit, from, operationType, assetId, date_to}, function (returnData) {
-                $scope.operationsLoading = false;
-                if(returnData && returnData.asset_not_found) {
-                    return Notify.warning({
-                        key: 'httpAssetNotFound',
-                        title: $filter('translate')('Asset not found', {
-                            asset: assetId
-                        }),
-                        message: $filter('translate')('Please check the asset name'),
-                        allowMultiple: true
-                    });
-                } else {
-                    $scope.operations = returnData;
-                    $scope.currentPage = page_operations;
-                    if (page_operations == 1) {
-                        if (returnData.length > 0) {
-                            $scope.total_ops = returnData[0].operation_id_num;
-                        } else {
-                            $scope.total_ops = 0;
-                        }
-                    }
-                }
-            }).catch(err => {
-                $scope.operationsLoadingError = true;
-            });
-        };
-        $scope.select(1);
-        
-        $scope.operationTypes = new Array(75).fill('#').map((item, key) => {
-            const name = utilities.operationType(key)[0]
-            if(!name)
-                return false;
-            return {
-                id: key,
-                name,
-            }
-        }).filter((item) => !!item);
-        
-        $scope.operationTypeFilter = '-1';
-        $scope.assetNameOrSymbolFilter = '';
-        $scope.assetNameOrSymbolFilterModelOptions = {
-            debounce: 500,
-            getterSetter: true
-        };
-
         $scope.chartsData = {
             operations_chart: chartService.loadingChart(),
             proxies_chart: chartService.loadingChart(),
@@ -116,10 +28,6 @@
             uias_chart: chartService.loadingChart(),
             holders_chart: chartService.loadingChart(),
         };
-        
-        $scope.$watchGroup(["operationTypeFilter", "assetNameOrSymbolFilter"], () => {
-            $scope.select(1)
-        });
 
         // lazy load on tab change
         $scope.loadTabsCharts = function(tabName) {
