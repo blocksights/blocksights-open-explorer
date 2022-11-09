@@ -31,12 +31,13 @@ This show/hide filtering fields for the user to filter all operations by account
  _ _ _ _ _ _ _ _
 |   Date From  |
  - - - - - - - -
-Use this field to optimize ES search by date limits
+Use this fields to optimize ES search by date limits
 
 // By default: now-1M
 
 (Example)
-<operations-table date-from="now-1y"/>
+<operations-table default-date-from="now-1y"/> this is a date-from which applies when no filters
+<operations-table filters-date-from="now-1y"/> this is a date-from which applies when any filter defined by the user
 
  _ _ _ _ _ _ _ _ _
 |   Show filters  |
@@ -63,7 +64,8 @@ Use this field show / hide user filters
                 groupByAccountId: '=',
                 groupByCreditOfferId: '=',
                 groupByPoolId: '=',
-                dateFrom: "@",
+                defaultDateFrom: "@",
+                filtersDateFrom: "@",
                 filterByAccountIdEnabled: '=',
                 filterByAssetIdEnabled: '=',
                 filterByOperationTypeEnabled: '=',
@@ -73,6 +75,10 @@ Use this field show / hide user filters
         };
         
         function operationsTableController($scope, $filter, Notify, OperationsService, utilities) {
+            
+            function filtersDefined() {
+                return $scope.filters.operationType !== '-1' || $scope.filters.accountIdOrName || $scope.filters.assetIdOrName;
+            }
             
             // list of values for filter by operation type <select>
             $scope.operationTypes = new Array(75).fill('#').map((item, key) => {
@@ -85,7 +91,10 @@ Use this field show / hide user filters
                 }
             }).filter((item) => !!item);
             
-            $scope.dateFrom = $scope.dateFrom || 'now-1M'
+            $scope.totalItems = 0;
+            
+            $scope.defaultDateFrom = $scope.defaultDateFrom || 'now-1M'
+            $scope.filtersDateFrom = $scope.filtersDateFrom || 'now-1y'
             
             // default values for filtering fields
             $scope.filters = {
@@ -113,6 +122,9 @@ Use this field show / hide user filters
             ];
             
             $scope.select = function (page_operations) {
+                if(page_operations === 1)
+                    $scope.totalItems = 0;
+                
                 const page = page_operations - 1;
                 const limit = 20;
                 const offset = page * limit;
@@ -129,7 +141,7 @@ Use this field show / hide user filters
                     limit,
                     offset,
                     date_to,
-                    date_from: $scope.dateFrom || undefined,
+                    date_from: filtersDefined() ? $scope.filtersDateFrom : $scope.defaultDateFrom || undefined,
                     assetId: $scope.filters.assetIdOrName,
                     accountId: $scope.groupByAccountId || $scope.filters.accountIdOrName,
                     creditOfferId: $scope.groupByCreditOfferId,
@@ -158,7 +170,8 @@ Use this field show / hide user filters
                             allowMultiple: true
                         });
                     } else {
-                        $scope.operations = response;
+                        $scope.totalItems += response.length;
+                        $scope.operations = response.slice(0, limit); // remove the additional item which defines the existence of the next page
                         $scope.currentPage = page_operations;
                         if (page_operations == 1) {
                             if (response.length > 0) {

@@ -53,7 +53,7 @@
             
             return $http.get(appConfig.urls.elasticsearch_wrapper() + "/history", {
                     params: {
-                        "limit": limit,
+                        "limit": limit + 1, // fetch a one more item to define is there a next page
                         "offset": offset,
                         "from_date": date_from ? date_from : (offset < MAGIC_NUMBER ? "now-1M" : "2015-10-10"),
                         "to_date": date_to,

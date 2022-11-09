@@ -143,7 +143,10 @@
             <img src="images/filter.svg" ng-click="showFilters = !showFilters" class="operations-filter"/>
         </div>
 
-        <operations-table total-items="total_ops" show-filters="showFilters"/>
+        <operations-table total-items="total_ops"
+                          show-filters="showFilters"
+                          default-date-from="now-1M"
+                          filters-date-from="now-1y"/>
 
     </div>
 </div>

@@ -36,6 +36,9 @@
             <img src="images/filter.svg" ng-click="showFilters = !showFilters" class="operations-filter"/>
         </div>
 
-        <operations-table show-filters="showFilters"/>
+        <operations-table show-filters="showFilters"
+                          default-date-from="now-1M"
+                          filters-date-from="now-1y"
+        />
     </div>
 </div>
