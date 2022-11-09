@@ -108,48 +108,6 @@
                     }
                 };
 
-                $scope.operationsColumns = [
-                    {
-                        title: $filter('translate')('Operation'),
-                        index: 'operation_text',
-                    },
-                    {
-                        title: $filter('translate')('ID'),
-                        index: 'operation_id'
-                    },
-                    {
-                        title: $filter('translate')('Date and time'),
-                        index: 'time',
-                        hidden: ['xs']
-                    },
-                    {
-                        title: $filter('translate')('Block'),
-                        index: 'block_num',
-                        hidden: ['xs', 'sm']
-                    },
-                    {
-                        title: $filter('translate')('Type'),
-                        index: 'type',
-                        hidden: ['xs', 'sm', 'md']
-                    }
-                ];
-                $scope.select = function(page_operations) {
-                    const page = page_operations - 1;
-                    const limit = 20;
-                    const from = page * limit;
-
-                    $scope.operationsLoading = true;
-                    $scope.operationsLoadingError = false;
-                    marketService.getLiquidityPoolHistory(name, limit, from, function (returnData) {
-                        $scope.operationsLoading = false;
-                        $scope.operations = returnData;
-                        $scope.currentPage = page_operations;
-                    }).catch(err => {
-                        $scope.operationsLoadingError = true;
-                        throw err;
-                    });
-                }
-                $scope.select(1);
             }
         }
         else {
