@@ -78,6 +78,8 @@ require("./app/sections/voting/voting.controller.js");
 require("./app/sections/witnesses/witnesses.controller.js");
 require("./app/sections/workers/workers.controller.js");
 require("./app/sections/operations/operations.controller.js");
+require("./app/sections/operations/operations-table.directive.js");
+require("./app/sections/operations/operations.service.js");
 require("./app/sections/blocks/blocks.controller.js");
 require("./app/sections/pools/pools.controller.js");
 require("./app/sections/credit_offers/credit_offers.controller.js");

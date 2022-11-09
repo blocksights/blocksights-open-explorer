@@ -353,6 +353,15 @@ ul.scrollable-tabs-shadow-right:after {
     z-index: 1000;
 }
 
+.operations-table-filters > div {
+    margin-right: 12px;
+}
+
+.operations-table-filters {
+    display: flex;
+    margin-bottom: 16px;
+}
+
 .dashboard-operations-filters > div {
     margin-right: 12px;
 }

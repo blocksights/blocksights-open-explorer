@@ -18,6 +18,7 @@ const HTML = [
     "sections/objects/object.html",
     "sections/operations/operation.html",
     "sections/operations/operations.html",
+    "sections/operations/operations-table.html",
     "sections/proxies/proxies.html",
     "sections/search/search.html",
     "sections/txs/tx.html",

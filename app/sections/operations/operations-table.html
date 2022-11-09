@@ -1,0 +1,68 @@
+<div class="panel-body table-responsive">
+
+    <script type="text/ng-template" id="operations-table.html">
+
+        <div ng-if="index === 'operation_text'" ng-bind-html="row.operation_text | to_trusted"></div>
+
+        <div ng-if="index === 'operation_id'">
+            <a href='#/operations/{{cell}}/'>{{cell}}</a>
+        </div>
+
+        <div ng-if="index === 'time'"> {{ cell | dateFilter }} </div>
+
+        <div ng-if="index === 'block_num'">
+            <a href="#/blocks/{{ cell }}">{{ cell | number }}</a>
+        </div>
+
+        <div ng-if="index === 'type'">
+            <span class="badge badge-primary" style="background-color: #{{row.color}};">{{row.type}}</span>
+        </div>
+
+    </script>
+
+    <div class="operations-table-filters" ng-if="showFilters === true">
+        <div ng-if="filterByAccountIdEnabled !== false">
+            <input type="text" ng-change="select(1)" ng-model-options="inputFilterOptions" ng-model="filters.accountIdOrName" placeholder="Type account name or id" class="form-control" style="width: 200px" ng-model="asset_id">
+        </div>
+        <div ng-if="filterByAssetIdEnabled !== false">
+            <input type="text" ng-change="select(1)" ng-model-options="inputFilterOptions" ng-model="filters.assetIdOrName" placeholder="Type asset name or id" class="form-control" style="width: 200px" ng-model="asset_id">
+        </div>
+        <div ng-if="filterByOperationTypeEnabled !== false">
+            <select ng-change="select(1)" class="form-control" style="width: 200px" ng-model="filters.operationType">
+                <option value="-1">Filter by operation type</option>
+                <option value="{{operationType.id}}" ng-repeat="operationType in operationTypes">
+                    {{ operationType.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <responsive-table data-data="operations"
+                      data-columns="operationsColumns"
+                      data-loading="operationsLoading"
+                      data-template="operations-table.html"
+                      data-loading-error="operationsLoadingError"
+    ></responsive-table>
+
+    <footer class="table-footer">
+        <div class="row">
+            <div class="col-md-6 page-num-info">
+            </div>
+            <div class="col-md-6 text-right pagination-container">
+
+                <ul
+                    uib-pagination class="pagination-sm"
+                    ng-model="currentPage"
+                    total-items="totalItems"
+                    max-size="4"
+                    ng-change="currentPage===undefined || select(currentPage)"
+                    items-per-page="20"
+                    rotate="false"
+                    previous-text="&lsaquo;" next-text="&rsaquo;"
+                    boundary-links="true"
+                ></ul>
+
+            </div>
+        </div>
+    </footer>
+</div>

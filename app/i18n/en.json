@@ -212,7 +212,9 @@
   "Block number symbol": "Block #",
   "Operations Count": "Operations Count",
   "Asset not found": "Asset {{asset}} not found",
+  "Account not found": "Account {{account}} not found",
   "Please check the asset name": "Please check the asset name or use the id",
+  "Please check the account name": "Please check the account name or use the id",
 
   "Committee members": "Committee members",
   "Current active committee members": "Current active committee members",
