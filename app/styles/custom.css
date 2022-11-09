@@ -357,6 +357,11 @@ ul.scrollable-tabs-shadow-right:after {
     margin-right: 12px;
 }
 
+.operations-filter {
+    width: 18px;
+    cursor: pointer;
+}
+
 .operations-table-filters {
     display: flex;
     margin-bottom: 16px;
