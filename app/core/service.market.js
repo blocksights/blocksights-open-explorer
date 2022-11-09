@@ -230,7 +230,7 @@
                         creditoffer_id: credit_offer_id,
                         offset: offset,
                         limit: limit,
-                        from: (from == 0 ? "&from_date=now-1y" : "&from_date=2015-10-10")
+                        from: (from == 0 ? "now-1y" : "2015-10-10")
                     }}).then((response) => {
                         const unique_data = response.data.filter((v,i,a)=>a.findIndex(t=>(t.operation_id_num === v.operation_id_num))===i);
 
