@@ -22,13 +22,13 @@
 
     <div class="operations-table-filters" ng-if="showFilters === true">
         <div ng-if="filterByAccountIdEnabled !== false">
-            <input type="text" ng-change="select(1)" ng-model-options="inputFilterOptions" ng-model="filters.accountIdOrName" placeholder="Type account name or id" class="form-control" style="width: 200px" ng-model="asset_id">
+            <input type="text" ng-change="select(1, true)" ng-model-options="inputFilterOptions" ng-model="filters.accountIdOrName" placeholder="Type account name or id" class="form-control" style="width: 200px" ng-model="asset_id">
         </div>
         <div ng-if="filterByAssetIdEnabled !== false">
-            <input type="text" ng-change="select(1)" ng-model-options="inputFilterOptions" ng-model="filters.assetIdOrName" placeholder="Type asset name or id" class="form-control" style="width: 200px" ng-model="asset_id">
+            <input type="text" ng-change="select(1, true)" ng-model-options="inputFilterOptions" ng-model="filters.assetIdOrName" placeholder="Type asset name or id" class="form-control" style="width: 200px" ng-model="asset_id">
         </div>
         <div ng-if="filterByOperationTypeEnabled !== false">
-            <select ng-change="select(1)" class="form-control" style="width: 200px" ng-model="filters.operationType">
+            <select ng-change="select(1, true)" class="form-control" style="width: 200px" ng-model="filters.operationType">
                 <option value="-1">Filter by operation type</option>
                 <option value="{{operationType.id}}" ng-repeat="operationType in operationTypes">
                     {{ operationType.name }}
@@ -43,6 +43,18 @@
                       data-template="operations-table.html"
                       data-loading-error="operationsLoadingError"
     ></responsive-table>
+
+    <div class="operations-table--load-more" ng-if="!operationsLoading && !operationsLoadingError && (operations.length !== 20 || !hasNextPage)">
+        <div>
+            There might be more data
+        </div>
+        <div ng-if="extendedDateFrom">
+            Data from <strong>{{ extendedDateFrom.format("YYYY-DD-MM") }}</strong> to <strong>{{ userOpenedFirstPageTime.format("YYYY-DD-MM") }}</strong>
+        </div>
+        <button class="btn btn-default" ng-click="loadMore()">
+            Load
+        </button>
+    </div>
 
     <footer class="table-footer">
         <div class="row">

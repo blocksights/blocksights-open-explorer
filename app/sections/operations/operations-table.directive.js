@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 /*
 Use this directive like this:
 <operations-table />
@@ -92,9 +94,12 @@ Use this field show / hide user filters
             }).filter((item) => !!item);
             
             $scope.totalItems = 0;
+            $scope.currentPage = 1;
+            $scope.maxPage = 0;
             
             $scope.defaultDateFrom = $scope.defaultDateFrom || 'now-1M'
             $scope.filtersDateFrom = $scope.filtersDateFrom || 'now-1y'
+            $scope.extendedDateFrom = null;
             
             // default values for filtering fields
             $scope.filters = {
@@ -121,19 +126,31 @@ Use this field show / hide user filters
                 OperationsService.columns.TYPE,
             ];
             
-            $scope.select = function (page_operations) {
-                if(page_operations === 1)
+            $scope.loadMore = () => {
+                if(!$scope.extendedDateFrom) {
+                    $scope.extendedDateFrom = moment().subtract(1, 'year')
+                } else {
+                    $scope.extendedDateFrom = $scope.extendedDateFrom.subtract(1, 'year')
+                }
+                
+                $scope.select($scope.currentPage)
+            }
+            
+            $scope.select = function (page_operations, filtersChanged = false) {
+                if(filtersChanged) {
                     $scope.totalItems = 0;
+                    $scope.maxPage = 0;
+                }
                 
                 const page = page_operations - 1;
                 const limit = 20;
                 const offset = page * limit;
                 
                 if(page_operations === 1 || !$scope.userOpenedFirstPageTime) { // if user switches back from page Y (Y>1) to page 1 we need to fetch new transactions and update time range
-                    $scope.userOpenedFirstPageTime = new Date();
+                    $scope.userOpenedFirstPageTime = new moment();
                 }
                 
-                const date_to = $scope.userOpenedFirstPageTime.toISOString();
+                const date_to = $scope.userOpenedFirstPageTime.format("YYYY-DD-MM");
 
                 $scope.operationsLoading = true;
                 $scope.operationsLoadingError = false;
@@ -141,7 +158,7 @@ Use this field show / hide user filters
                     limit,
                     offset,
                     date_to,
-                    date_from: filtersDefined() ? $scope.filtersDateFrom : $scope.defaultDateFrom || undefined,
+                    date_from: $scope.extendedDateFrom ? $scope.extendedDateFrom.format("YYYY-DD-MM") : filtersDefined() ? $scope.filtersDateFrom : $scope.defaultDateFrom || undefined,
                     assetId: $scope.filters.assetIdOrName,
                     accountId: $scope.groupByAccountId || $scope.filters.accountIdOrName,
                     creditOfferId: $scope.groupByCreditOfferId,
@@ -170,7 +187,13 @@ Use this field show / hide user filters
                             allowMultiple: true
                         });
                     } else {
-                        $scope.totalItems += response.length;
+                        if(page_operations > $scope.maxPage) { // next page
+                            $scope.maxPage = page_operations;
+                            $scope.totalItems += response.length;
+                        } else if (page_operations === $scope.maxPage) { // loads more for current page
+                            $scope.totalItems = $scope.totalItems - $scope.operations.length + response.length;
+                        }
+                        $scope.hasNextPage = response.length > limit;
                         $scope.operations = response.slice(0, limit); // remove the additional item which defines the existence of the next page
                         $scope.currentPage = page_operations;
                         if (page_operations == 1) {

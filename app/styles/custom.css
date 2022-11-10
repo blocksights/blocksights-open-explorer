@@ -357,6 +357,13 @@ ul.scrollable-tabs-shadow-right:after {
     margin-right: 12px;
 }
 
+.operations-table--load-more > div{
+    margin-bottom: 8px;
+}
+.operations-table--load-more {
+    text-align: center;
+}
+
 .operations-filter {
     width: 18px;
     cursor: pointer;
