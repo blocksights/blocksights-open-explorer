@@ -57,11 +57,13 @@
                         "offset": offset,
                         "from_date": date_from ? date_from : (offset < MAGIC_NUMBER ? "now-1M" : "2015-10-10"),
                         "to_date": date_to,
-                        "asset_id": assetId ? assetId : undefined,
-                        "operation_type": Number(operationType) === -1 ? undefined : operationType,
-                        "account_id": accountId ? accountId : undefined,
-                        "creditoffer_id": creditOfferId ? creditOfferId : undefined,
-                        "pool_id": poolId ? poolId : undefined
+                        "group_by": {
+                            "asset_id": assetId ? assetId : undefined,
+                            "operation_type": Number(operationType) === -1 ? undefined : operationType,
+                            "account_id": accountId ? accountId : undefined,
+                            "creditoffer_id": creditOfferId ? creditOfferId : undefined,
+                            "pool_id": poolId ? poolId : undefined
+                        }
                     }
                 }).then(response => {
                     if(response && response.data && (response.data.asset_not_found || response.data.account_not_found)) {
