@@ -150,7 +150,7 @@ Use this field show / hide user filters
                     $scope.userOpenedFirstPageTime = new moment();
                 }
                 
-                const date_to = $scope.userOpenedFirstPageTime.format("YYYY-DD-MM");
+                const date_to = $scope.userOpenedFirstPageTime.format("YYYY-MM-DD");
 
                 $scope.operationsLoading = true;
                 $scope.operationsLoadingError = false;
@@ -158,7 +158,7 @@ Use this field show / hide user filters
                     limit,
                     offset,
                     date_to,
-                    date_from: $scope.extendedDateFrom ? $scope.extendedDateFrom.format("YYYY-DD-MM") : filtersDefined() ? $scope.filtersDateFrom : $scope.defaultDateFrom || undefined,
+                    date_from: $scope.extendedDateFrom ? $scope.extendedDateFrom.format("YYYY-MM-DD") : filtersDefined() ? $scope.filtersDateFrom : $scope.defaultDateFrom || undefined,
                     assetId: $scope.filters.assetIdOrName,
                     accountId: $scope.groupByAccountId || $scope.filters.accountIdOrName,
                     creditOfferId: $scope.groupByCreditOfferId,
