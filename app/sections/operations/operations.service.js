@@ -2,15 +2,15 @@
     'use strict';
     
     angular.module('app.ui')
-    .service('OperationsService', ['utilities', 'appConfig', '$filter', '$http', OperationsService]);
+    .service('OperationsService', ['utilities', 'appConfig', '$filter', '$http', OperationsService])
     
     function OperationsService(utilities, appConfig, $filter, $http) {
         
+        function filterOperationDuplicates(v, i, a) {
+            return a.findIndex(t=>(t.operation_id_num === v.operation_id_num))===i
+        }
+        
         function getOperationsHistory({ poolId = undefined, creditOfferId = undefined, limit = 20, offset = 0, date_from = undefined, date_to = undefined, assetId = undefined, operationType = undefined, accountId = undefined }) {
-            
-            function filterOperationDuplicates(v, i, a) {
-                return a.findIndex(t=>(t.operation_id_num === v.operation_id_num))===i
-            }
             
             function operationMapperToAppFormat(op) {
                 let operation = {};
@@ -68,7 +68,7 @@
                         return response.data
                     }
 
-                    const operations = response.data.filter(filterOperationDuplicates).map(operationMapperToAppFormat);
+                    const operations = response.data.map(operationMapperToAppFormat);
                     
                     return operations;
                 });
@@ -102,7 +102,8 @@
         
         return {
             columns: COLUMNS,
-            getOperationsHistory
+            getOperationsHistory,
+            filterOperationDuplicates
         }
     }
     

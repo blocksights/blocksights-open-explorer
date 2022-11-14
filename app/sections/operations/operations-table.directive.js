@@ -93,6 +93,7 @@ Use this field show / hide user filters
                 }
             }).filter((item) => !!item);
             
+            $scope.itemsOnPage = 20;
             $scope.totalItems = 0;
             $scope.currentPage = 1;
             $scope.maxPage = 0;
@@ -143,7 +144,7 @@ Use this field show / hide user filters
                 }
                 
                 const page = page_operations - 1;
-                const limit = 20;
+                const limit = $scope.itemsOnPage;
                 const offset = page * limit;
                 
                 if(page_operations === 1 || !$scope.userOpenedFirstPageTime) { // if user switches back from page Y (Y>1) to page 1 we need to fetch new transactions and update time range
@@ -194,7 +195,8 @@ Use this field show / hide user filters
                             $scope.totalItems = $scope.totalItems - $scope.operations.length + response.length;
                         }
                         $scope.hasNextPage = response.length > limit;
-                        $scope.operations = response.slice(0, limit); // remove the additional item which defines the existence of the next page
+                        $scope.operations = response.slice(0, limit) // remove the additional item which defines the existence of the next page
+                        $scope.operationsWithoutDuplicates = $scope.operations.filter(OperationsService.filterOperationDuplicates);
                         $scope.currentPage = page_operations;
                         if (page_operations == 1) {
                             if (response.length > 0) {

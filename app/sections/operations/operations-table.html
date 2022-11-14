@@ -37,14 +37,14 @@
         </div>
     </div>
 
-    <responsive-table data-data="operations"
+    <responsive-table data-data="operationsWithoutDuplicates"
                       data-columns="operationsColumns"
                       data-loading="operationsLoading"
                       data-template="operations-table.html"
                       data-loading-error="operationsLoadingError"
     ></responsive-table>
 
-    <div class="operations-table--load-more" ng-if="!operationsLoading && !operationsLoadingError && (operations.length !== 20 || !hasNextPage)">
+    <div class="operations-table--load-more" ng-if="!operationsLoading && !operationsLoadingError && (operations.length !== itemsOnPage || !hasNextPage)">
         <div>
             There might be more data
         </div>
@@ -68,7 +68,7 @@
                     total-items="totalItems"
                     max-size="4"
                     ng-change="currentPage===undefined || select(currentPage)"
-                    items-per-page="20"
+                    items-per-page="itemsOnPage"
                     rotate="false"
                     previous-text="&lsaquo;" next-text="&rsaquo;"
                     boundary-links="true"
