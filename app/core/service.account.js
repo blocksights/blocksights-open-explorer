@@ -287,47 +287,6 @@
                     callback(results);
                 }
             },
-            getAccountHistory: function(account_id, limit, from, callback) {
-                return $http.get(appConfig.urls.elasticsearch_wrapper() + "/account_history"
-                    + "?account_id=" + account_id
-                    + "&offset=" + from
-                    + "&limit=" + limit
-                    + (from == 0 ? "&from_date=now-1y" : "&from_date=2015-10-10")
-                ).then(response => {
-                    let last_ops = [];
-
-                    // only add if the op id is not already added (transfer appears in both accounts!)
-                    const unique_data = response.data.filter((v,i,a)=>a.findIndex(t=>(t.operation_id_num === v.operation_id_num))===i);
-
-                    angular.forEach(unique_data, function (value) {
-                        let operation = {};
-                        operation.block_num = value.block_data.block_num;
-                        operation.operation_id = value.account_history.operation_id;
-                        operation.operation_id_num = value.operation_id_num;
-                        operation.time = value.block_data.block_time;
-                        operation.witness = value.witness;
-                        operation.sequence = value.account_history.sequence;
-
-                        let parsed_op = value.operation_history.op_object;
-                        if (parsed_op == undefined)
-                            parsed_op = JSON.parse(value.operation_history.op)[1];
-                        if (parsed_op.amount)
-                            parsed_op.amount_ = parsed_op.amount;
-                        const _with_result = {...parsed_op, result: value.operation_history.operation_result};
-                        if (typeof _with_result.result === "string") _with_result.result = JSON.parse(value.operation_history.operation_result);
-                        utilities.opText(appConfig, $http, value.operation_type, _with_result, function(returnData) {
-                            operation.operation_text = returnData;
-                        });
-
-                        const type_res =  utilities.operationType(value.operation_type);
-                        operation.type = type_res[0];
-                        operation.color = type_res[1];
-
-                        last_ops.push(operation);
-                    });
-                    callback(last_ops);
-                });
-            },
             exportAccountHistory: function(account_id, premium_code = null, document=null) {
                 let url = appConfig.urls.elasticsearch_wrapper() + "/export/account_history"
                     + "?account_id=" + account_id
