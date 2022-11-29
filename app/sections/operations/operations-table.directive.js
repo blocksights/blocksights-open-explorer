@@ -88,7 +88,7 @@ Use this field show / hide user filters
                 if(!name)
                     return false;
                 return {
-                    value: key,
+                    id: key,
                     name,
                 }
             }).filter((item) => !!item);
@@ -119,45 +119,10 @@ Use this field show / hide user filters
             // see the issue: https://github.com/blocksights/blocksights-open-explorer/issues/15
             $scope.userOpenedFirstPageTime = null;
             
-            const filters = [
-                $scope.filterByAssetIdEnabled !== false ? {
-                    width: '150px',
-                    defaultValue: '',
-                    placeholder: 'Search by asset',
-                    onChange: (value) => {
-                        $scope.filters.assetIdOrName = value;
-                        $scope.select(1, true);
-                    },
-                    modelOptions: {
-                        debounce: 500,
-                        getterSetter: true
-                    }
-                } : null,
-                $scope.filterByAccountIdEnabled !== false ? {
-                    width: '150px',
-                    defaultValue: '',
-                    placeholder: 'Search by account',
-                    onChange: (value) => {
-                        $scope.filters.accountIdOrName = value;
-                        $scope.select(1, true);
-                    },
-                    modelOptions: {
-                        debounce: 500,
-                        getterSetter: true
-                    }
-                } : null,
-            ].filter((item) => !!item);
-            
             $scope.operationsColumns = $scope.columns || [
                 {
                     title: $filter('translate')('Operation'),
                     index: 'operation_text',
-                    onFilterCancel: () => {
-                        $scope.filters.assetIdOrName = undefined;
-                        $scope.filters.accountIdOrName = undefined;
-                        $scope.select(1, true)
-                    },
-                    filter: filters.length ? filters : undefined
                 },
                 {
                     title: $filter('translate')('ID'),
@@ -177,22 +142,6 @@ Use this field show / hide user filters
                     title: $filter('translate')('Type'),
                     index: 'type',
                     hidden: ['xs', 'sm', 'md'],
-                    onFilterCancel: () => {
-                        $scope.filters.operationType = '-1';
-                        $scope.select(1, true)
-                    },
-                    filter: $scope.filterByOperationTypeEnabled !== false ? [
-                        {
-                            width: '300px',
-                            placeholder: 'Filter by operation id',
-                            defaultValue: '-1',
-                            onChange: (value) => {
-                                $scope.filters.operationType = value;
-                                $scope.select(1, true);
-                            },
-                            options: $scope.operationTypes
-                        }
-                    ] : undefined
                 }
             ];
             
