@@ -11,6 +11,33 @@
             <th ng-repeat="column in columns track by column.title" class="{{ columnClass[column.title] ||  '' }}" ng-class="column.sort ? 'responsive-table-sort-enabled' : 'responsive-table-sort-disabled'" ng-click="sort(column)">
                 {{column.title}}
                 <span ng-if="column.index === sortingParameter" class="responsive-table-sort-button" ng-class="sortingOrder ? 'responsive-table-sort-button-desc' : 'responsive-table-sort-button-asc'"></span>
+
+                <img ng-if="column.filter" src="{{ column.showFilter ? 'images/filter-on.svg' : 'images/filter.svg' }}" ng-click="column.showFilter = !column.showFilter; !column.showFilter ? column.onFilterCancel() : null" class="operations-filter"/>
+                <span ng-repeat="filter in column.filter" ng-if="column.showFilter" style="display: inline-block; margin-right: 5px;">
+                    <select ng-if="filter.options"
+                            ng-change="filter.onChange(filter.optionValue)"
+                            class="form-control"
+                            ng-model="filter.optionValue"
+                            ng-init="filter.optionValue = filter.defaultValue"
+                            style="width: {{column.filter.width || '200px'}}"
+                    >
+                        <option value="-1">{{filter.placeholder}}</option>
+                        <option value="{{option.value}}" ng-repeat="option in filter.options">
+                            {{ option.name }}
+                        </option>
+                    </select>
+                    <div ng-if="!filter.options">
+                        <input type="text"
+                               ng-change="filter.onChange(filter.value)"
+                               ng-model-options="filter.modelOptions || {}"
+                               ng-model="filter.value"
+                               placeholder="{{ filter.placeholder }}"
+                               ng-init="filter.optionValue = filter.defaultValue || ''"
+                               class="form-control"
+                               style="width: {{filter.width || '200px'}}"
+                        />
+                    </div>
+                </span>
             </th>
         </tr>
         </thead>
@@ -53,6 +80,33 @@
                             <strong>
                                 {{column.title}}:
                             </strong>
+
+                            <img ng-if="column.filter" src="{{ column.showFilter ? 'images/filter-on.svg' : 'images/filter.svg' }}" ng-click="column.showFilter = !column.showFilter; !column.showFilter ? column.onFilterCancel() : null" class="operations-filter"/>
+                            <span ng-repeat="filter in column.filter" ng-if="column.showFilter" style="display: inline-block; margin-right: 5px;">
+                                <select ng-if="filter.options"
+                                        ng-change="filter.onChange(filter.optionValue)"
+                                        class="form-control"
+                                        ng-model="filter.optionValue"
+                                        ng-init="filter.optionValue = filter.defaultValue"
+                                        style="width: {{column.filter.width || '200px'}}"
+                                >
+                                    <option value="-1">{{filter.placeholder}}</option>
+                                    <option value="{{option.value}}" ng-repeat="option in filter.options">
+                                        {{ option.name }}
+                                    </option>
+                                </select>
+                                <div ng-if="!filter.options">
+                                    <input type="text"
+                                           ng-change="filter.onChange(filter.value)"
+                                           ng-model-options="filter.modelOptions || {}"
+                                           ng-model="filter.value"
+                                           placeholder="{{ filter.placeholder }}"
+                                           ng-init="filter.optionValue = filter.defaultValue || ''"
+                                           class="form-control"
+                                           style="width: {{filter.width || '200px'}}"
+                                    />
+                                </div>
+                            </span>
                         </td>
                         <td>
                             <div ng-include style="padding-left: 12px;padding-top: 6px;" src="template" onload="row = item; cell = item[column.index]; index = column.index"></div>
