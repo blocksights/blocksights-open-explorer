@@ -9,7 +9,6 @@
     "ws": "./loadWebSocket.js"
   },
   "devDependencies": {
-    "angular-websocket": "2.0.1",
     "archiver": "^4.0.1",
     "bootstrap": "3.4.1",
     "components-font-awesome": "5.9.0",
@@ -44,6 +43,7 @@
     "angular-translate-loader-static-files": "2.19.0",
     "angular-ui-bootstrap": "^2.5.6",
     "angular-ui-notification": "^0.3.6",
+    "angular-websocket": "^2.0.1",
     "clipboard": "2.0.11",
     "extract-zip": "2.0.1",
     "highcharts": "10.3.2",
