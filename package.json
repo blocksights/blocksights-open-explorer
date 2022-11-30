@@ -9,7 +9,7 @@
     "ws": "./loadWebSocket.js"
   },
   "devDependencies": {
-    "archiver": "^4.0.1",
+    "archiver": "5.3.1",
     "bootstrap": "3.4.1",
     "components-font-awesome": "5.9.0",
     "copy-webpack-plugin": "^5.1.2",
