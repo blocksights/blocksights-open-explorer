@@ -220,10 +220,10 @@ angular-animate@1.8.3:
   resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.8.3.tgz#f88db37325de256f9144d1242ce3158134a9d72a"
   integrity sha512-/LtTKvy5sD6MZbV0v+nHgOIpnFF0mrUp+j5WIxVprVhcrJriYpuCZf4S7Owj1o76De/J0eRzANUozNJ6hVepnQ==
 
-angular-aria@1.7.8:
-  version "1.7.8"
-  resolved "https://registry.yarnpkg.com/angular-aria/-/angular-aria-1.7.8.tgz#3954250ef516b57cdd3cdf41ff4ee6fcfdc84ceb"
-  integrity sha512-facq/111sZKL2wUUqRA1GnGt+lZ8KAcX9Aw04cNA+OyEkoaoRC77NY4VSOTQxghlSd0OPAdLeFnmETnuiWrpLg==
+angular-aria@1.8.3:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/angular-aria/-/angular-aria-1.8.3.tgz#b387ebca9569eb557855abb283a09c2d0457e779"
+  integrity sha512-qTXclmTW/KGw5JNKKQPcCKKq6hCBZ39jYINmLgMsjUHBAoxULaMRRTaRj/L2VTOjKvK5f9enkx+EUqRqzXDSFQ==
 
 angular-echarts-lite@1.1.0:
   version "1.1.0"
