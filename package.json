@@ -45,7 +45,7 @@
   "dependencies": {
     "angular-ui-notification": "^0.3.6",
     "clipboard": "2.0.11",
-    "extract-zip": "^2.0.0",
+    "extract-zip": "2.0.1",
     "highcharts": "^8.1.2",
     "md5-file": "^5.0.0",
     "moment": "^2.29.4",
