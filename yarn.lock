@@ -225,7 +225,7 @@ angular-aria@1.8.3:
   resolved "https://registry.yarnpkg.com/angular-aria/-/angular-aria-1.8.3.tgz#b387ebca9569eb557855abb283a09c2d0457e779"
   integrity sha512-qTXclmTW/KGw5JNKKQPcCKKq6hCBZ39jYINmLgMsjUHBAoxULaMRRTaRj/L2VTOjKvK5f9enkx+EUqRqzXDSFQ==
 
-angular-echarts-lite@1.1.0:
+angular-echarts-lite@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/angular-echarts-lite/-/angular-echarts-lite-1.1.0.tgz#377f218129863cdcec8740c1bc5422d664f6ba17"
   integrity sha512-TFkcNSAX2Yc9JfFlFPt+TOoJIIulD9TGuyXmcrV+LHUQV6SDWOoYcV8ORps/dsJkorlT6AVLJZmIBDkYVViSyA==
@@ -233,7 +233,7 @@ angular-echarts-lite@1.1.0:
     angular "^1.2.0"
     echarts "^3.0.0"
 
-angular-google-analytics@1.1.8:
+angular-google-analytics@^1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/angular-google-analytics/-/angular-google-analytics-1.1.8.tgz#e497926c0f77cd6eec0c0cbdf0b20e58938cf8a0"
   integrity sha512-eK2othKv6Oud4RaYVJW6fWNpz0UbcWQ/cASLIDGcD+xvVkndmWCNOqRKe/WFPN7ck4BYlr9sRvYGE+jZfZIyGA==
