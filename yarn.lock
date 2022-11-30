@@ -238,10 +238,10 @@ angular-google-analytics@1.1.8:
   resolved "https://registry.yarnpkg.com/angular-google-analytics/-/angular-google-analytics-1.1.8.tgz#e497926c0f77cd6eec0c0cbdf0b20e58938cf8a0"
   integrity sha512-eK2othKv6Oud4RaYVJW6fWNpz0UbcWQ/cASLIDGcD+xvVkndmWCNOqRKe/WFPN7ck4BYlr9sRvYGE+jZfZIyGA==
 
-angular-loader@1.7.8:
-  version "1.7.8"
-  resolved "https://registry.yarnpkg.com/angular-loader/-/angular-loader-1.7.8.tgz#0c2fdc8db7aad0d37a126c8d1bc315c7497d82d9"
-  integrity sha512-MKwUS618iCbFfv6Igs1uYglVmjol+4g4rNSK2ezdyWyC6+cXffPFUm0voj3qf3HuN5R1pH1pGCpCB0sO/qFHig==
+angular-loader@1.8.3:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/angular-loader/-/angular-loader-1.8.3.tgz#a4ab0dc6fbd3a59496c634b63d67c59fb15c7bcb"
+  integrity sha512-7Jn0hg811k5QAijcXCVCszySXTtakaNEe11MfGiZP3/eBkmSTkUc9z+DiAJ+VVmDlu+SVSF81Ahj0iXjSBQfwQ==
 
 angular-loading-bar@0.9.0:
   version "0.9.0"
