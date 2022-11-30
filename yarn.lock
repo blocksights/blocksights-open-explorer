@@ -243,7 +243,7 @@ angular-loader@1.8.3:
   resolved "https://registry.yarnpkg.com/angular-loader/-/angular-loader-1.8.3.tgz#a4ab0dc6fbd3a59496c634b63d67c59fb15c7bcb"
   integrity sha512-7Jn0hg811k5QAijcXCVCszySXTtakaNEe11MfGiZP3/eBkmSTkUc9z+DiAJ+VVmDlu+SVSF81Ahj0iXjSBQfwQ==
 
-angular-loading-bar@0.9.0:
+angular-loading-bar@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/angular-loading-bar/-/angular-loading-bar-0.9.0.tgz#37ef52c25f102c216e7b3cdfd2fc5a5df9628e45"
   integrity sha512-m131J6XitwSMS2D95Kso9WwpoV92ixkksJv4KXGdhk6UKS1gW09IDvSaJq24iUtsLHIRqnhpj9Y2HiIn7q0WpQ==
@@ -267,7 +267,7 @@ angular-translate@2.19.0, angular-translate@~2.19.0:
   dependencies:
     angular "^1.8.0"
 
-angular-ui-bootstrap@2.5.6:
+angular-ui-bootstrap@^2.5.6:
   version "2.5.6"
   resolved "https://registry.yarnpkg.com/angular-ui-bootstrap/-/angular-ui-bootstrap-2.5.6.tgz#23937322ec641a6fbee16498cc32452aa199e7c5"
   integrity sha512-yzcHpPMLQl0232nDzm5P4iAFTFQ9dMw0QgFLuKYbDj9M0xJ62z0oudYD/Lvh1pWfRsukiytP4Xj6BHOSrSXP8A==
