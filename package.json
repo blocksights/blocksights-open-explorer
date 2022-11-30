@@ -36,7 +36,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "postinstall": "npm run install-charting-library",
+    "postinstall": "yarn install-charting-library",
     "install-charting-library": "node ./app/charting_library/install-charting-library.js",
     "package-charting-library": "node ./app/charting_library/package-charting-library.js",
     "start": "webpack-dev-server --mode=development",
