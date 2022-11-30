@@ -17,6 +17,7 @@
     "jdenticon": "2.2.0",
     "jquery": "^3.5.1",
     "js-sha256": "0.9.0",
+    "md5-file": "^5.0.0",
     "webpack": "^4.39.2",
     "webpack-cli": "^3.3.7",
     "webpack-dev-server": "^3.11.0"
