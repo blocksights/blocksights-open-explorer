@@ -253,24 +253,17 @@ angular-route@1.8.3:
   resolved "https://registry.yarnpkg.com/angular-route/-/angular-route-1.8.3.tgz#f24a700ebd462454ca83a8b765df55c87a4edde1"
   integrity sha512-kpIcRmDR2+o1FxDVVYy8Rvfab86/7LDbOgTRb9T+X9ewPQiBRuDEnZtM3oJYBiQLvAXDYTJXHV48n/bGE9Mv2g==
 
-angular-translate-loader-static-files@2.18.1:
-  version "2.18.1"
-  resolved "https://registry.yarnpkg.com/angular-translate-loader-static-files/-/angular-translate-loader-static-files-2.18.1.tgz#ad0c3c883b18b089bdb8db02bbd366d903f857cc"
-  integrity sha512-5MuyzAROfc493kjLjKlLGLBzXiRmZIFbcWZGutDRxW5SRXSpwrH0u0hh0ENNnUyUQbe2vUspHNPIuZqlq8qIhw==
+angular-translate-loader-static-files@2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/angular-translate-loader-static-files/-/angular-translate-loader-static-files-2.19.0.tgz#409290e1a652dfd582cffdf97a21657856d90dff"
+  integrity sha512-B0LiFzn+rHGgL0okl+uAcQKtmySskTlhw6vsnQODUqARV0IcgMUi2tl9RhybgGy3MbGmdF1JjJFjITCbXzWZQA==
   dependencies:
-    angular-translate "~2.18.1"
+    angular-translate "~2.19.0"
 
-angular-translate@2.18.1:
-  version "2.18.1"
-  resolved "https://registry.yarnpkg.com/angular-translate/-/angular-translate-2.18.1.tgz#b29ed0d2f9bac44075e7aad3284166c59e150791"
-  integrity sha512-Mw0kFBqsv5j8ItL9IhRZunIlVmIRW6iFsiTmRs9wGr2QTt8z4rehYlWyHos8qnXc/kyOYJiW50iH50CSNHGB9A==
-  dependencies:
-    angular ">=1.2.26 <=1.7"
-
-angular-translate@~2.18.1:
-  version "2.18.4"
-  resolved "https://registry.yarnpkg.com/angular-translate/-/angular-translate-2.18.4.tgz#8dba3921cc75d0601891c1f0e9d320aa7cef17bd"
-  integrity sha512-KohNrkH6J9PK+VW0L/nsRTcg5Fw70Ajwwe3Jbfm54Pf9u9Fd+wuingoKv+h45mKf38eT+Ouu51FPua8VmZNoCw==
+angular-translate@2.19.0, angular-translate@~2.19.0:
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/angular-translate/-/angular-translate-2.19.0.tgz#133c75ad64727b11d96bcbb8b53cf9c7c7a9fde4"
+  integrity sha512-Z/Fip5uUT2N85dPQ0sMEe1JdF5AehcDe4tg/9mWXNDVU531emHCg53ZND9Oe0dyNiGX5rWcJKmsL1Fujus1vGQ==
   dependencies:
     angular "^1.8.0"
 
@@ -296,11 +289,6 @@ angular@*, angular@1.8.3, angular@^1.2.0, angular@^1.8.0:
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.8.3.tgz#851ad75d5163c105a7e329555ef70c90aa706894"
   integrity sha512-5qjkWIQQVsHj4Sb5TcEs4WZWpFeVFHXwxEBHUhrny41D8UrBAd6T/6nPPAsLngJCReIOqi95W3mxdveveutpZw==
-
-"angular@>=1.2.26 <=1.7":
-  version "1.7.9"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.9.tgz#e52616e8701c17724c3c238cfe4f9446fd570bc4"
-  integrity sha512-5se7ZpcOtu0MBFlzGv5dsM1quQDoDeUTwZrWjGtTNA7O88cD8TEk5IEKCTDa3uECV9XnvKREVUr7du1ACiWGFQ==
 
 ansi-colors@^3.0.0:
   version "3.2.4"
