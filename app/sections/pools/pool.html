@@ -153,34 +153,20 @@
             </div>
         </div>
     </div>
-    <h2><span data-translate="Liquidity Pools"></span></h2>
-        <div class="panel-body table-responsive">
-            <responsive-table data-data="operations"
-                              data-columns="operationsColumns"
-                              data-loading="operationsLoading"
-                              data-template="operations-table.html"
-                              data-loading-error="operationsLoadingError"
-            ></responsive-table>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span data-translate="Last operations"></span>
+                <img src="images/filter.svg" ng-click="showFilters = !showFilters" class="operations-filter"/>
+            </div>
 
-            <footer class="table-footer">
-                <div class="row">
-                    <div class="col-md-6 page-num-info">
-                    </div>
-                    <div class="col-md-6 text-right pagination-container">
-                        <ul
-                            uib-pagination class="pagination-sm"
-                            ng-model="currentPage"
-                            total-items="total_ops"
-                            max-size="4"
-                            ng-change="currentPage===undefined || select(currentPage)"
-                            items-per-page="20"
-                            rotate="false"
-                            previous-text="&lsaquo;" next-text="&rsaquo;"
-                            boundary-links="true"
-                        ></ul>
-                    </div>
-                </div>
-            </footer>
+            <loading ng-if="!pool.id"></loading>
+            <operations-table ng-if="pool.id" group-by-pool-id="pool.id"
+                              filter-by-asset-id-enabled="false"
+                              filter-by-operation-type-enabled="false"
+                              show-filters="showFilters"
+                              default-date-from="now-1y"
+                              filters-date-from="now-1y"
+            />
         </div>
     </div>
 </div>

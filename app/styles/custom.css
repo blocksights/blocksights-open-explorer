@@ -353,6 +353,36 @@ ul.scrollable-tabs-shadow-right:after {
     z-index: 1000;
 }
 
+.operations-table-filters > div {
+    margin-right: 12px;
+}
+
+.operations-table--load-more > div{
+    margin-bottom: 8px;
+}
+.operations-table--load-more {
+    text-align: center;
+}
+
+.operations-filter {
+    width: 18px;
+    cursor: pointer;
+}
+
+.operations-table-filters {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.dashboard-operations-filters > div {
+    margin-right: 12px;
+}
+
+.dashboard-operations-filters {
+    display: flex;
+    margin-bottom: 16px;
+}
+
 .market--tv_chart_container {
     height: 43vh;
 }

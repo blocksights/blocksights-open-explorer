@@ -128,6 +128,10 @@
                     object: (objectId) => ({
                         text: objectId,
                         href: `/#/objects/${objectId}`
+                    }),
+                    offer: (offerId) => ({
+                        text: offerId,
+                        href: `/#/credit-offers/${offerId}`
                     })
                 })
                 
@@ -1556,6 +1560,23 @@
                                 callback(operation_text)
                             });
                         })
+                    })
+                }
+                
+                else if (operation_type === 74) { // Expired Credit Deal
+                    console.log('debug expired', operation)
+                    const operation_account = operation.borrower;
+                    const unpaid = operation.unpaid_amount;
+                    getAccount(operation_account).then((account_name) => {
+                        getAsset(unpaid.asset_id, unpaid.amount).then((unpaidAsset) => {
+                            operation_text = $filter('translateWithLinks')('Operation Credit Deal Expired', {
+                                accountLink : getLink().account(account_name),
+                                amount      : unpaidAsset.amount,
+                                offerLink     : getLink().offer(operation.offer_id),
+                                assetLink   : getLink().asset(unpaidAsset.symbol),
+                            });
+                            callback(operation_text)
+                        });
                     })
                 }
                 

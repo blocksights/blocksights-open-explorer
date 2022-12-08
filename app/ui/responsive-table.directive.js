@@ -38,6 +38,15 @@
  *
  * columns[].sortReverse {boolean}       - Reverse the sorting when user sort the column
  * columns[].sortByDefault {boolean}     - Turns on the sorting for the column when page loads
+ *
+ * columns[].filter[]                      - use an array to apply one or more filters to specific column
+ * columns[].filter[].width                - The width of input/select
+ * columns[].filter[].placeholder          - The placeholder of input/select
+ * columns[].filter[].defaultValue         - Default value, please use '-1' for select
+ * columns[].filter[].onChange(value)      - Handler for filter changes
+ * columns[].filter[].onFilterCancel       - Handler when filter canceled (for e.g. to fetch non filtered data)
+ * columns[].filter[].modelOptions         - ng-model-options
+ * columns[].filter[].options              - use this for <select>, if <options> missed - the filter will be a simple input[type=text]
  * ===================
  * ===== Data API ====
  * ===================

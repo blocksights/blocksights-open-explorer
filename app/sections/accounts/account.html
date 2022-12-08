@@ -510,6 +510,7 @@
         <div class="panel-heading clearfix">
             <h3 class="panel-title pull-left">
                 <span data-translate="Full account history"></span>
+                <img src="images/filter.svg" ng-click="showFilters = !showFilters" class="operations-filter"/>
             </h3>
             <div class="pull-right">
                 <div class="input-group">
@@ -526,34 +527,14 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body table-responsive">
 
-            <responsive-table data-data="operations"
-                              data-columns="operationsColumns"
-                              data-loading="operationsLoading"
-                              data-template="account-operations-table.html"
-                              data-loading-error="operationsLoadingError"
-            ></responsive-table>
-
-            <footer class="table-footer">
-                <div class="row">
-                    <div class="col-md-6 page-num-info">
-                    </div>
-                    <div class="col-md-6 text-right pagination-container">
-                        <ul
-                            uib-pagination class="pagination-sm"
-                            ng-model="currentPage"
-                            total-items="account.total_ops"
-                            max-size="4"
-                            ng-change="currentPage===undefined || select(currentPage)"
-                            items-per-page="20"
-                            rotate="false"
-                            previous-text="&lsaquo;" next-text="&rsaquo;"
-                            boundary-links="true"
-                        ></ul>
-                    </div>
-                </div>
-            </footer>
-        </div>
+        <loading ng-if="!account.name"></loading>
+        <operations-table ng-if="!!account.name"
+                          show-filters="showFilters"
+                          group-by-account-id="account.id"
+                          default-date-from="now-1y"
+                          filters-date-from="now-1y"
+                          filter-by-account-id-enabled="false"
+        />
     </div>
 </div>

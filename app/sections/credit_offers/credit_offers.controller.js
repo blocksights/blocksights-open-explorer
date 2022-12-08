@@ -2,8 +2,7 @@
     'use strict';
 
     angular.module('app.credit_offers')
-        .controller('creditOffersCtrl', ['$scope', '$route', '$routeParams', '$location', '$filter', 'utilities', 'marketService',
-            'chartService', 'appConfig', creditOffersCtrl])
+        .controller('creditOffersCtrl', ['$scope', '$route', '$routeParams', '$filter', 'marketService', creditOffersCtrl])
         .filter('to_trusted', ['$sce', function($sce){
             return function(text) {
                 return $sce.trustAsHtml(text);
@@ -49,56 +48,13 @@
         }
     }
 
-    function creditOffersCtrl($scope, $route, $routeParams, $location, $filter, utilities, marketService, chartService, appConfig) {
+    function creditOffersCtrl($scope, $route, $routeParams, $filter, marketService) {
         
         $scope.credit_offer_id = $routeParams.name;
         $scope.showOnlyActive = true;
 
         if($scope.credit_offer_id) {
-            
-            $scope.operationsColumns = [
-                    {
-                        title: $filter('translate')('Operation'),
-                        index: 'operation_text',
-                    },
-                    {
-                        title: $filter('translate')('ID'),
-                        index: 'operation_id'
-                    },
-                    {
-                        title: $filter('translate')('Date and time'),
-                        index: 'time',
-                        hidden: ['xs']
-                    },
-                    {
-                        title: $filter('translate')('Block'),
-                        index: 'block_num',
-                        hidden: ['xs', 'sm']
-                    },
-                    {
-                        title: $filter('translate')('Type'),
-                        index: 'type',
-                        hidden: ['xs', 'sm', 'md']
-                    }
-                ];
-            $scope.select = function(page_operations) {
-                    const page = page_operations - 1;
-                    const limit = 20;
-                    const from = page * limit;
-
-                    $scope.operationsLoading = true;
-                    $scope.operationsLoadingError = false;
-                    marketService.getCreditOfferOperationsHistory($scope.credit_offer_id, limit, from).then((returnData) => {
-                        console.log('test?');
-                        $scope.operationsLoading = false;
-                        $scope.operations = returnData;
-                        $scope.currentPage = page_operations;
-                    }).catch(err => {
-                        $scope.operationsLoadingError = true;
-                        throw err;
-                    });
-                }
-            $scope.select(1);
+        
         } else {
             $scope.columns = [{
                 title: 'ID',

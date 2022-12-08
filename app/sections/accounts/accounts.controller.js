@@ -77,69 +77,6 @@ import {sha256} from "js-sha256";
                         $scope.account = new_account;
                     }
 
-                    $scope.operationsColumns = [
-                        {
-                            title: $filter('translate')('Operation'),
-                            index: 'operation_text',
-                        },
-                        {
-                            title: $filter('translate')('ID'),
-                            index: 'operation_id',
-                        },
-                        {
-                            title: $filter('translate')('Date and time'),
-                            index: 'time',
-                            hidden: ['xs']
-                        },
-                        {
-                            title: $filter('translate')('Block'),
-                            index: 'block_num',
-                            hidden: ['xs', 'sm']
-                        },
-                        {
-                            title: $filter('translate')('Type'),
-                            index: 'type',
-                            hidden: ['xs', 'sm', 'md']
-                        }
-                    ];
-                    $scope.select = function(page_operations) {
-                        const page = page_operations - 1;
-                        const limit = 20;
-                        const from = page * limit;
-
-                        $scope.operationsLoading = true;
-                        $scope.operationsLoadingError = false;
-                        accountService.getAccountHistory(fullAccount.account.id, limit, from, function (returnData) {
-                            $scope.operationsLoading = false;
-                            $scope.operations = returnData;
-                            $scope.currentPage = page_operations;
-                            if (page_operations == 1) {
-                                let new_account = {
-                                    total_ops: 0
-                                };
-                                if (returnData.length > 0) {
-                                    new_account.total_ops = returnData[0].sequence;
-                                }
-                                if ($scope.account) {
-                                    $scope.account = Object.assign(new_account, $scope.account);
-                                } else {
-                                    $scope.account = new_account;
-                                }
-                            }
-                        }).catch(err => {
-                            $scope.operationsLoadingError = true;
-                            let new_account = {
-                                total_ops: -1,
-                            };
-                            if ($scope.account) {
-                                $scope.account = Object.assign(new_account, $scope.account);
-                            } else {
-                                $scope.account = new_account;
-                            }
-                            throw err;
-                        });
-                    }
-                    $scope.select(1);
                     // initial sort of fullAccount.balances by balance
                     fullAccount.balances = $filter("orderBy")(fullAccount.balances, 'float_balance', true);
 
