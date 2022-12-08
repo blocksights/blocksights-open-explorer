@@ -1,7 +1,7 @@
 {
   "name": "open-explorer",
   "private": false,
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "An Open Source explorer for Graphene blockchains.",
   "repository": "-",
   "license": "MIT + Proprietary",
