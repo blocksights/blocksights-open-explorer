@@ -9,7 +9,7 @@ export function getAvailableEndpoints() {
             translate: 'Mainnet',
             url: 'https://api.bitshares.ws/openexplorer',
             chainId: '4018d7844c78f6a6c41c6a552b898022310fc5dec06da467ee7905a8dad512c8',
-            isDefault: false,
+            isDefault: true,
         },
         {
             key: "testnet",
@@ -22,7 +22,6 @@ export function getAvailableEndpoints() {
             translate: 'Local',
             url: 'http://localhost:5000/openexplorer',
             chainId: '4018d7844c78f6a6c41c6a552b898022310fc5dec06da467ee7905a8dad512c8',
-            isDefault: true,
         }
     ];
 }
