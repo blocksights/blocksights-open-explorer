@@ -4,7 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const git = require("git-rev-sync");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const Html = require('./html'); // html.js
 
@@ -20,10 +20,25 @@ module.exports = (env, args) => ({
         path: __dirname + "/dist",
             filename: "[name].bundle.js"
     },
+    resolve: {
+        fallback: {
+            fs: false,
+            zlib: false,
+            crypto: false,
+            url: false,
+            http: false,
+            https: false,
+            stream: false,
+            tls: false,
+            
+        }
+    },
     devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-            compress: true,
-            port: 9000
+        static: {
+            directory: path.join(__dirname, 'dist'),
+        },
+        compress: true,
+        port: 9000
     },
     
     optimization:{
@@ -32,10 +47,9 @@ module.exports = (env, args) => ({
         }
     },
     
-    node: {
-        fs: 'empty',
-            tls: 'empty'
-    },
+    target: 'web',
+    
+    externals: ['bufferutil', 'utf-8-validate'],
     
     plugins: [
         new webpack.ProvidePlugin({
@@ -48,40 +62,46 @@ module.exports = (env, args) => ({
             ClipboardJS: "clipboard"
         }),
         
-        new CopyWebpackPlugin([{
+        new CopyWebpackPlugin({
+            patterns: [{
                 from: path.resolve(__dirname, `./node_modules/components-font-awesome/webfonts`),
                 to: path.resolve(__dirname, './dist/webfonts')
             }]
-        ),
-        new CopyWebpackPlugin([{
+        }),
+        new CopyWebpackPlugin({
+            patterns: [{
                 from: path.resolve(__dirname, `./app/images`),
                 to: path.resolve(__dirname, './dist/images')
             }]
-        ),
+        }),
         
-        new CopyWebpackPlugin([{
+        new CopyWebpackPlugin({
+            patterns: [{
                 from: path.resolve(__dirname, `./app/charting_library`),
                 to: path.resolve(__dirname, './dist/charting_library')
-            }]
+            }]}
         ),
-        new CopyWebpackPlugin([{
+        new CopyWebpackPlugin({
+            patterns: [{
                 from: path.resolve(__dirname, `./app/i18n`),
-                to: path.resolve(__dirname, './dist/i18n')
+                to  : path.resolve(__dirname, './dist/i18n')
             }]
-        ),
-        new CopyWebpackPlugin([{
+        }),
+        new CopyWebpackPlugin({
+            patterns: [{
                 from: path.resolve(__dirname, `./app/favicon.ico`),
                 to: path.resolve(__dirname, './dist/favicon.ico')
             }]
-        ),
-        new CopyWebpackPlugin(
-            Html.map(html => {
-                return {
-                    from: path.resolve(__dirname, `./app/${html}`),
-                    to: path.resolve(__dirname, './dist/html')
-                };
-            })
-        ),
+        }),
+        new CopyWebpackPlugin({
+            patterns:
+                Html.map(html => {
+                    return {
+                        from: path.resolve(__dirname, `./app/${html}`),
+                        to  : path.resolve(__dirname, './dist/html')
+                    };
+                })
+        }),
         new HtmlWebpackPlugin({
             hash: true,
             template: __dirname + '/app/index.html',
