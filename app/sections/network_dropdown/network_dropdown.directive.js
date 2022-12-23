@@ -9,11 +9,11 @@
             restrict: 'E',
             replace: true,
             templateUrl: 'html/network_dropdown.html',
-            controller: ['Api', '$scope', 'networkService', 'appConfig', '$route', networkDropdownCtrl]
+            controller: ['Api', '$scope', 'networkService', 'appConfig', '$route', '$location', networkDropdownCtrl]
         }
     }
 
-    function networkDropdownCtrl(Api, $scope, networkService, appConfig, $route) {
+    function networkDropdownCtrl(Api, $scope, networkService, appConfig, $route, $location) {
         $scope.darkMode = false;
 
         $scope.activeChainTitle = false;
@@ -47,6 +47,8 @@
         function setEndpoint(endpoint) {
             Api.setActiveEndpoint(endpoint);
             appConfig.update();
+            // remove network from the query url when changes network by hands
+            $location.search('network', undefined)
             $route.reload();
             selectActiveChain();
         }
