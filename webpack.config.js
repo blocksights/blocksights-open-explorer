@@ -30,7 +30,7 @@ module.exports = (env, args) => ({
             https: false,
             stream: false,
             tls: false,
-            
+            util: false,
         }
     },
     devServer: {
@@ -56,6 +56,7 @@ module.exports = (env, args) => ({
             jdenticon: "jdenticon",
         }),
         new webpack.ProvidePlugin({
+            process: "process/browser",
             $: "jquery",
             jQuery: "jquery",
             Highcharts: "highcharts",

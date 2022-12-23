@@ -45,11 +45,13 @@
     "echarts": "4.2.1",
     "extract-zip": "2.0.1",
     "highcharts": "10.3.2",
-    "md5-file": "^5.0.0",
-    "moment": "^2.29.4",
     "jdenticon": "^3.2.0",
     "jquery": "^3.6.1",
     "js-sha256": "^0.9.0",
-    "ngstorage": "^0.3.11"
+    "md5-file": "^5.0.0",
+    "moment": "^2.29.4",
+    "ngstorage": "^0.3.11",
+    "process": "^0.11.10",
+    "util": "^0.12.5"
   }
 }
