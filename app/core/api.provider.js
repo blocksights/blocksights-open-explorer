@@ -107,6 +107,7 @@ import {getAvailableEndpoints} from "../branding";
             setKnownBlockchains: setKnownBlockchains,
             enableLocalStorageSync: () => localStorageSync = true,
             disableLocalStorageSync: () => localStorageSync = false,
+            getActiveEndpoint: () => activeEndpoint,
             getActiveBlockchain: () => blockchainsList.find(item => item.chainId == activeEndpoint.chainId),
             $get: ['$localStorage', '$location', ($localStorage, $location) => {
                 function _saveEndpointToLocalStorage(endpoint) {
@@ -160,7 +161,7 @@ import {getAvailableEndpoints} from "../branding";
                     /** @returns {string} - active endpoint url */
                     getApiUrl: getApiUrl,
                     /** @returns {string|undefined} - active chain title translation */
-                    getActiveChainTranslation: () => activeBlockchain && activeBlockchain.translate,
+                    getActiveEndpointTranslation: () => activeEndpoint && activeEndpoint.translate,
                     /** @returns {Endpoint[]} - returns an array of all endpoints */
                     getEndpoints: () => endpointsList,
                     /** @returns {Blockchain[]} - returns an array of all chains */

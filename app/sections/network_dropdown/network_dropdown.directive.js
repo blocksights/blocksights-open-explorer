@@ -16,7 +16,7 @@
     function networkDropdownCtrl(Api, $scope, networkService, appConfig, $route, $location) {
         $scope.darkMode = false;
 
-        $scope.activeChainTitle = false;
+        $scope.activeNetworkTitle = false;
 
         $scope.endpoints = Api.getEndpoints();
 
@@ -32,12 +32,12 @@
             networkService.getBlockchain((response) => {
                 if(response && response.chain_id && response.chain_id) {
                     Api.setActiveBlockchain(response.chain_id);
-                    $scope.activeChainTitle = Api.getActiveChainTranslation();
+                    $scope.activeNetworkTitle = Api.getActiveEndpointTranslation();
                 } else {
-                    $scope.activeChainTitle = 'error';
+                    $scope.activeNetworkTitle = 'error';
                 }
             }).catch((err) => {
-                $scope.activeChainTitle = 'error';
+                $scope.activeNetworkTitle = 'error';
             });
         }
 
