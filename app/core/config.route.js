@@ -27,10 +27,10 @@
             const redirectTo = (params,url) => {
                 // the idea of this script is to keep always "?network={network}" in user's url
                 // if he surfing on a testnet blockchain
-                const activeBlockchain = ApiProvider.getActiveBlockchain();
+                const activeEndpoint = ApiProvider.getActiveEndpoint();
                 
-                if(url.indexOf('?network') === -1 && activeBlockchain.key === 'testnet') {
-                    return `${url}?network=testnet`
+                if(url.indexOf('?network') === -1 && !activeEndpoint.isDefault) {
+                    return `${url}?network=${activeEndpoint.key}`
                 }
             }
             
