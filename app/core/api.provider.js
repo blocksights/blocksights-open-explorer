@@ -107,7 +107,9 @@ import {getAvailableEndpoints} from "../branding";
             setKnownBlockchains: setKnownBlockchains,
             enableLocalStorageSync: () => localStorageSync = true,
             disableLocalStorageSync: () => localStorageSync = false,
-            $get: ['$localStorage', ($localStorage) => {
+            getActiveEndpoint: () => activeEndpoint,
+            getActiveBlockchain: () => blockchainsList.find(item => item.chainId == activeEndpoint.chainId),
+            $get: ['$localStorage', '$location', ($localStorage, $location) => {
                 function _saveEndpointToLocalStorage(endpoint) {
                     $localStorage.api = {
                         ...$localStorage.api,
@@ -130,16 +132,20 @@ import {getAvailableEndpoints} from "../branding";
                 }
 
                 function restoreActiveEndpoint() {
+                    const network = $location.$$search && $location.$$search.network || '';
                     endpointsList.forEach((endpoint) => {
-                        if (endpoint.isDefault)
+                        if (endpoint.isDefault && !network) {
                             _setActiveEndpoint(endpoint);
+                        } else if(network && network === endpoint.key) {
+                            _setActiveEndpoint(endpoint);
+                        }
                     });
                     // if default endpoint is not specified we use first element of array
                     if (!activeEndpoint)
                         _setActiveEndpoint(endpointsList[0]);
 
                     /** if sync with localStorage turned on  */
-                    if (localStorageSync) {
+                    if (localStorageSync && !network) {
                         /** if sync is on and user has endpoint in localStorage */
                         if($localStorage.api && $localStorage.api.key) {
                             _setActiveEndpoint($localStorage.api.key)
@@ -155,7 +161,7 @@ import {getAvailableEndpoints} from "../branding";
                     /** @returns {string} - active endpoint url */
                     getApiUrl: getApiUrl,
                     /** @returns {string|undefined} - active chain title translation */
-                    getActiveChainTranslation: () => activeBlockchain && activeBlockchain.translate,
+                    getActiveEndpointTranslation: () => activeEndpoint && activeEndpoint.translate,
                     /** @returns {Endpoint[]} - returns an array of all endpoints */
                     getEndpoints: () => endpointsList,
                     /** @returns {Blockchain[]} - returns an array of all chains */
