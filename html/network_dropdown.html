@@ -1,11 +1,11 @@
 <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 
-        <span ng-if="activeChainTitle!=='error'">{{activeChainTitle ? (activeChainTitle | translate) : ''}} </span>
+        <span ng-if="activeNetworkTitle!=='error'">{{activeNetworkTitle ? (activeNetworkTitle | translate) : ''}} </span>
 
-        <loading strip-image-height="true" ng-if="!activeChainTitle"></loading>
+        <loading strip-image-height="true" ng-if="!activeNetworkTitle"></loading>
 
-        <loading-error text="'Select another network' | translate" ng-if="activeChainTitle === 'error'"></loading-error>
+        <loading-error text="'Select another network' | translate" ng-if="activeNetworkTitle === 'error'"></loading-error>
 
         <span class="caret"></span>
     </a>
