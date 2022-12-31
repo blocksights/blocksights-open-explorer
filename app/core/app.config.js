@@ -60,8 +60,8 @@ import {getGATag, getAvailableEndpoints, getAvailableBlockchains, getGlobalConfi
                 brand: config.name + " Blocksights",
                 name: config.name,
                 api_link: "https://api.bitshares.ws/",
-                source_code_link: null,
-                fork_of: "https://github.com/bitshares/open-explorer",
+                source_code_link: "https://github.com/blocksights/blocksights-open-explorer",
+                fork_of: null,
                 year: year,
                 pageTransition: pageTransitionOpts[0]
             }
