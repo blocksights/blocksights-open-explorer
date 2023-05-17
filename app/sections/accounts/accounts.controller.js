@@ -69,7 +69,9 @@ import {sha256} from "js-sha256";
                         lifetime_fees_paid: utilities.formatBalance(lifetime_fees_paid, 5),
                         bts_balance: utilities.formatBalance(core_balance, 5),
                         vesting: vesting_balances,
-                        memo_key: fullAccount.account.options.memo_key
+                        memo_key: fullAccount.account.options.memo_key,
+                        owner_threshold: fullAccount.account.owner.weight_threshold,
+                        active_threshold: fullAccount.account.active.weight_threshold
                     };
                     if ($scope.account) {
                         $scope.account = Object.assign(new_account, $scope.account);
@@ -118,7 +120,7 @@ import {sha256} from "js-sha256";
                     accountService.parseAuth(fullAccount.account.active.key_auths, "key", function (returnData) {
                         $scope.active_keys = returnData;
                     });
-
+                    
                     accountService.parseAuth(fullAccount.account.active.account_auths, "account",
                         function (returnData) {
                         $scope.active_accounts = returnData;
