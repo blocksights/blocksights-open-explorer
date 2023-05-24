@@ -233,20 +233,25 @@
                                                     <td class="align-right"><font size="-1">{{ok.threshold}}</font></td>
                                                 </tbody>
                                             </table>
+
                                             <table class="table" ng-if="owner_accounts.length">
-                                                <thead>
+                                              <thead>
                                                 <tr>
-                                                    <th>
-                                                        <span data-translate="Account"></span>
-                                                    </th>
-                                                    <th class="align-right"><span data-translate="Threshold"></span></th>
+                                                  <th>
+                                                    <span data-translate="Account"></span>
+                                                  </th>
+                                                  <th class="align-right"><span data-translate="Weight"></span></th>
                                                 </tr>
-                                                </thead>
-                                                <tbody>
+                                              </thead>
+                                              <tbody>
                                                 <tr data-ng-repeat="oa in owner_accounts">
-                                                    <td align="left"><a href="#/accounts/{{oa.account}}/"><font size="-1">{{oa.account_name}}</font></a></td>
-                                                    <td class="align-right"><font size="-1">{{oa.threshold}}</font></td>
-                                                </tbody>
+                                                  <td align="left"><a href="#/accounts/{{oa.account}}/"><font size="-1">{{oa.account_name}}</font></a></td>
+                                                  <td class="align-right"><font size="-1">{{oa.threshold}}</font></td>
+                                                </tr>
+                                                <tr>
+                                                  <td class="align-right" colspan="2"><font size="-1"><span data-translate="Threshold"></span>: {{account.owner_threshold}}</font></td>
+                                                </tr>
+                                              </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -278,13 +283,17 @@
                                                     <th>
                                                         <span data-translate="Account"></span>
                                                     </th>
-                                                    <th class="align-right"><span data-translate="Threshold"></span></th>
+                                                    <th class="align-right"><span data-translate="Weight"></span></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr data-ng-repeat="aa in active_accounts">
-                                                    <td align="left"><a href="#/accounts/{{aa.account}}/"><font size="-1">{{aa.account_name}}</font></a></td>
-                                                    <td class="align-right"><font size="-1">{{aa.threshold}}</font></td>
+                                                    <tr data-ng-repeat="aa in active_accounts">
+                                                        <td align="left"><a href="#/accounts/{{aa.account}}/"><font size="-1">{{aa.account_name}}</font></a></td>
+                                                        <td class="align-right"><font size="-1">{{aa.threshold}}</font></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="align-right" colspan="2"><font size="-1"><span data-translate="Threshold"></span>: {{account.active_threshold}}</font></td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
