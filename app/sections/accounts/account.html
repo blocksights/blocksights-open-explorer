@@ -194,14 +194,16 @@
                                                 <thead>
                                                 <tr>
                                                     <th>ID</th>
+                                                    <th>Type</th>
                                                     <th><span data-translate="Asset"></span></th>
                                                     <th class="align-right"><span data-translate="Balance"></span></th>
                                                 </tr>
                                                 </thead>
                                                 <tr data-ng-repeat="v in account.vesting">
                                                     <td><a href='#/objects/{{v.id}}/'>{{v.id}}</a></td>
+                                                    <td>{{v.type}}</td>
                                                     <td>{{v.asset_name}}</td>
-                                                    <td class="align-right">{{v.balance | number}}</td>
+                                                    <td class="align-right">{{v.balance}}</td>
                                                 </tr>
                                             </table>
                                         </div>

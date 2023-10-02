@@ -277,6 +277,7 @@
                         assetService.getAssetNameAndPrecision(value.balance.asset_id, function (returnData) {
                             var vesting = {
                                 id: value.id,
+                                type: value.balance_type,
                                 balance: utilities.formatBalance(value.balance.amount, returnData.precision),
                                 asset_id: value.balance.asset_id,
                                 asset_name: returnData.symbol
