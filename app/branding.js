@@ -65,7 +65,8 @@ export function getGlobalConfig() {
     return {
         supportedBy: {
             donations: [
-                ["BitShares", "blocksights"]
+                ["BitShares", "blocksights"],
+                ["Bitcoin", "1473x2qt1JViQ76S52cm5iVMJQ9M9EzMj7"]
             ],
             blockproducers: [
                 ["BitShares", "blocksights"]
