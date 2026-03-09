@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:16 AS builder
 
 # Install nginx
 RUN apt-get update \
@@ -11,12 +11,19 @@ RUN npm install -g cross-env
 CMD mkdir /open-explorer
 WORKDIR /open-explorer
 
-COPY ./entry.js ./html.js ./package.json ./package-lock.json ./webpack.config.js /open-explorer/
+COPY ./entry.js ./html.js ./package.json ./yarn.lock ./webpack.config.js /open-explorer/
 COPY ./app /open-explorer/app
 
-RUN cross-env npm install --env.prod
+RUN yarn install
 
-RUN cross-env npm run start:build
+RUN yarn build
 
-RUN cp -a /open-explorer/dist/. /var/www/html/
+FROM nginx:1.19-alpine AS server
 
+ARG BUILD_DATE
+LABEL BUILD_DATE=$BUILD_DATE
+ARG VCS_REF
+LABEL VCS_REF=$VCS_REF
+
+COPY ./nginx.prod.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /open-explorer/dist /usr/share/nginx/html
